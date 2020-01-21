@@ -4,15 +4,46 @@
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
-class TrickController
+/**
+ * @Route("/index")
+ */
+class TrickController extends AbstractController
 {
-    public function createTrick(Environment $twig)
+    /**
+     * @Route("/", name="app_trick_home")
+     */
+    public function index(Environment $twig)
     {
-        $content = $twig->render('Home/createTrick.html.twig', ['name' => 'Mirko']);
+        $content = $twig->render('Home/home.html.twig', ['name' => 'Mirko']);
 
         return new Response($content);
+    }
+
+    /**
+     * @Route("/view/{id}", name="app_trick_view")
+     */
+    public function view($id)
+    {
+        return new Response("Affichage du trick n.:".$id);
+    }
+
+    /**
+     * @Route("/view/{slug}/{year}/{format}", name="app_trick_view_slug", requirements={
+     *     "year" = "\d{4}",
+     *     "format" = "html|xml"
+     * })
+     */
+    public function viewTrick($slug, $year, $format)
+    {
+        $slug = 'coucou';
+        $year = 2010;
+        $format = 'html';
+        
+        return new Response("Figure correspondante au '.$slug.', créée en '$year' au format '.$format.'");
     }
 }
