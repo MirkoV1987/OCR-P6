@@ -5,6 +5,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
@@ -15,7 +16,7 @@ use Twig\Environment;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/", name="app_trick_home")
+     * @Route("/{page}", name="app_trick_home", requirements={"page" = "\d+"}, defaults={"page" = 1} )
      */
     public function index(Environment $twig)
     {
@@ -24,26 +25,42 @@ class TrickController extends AbstractController
         return new Response($content);
     }
 
+    // Présentation d'une figure
     /**
-     * @Route("/view/{id}", name="app_trick_view")
+     * @Route("/view/{id}", name="app_trick_view", requirements={"id" = "\d+"})
      */
-    public function view($id)
+    public function view($id, Request $request)
     {
-        return new Response("Affichage du trick n.:".$id);
+        //$url = $this->generateUrl("app_trick_view", ['id' => 87]);
+
+        $tag = $request->query->get('tag');
+        return new Response("Affichage de la figure :".$id.", avec le tag :".$tag);
     }
 
+    // Ajouter une figure
     /**
-     * @Route("/view/{slug}/{year}/{format}", name="app_trick_view_slug", requirements={
-     *     "year" = "\d{4}",
-     *     "format" = "html|xml"
-     * })
+     * @Route("/add", name="app_trick_add")
      */
-    public function viewTrick($slug, $year, $format)
+    public function add()
     {
-        $slug = 'coucou';
-        $year = 2010;
-        $format = 'html';
-        
-        return new Response("Figure correspondante au '.$slug.', créée en '$year' au format '.$format.'");
+
+    }
+
+    // Modifier une figure
+    /**
+     * @Route("/edit/{id}", name="app_trick_update")
+     */
+    public function edit($id)
+    {
+
+    }
+
+    // Effacer une figure
+    /**
+     * @Route("/delete/{id}", name="app_trick_delete", requirements={"id" = "\d+"})
+     */
+    public function delete()
+    {
+
     }
 }
