@@ -1,0 +1,21 @@
+{# templates/User/login.html.twig #}
+
+{% extends "layout.html.twig" %}
+
+{% block stylesheets %}{{ parent() }}{% endblock %}
+
+{% block title %}{{ parent() }} Liste des figures {% endblock %}
+
+{% block body %}
+
+<!-- Page Content -->
+<div class="container-fluid">
+  {{ parent() }}
+
+    <div class="row">
+        <img src="../img/snowtrick-login.jpg" class="img-fluid my-5" alt="snowtrick">
+    </div>
+
+</div>
+
+{% endblock %}

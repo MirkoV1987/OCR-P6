@@ -1,0 +1,21 @@
+{# templates/Trick/add.html.twig #}
+
+{% extends "layout.html.twig" %}
+
+{% block stylesheets %}{{ parent() }}{% endblock %}
+
+{% block title %}{{ parent() }} Ajouter une figure {% endblock %}
+
+{% block body %}
+
+<h2>Ajouter une figure</h2>
+
+{{ include("Trick/_form.html.twig") }}
+
+<!--TO DO : formulaire pour ajouter une figure-->
+
+<p>
+Figure ajoutée sur la page d'accueil après validation du formulaire.    
+</p>
+
+{% endblock %}

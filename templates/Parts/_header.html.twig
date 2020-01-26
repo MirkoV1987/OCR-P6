@@ -1,0 +1,36 @@
+{# templates/Parts/header.html.twig #}
+
+<!-- Navigation -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-light fixed-top" style="box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);">
+    <div class="container">
+      <a class="navbar-brand text-dark" href="#">SnowTrick</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon text-dark"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto font-weight-bold">
+          <li class="nav-item text-dark font-weight-bold">
+            <a class="nav-link text-dark" href="{{ path('app_trick_home') }}">Accueil</a>
+          </li>
+          <li class="nav-item dropdown text-dark">
+            <a class="nav-link text-dark dropdown-toggle text-dark" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Figures
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
+              <a class="dropdown-item" href="{{ path('app_trick_add') }}">Ajouter une figure</a>
+              <a class="dropdown-item" href="portfolio-2-col.html">2 Column Portfolio</a>
+              <a class="dropdown-item" href="portfolio-3-col.html">3 Column Portfolio</a>
+              <a class="dropdown-item" href="portfolio-4-col.html">4 Column Portfolio</a>
+              <a class="dropdown-item" href="portfolio-item.html">Single Portfolio Item</a>
+            </div>
+          </li>
+          <li class="nav-item text-dark">
+            <a class="nav-link text-dark" href="{{ path('app_user_register') }}">Inscription</a>
+          </li>
+          <li class="nav-item text-dark">
+            <a class="nav-link text-dark" href="{{ path('app_user_login') }}">Connexion</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+</nav>

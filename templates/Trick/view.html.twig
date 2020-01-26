@@ -1,0 +1,26 @@
+{# templates/Trick/view.html.twig #}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>SnowTrick - Figure {{ id }}</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1>Figure - {{ id }}</h1>
+  <h2>Bienvenue sur la page du Trick {{ id }} !</h2>
+  <p>
+    {{ 'Mirko' }} - Lorem ipsum dolor sit amet, consectetur adipiscing elit,<br/>
+    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br/>
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<br/>
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.<br/>
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br/>
+  </p>
+  <div>
+    {# On affiche tous les messages flash nommés "info" #}
+    {% for message in app.flashes('info') %}
+      <p>Message flash : {{ message }}</p>
+    {% endfor %}
+  </div>
+</body>
+</html>

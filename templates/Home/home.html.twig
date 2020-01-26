@@ -1,18 +1,218 @@
 {# templates/Home/home.html.twig #}
 
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Bienvenue sur ma première page avec OpenClassrooms !</title>
-  <meta charset="UTF-8">
-</head>
-<body>
-  <h1>{{ name|upper }}</h1>
-  <p>
-    Le Hello World est un grand classique en programmation.
-    Il signifie énormément, car cela veut dire que vous avez
-    réussi à exécuter le programme pour accomplir une tâche simple :
-    afficher ce hello world !
-  </p>
-</body>
-</html>
+{% extends "layout.html.twig" %}
+
+{% block stylesheets %}{{ parent() }}{% endblock %}
+
+{% block title %}{{ parent() }} Liste des figures {% endblock %}
+
+{% block body %}
+
+<!-- Page Content -->
+<div class="container-fluid">
+  {{ parent() }}
+
+  <div class="row">
+    <img src="../public/img/snowtrick-background.jpg" class="img-fluid my-5" alt="snowtrick">
+  </div>
+  <!-- Tricks Section -->
+  <div class="row">
+    <div class="col-lg-1 mb-1">
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1 mb-4">
+    </div>
+  </div>
+  <!-- /.row -->
+
+  <div class="row">
+    <div class="col-lg-1 mb-1">
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1 mb-4">
+    </div>
+  </div>
+  <!-- /.row -->
+
+  <div class="row">
+    <div class="col-lg-1 mb-1">
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 mb-4">
+      <div class="card h-100">
+        <h4 class="card-header">Card Title</h4>
+        <div class="card-body">
+          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-primary">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1 mb-4">
+    </div>
+  </div>
+  <!-- /.row -->
+
+  <!-- Call to Action Section -->
+  <div class="row mb-4 text-center">
+    <div class="align-self-center mx-auto">
+      <a class="btn btn-lg btn-primary btn-block text-uppercase" href="#">Load more tricks</a>
+    </div>
+  </div>
+
+</div>
+<!-- /.container -->
+{% block javascripts %} {{ parent() }} {% endblock %} 
+{% endblock %}
