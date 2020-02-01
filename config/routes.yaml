@@ -1,6 +1,14 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-app_home:
-    path: /index/home/index
-    controller: App\Controller\HomeController:index
+#app_trick_home:
+#    path: /index
+#    controller: App\Controller\TrickController::index
+
+#app_trick_view:
+#    path: /index/view/{id}
+#    controller: App\Controller\TrickController::view
+
+#app_trick_add:
+#    path: /index/createTrick
+#    controller: App\Controller\TrickController::add
