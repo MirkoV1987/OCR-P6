@@ -1,0 +1,107 @@
+{# src/templates/Parts/_dashboard_layout.html.twig  #}
+
+<!--Preloader start-->
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>
+    <!--Preloader end-->
+
+    
+    <!--Main wrapper start-->
+    <div id="main-wrapper">
+
+        <!-- Nav header start-->
+        <div class="nav-header">
+            <div class="brand-logo">
+                <a href="index.html">
+                    <b class="logo-abbr"><img src="images/logo.png" alt=""> </b>
+                    <span class="logo-compact"><img src="./images/logo-compact.png" alt=""></span>
+                    <span class="brand-title">
+                        <img src="images/logo-text.png" alt="">
+                    </span>
+                </a>
+            </div>
+        </div>
+        <!--Nav header end-->
+
+        <!--Header start-->
+        <div class="header">    
+            <div class="header-content clearfix">
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <ul class="clearfix">
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                <img src="/OCR-P6/public/quixlab-master/images/user/1.png" height="40" width="40" alt="utilisateur">
+                            </div>
+                            <div class="drop-down dropdown-profile dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#"><i class="icon-user"></i> <span>Profil</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="icon-lock"></i> <span>Mot de passe</span></a>
+                                        </li>                        
+                                        <hr class="my-2">
+                                        <li>
+                                            <a href="#"><i class="icon-key"></i> <span>Logout</span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--Header end-->
+
+        <!--Sidebar start-->
+        <div class="nk-sidebar">           
+            <div class="nk-nav-scroll text-uppercase font-weight-bold py-6">
+                <ul class="metismenu my-2" id="menu">
+                    <li class="nav-label" style="font-family: 'Trebuchet MS';">Born to snowboard</li>
+                    <li>
+                        <a href="javascript:void()" aria-expanded="false">
+                            <i class="icon-user menu-icon"></i><span class="nav-text">Mon Profil</span>
+                        </a>
+                    </li>
+                    <hr class="my-2">
+                    <li>
+                        <a href="javascript:void()" aria-expanded="false">
+                            <i class="icon-lock menu-icon"></i><span class="nav-text">Mon mot de passe</span>
+                        </a>
+                    </li>
+                    <hr class="my-2">
+                    <li>
+                        <a href="javascript:void()" aria-expanded="false">
+                            <i class="icon-list menu-icon"></i><span class="nav-text">Mes Tricks</span>
+                        </a>
+                    </li>
+                    <hr class="my-2">
+                    <li>
+                        <a href="javascript:void()" aria-expanded="false">
+                            <i class="icon-note menu-icon"></i><span class="nav-text">Ajouter un Trick</span>
+                        </a>
+                    </li>
+                    <hr class="my-2">
+                    <li>
+                        <a href="javascript:void()" aria-expanded="false">
+                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Mes commentaires</span>
+                        </a>
+                    </li>
+                </ul>
+                <img class="img-fluid my-5" src="/OCR-P6/public/img/snowboarder.png" alt="snowtricks" />
+            </div>
+        </div>
+        <!--Sidebar end-->
