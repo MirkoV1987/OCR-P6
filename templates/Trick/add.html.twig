@@ -1,21 +1,25 @@
 {# templates/Trick/add.html.twig #}
 
-{% extends "layout.html.twig" %}
-
-{% block stylesheets %}{{ parent() }}{% endblock %}
-
-{% block title %}{{ parent() }} Ajouter une figure {% endblock %}
+{% extends "dashboard.html.twig" %}
 
 {% block body %}
+ 
+ {{ include("Parts/_dashboard_layout.html.twig") }}
+        <!--Content body start-->
+        <div class="content-body my-4">
+            <div class="container-fluid">
+                {{ include("Trick/_form.html.twig") }}
+            </div>
+        </div>
+        <!--Content body end-->
+        
+        <!--Footer start-->
+        <div class="footer">
+            <div class="copyright">
+                <p>Copyright &copy; Mirko Venturi 2020</p>
+            </div>
+        </div>
+        <!--Footer end-->
 
-<h2>Ajouter une figure</h2>
-
-{{ include("Trick/_form.html.twig") }}
-
-<!--TO DO : formulaire pour ajouter une figure-->
-
-<p>
-Figure ajoutée sur la page d'accueil après validation du formulaire.    
-</p>
-
+    </div>
 {% endblock %}
