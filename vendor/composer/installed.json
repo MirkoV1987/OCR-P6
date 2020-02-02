@@ -2783,8 +2783,8 @@
     },
     {
         "name": "symfony/form",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/form.git",
@@ -3922,8 +3922,8 @@
     },
     {
         "name": "symfony/property-access",
-        "version": "v5.0.3",
-        "version_normalized": "5.0.3.0",
+        "version": "v5.0.4",
+        "version_normalized": "5.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/property-access.git",
