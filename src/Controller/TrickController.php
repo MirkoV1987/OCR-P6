@@ -4,7 +4,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Trick;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\TrickType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -20,20 +27,32 @@ class TrickController extends AbstractController
      */
     public function add(Request $request)
     {
-        //Si la requête est en POST, l'utilisateur a soumis le formulaire
+        $trick = new Trick();
 
-        if ($request->isMethod('POST')) {
+        $form = $this->createForm(TrickType::class, $trick);
 
-            //Création et gestion du formulaire
+        $form->handleRequest($request);
 
-            $this->addFlash('notice', 'Figure enregistrée avec succès !');
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            // Rédirection vers la view de la nouvelle figure créée
+            $trick = $form->getData();
 
-            return $this->redirectToRoute('app_trick_view', ['id' => 4]);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            $this->addFlash('notice', 'Trick enregistré avec succès !');
+
+            return $this->redirectToRoute('app_trick_home');
+
         }
-        // Si on n'est pas en POST, on affiche le formulaire
-        return $this->render('Trick/add.html.twig');
+
+        return $this->render('Trick/add.html.twig', [
+            'form' => $form->createView(),
+        ]);    
+       
+        //TO DO: Vérifier si les données du formulaire sont valides
+
     }
 
     /**

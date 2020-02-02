@@ -34,4 +34,9 @@ class HomeController extends AbstractController
             'name' => 'Mirko Venturi'
         ]);
     }
+
+    public function mail() 
+    {
+        $mailer = $this->get('mailer');
+    } 
 }
