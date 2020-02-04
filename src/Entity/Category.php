@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
@@ -17,14 +19,10 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * 
+     * @ORM\Column(type="string", length=50)
      */
     private $name;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $tricks;
 
     public function getId(): ?int
     {
@@ -39,18 +37,6 @@ class Category
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getTricks(): ?string
-    {
-        return $this->tricks;
-    }
-
-    public function setTricks(?string $tricks): self
-    {
-        $this->tricks = $tricks;
 
         return $this;
     }
