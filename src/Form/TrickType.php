@@ -6,6 +6,9 @@ namespace App\Form;
 
 use App\Entity\Trick;
 use App\Entity\Category;
+use App\Entity\Media;
+use App\Form\MediaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -45,11 +48,21 @@ class TrickType extends AbstractType
                 'class'=>Category::class,
                 'choice_label'=> 'name'
             ])
+            ->add('mediaUrl', FileType::class, [
+                'mapped' => false
+            ])
+            ->add('medias', CollectionType::class, [
+                'entry_type' => MediaType::class,
+                'entry_options' => ['label' => true], 
+                'allow_add' => true,
+                'allow_delete' => true
+            ])
             ->add('save', SubmitType::class, [
                 'label'=>'Ajouter'
             ])
         ;
     }
+    
 
     public function configureOptions(OptionsResolver $resolver)
     {
