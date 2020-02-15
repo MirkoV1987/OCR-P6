@@ -58,10 +58,28 @@ class Trick
     private $date_update;
 
     /**
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="set null")
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="name", cascade={"persist"})
      */
     private $category;
+
+    /**
+     * @ORM\JoinColumn(nullable=false, onDelete="set null")
+     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
+     */
+    private $medias;
+
+    /**
+     * @ORM\JoinColumn(nullable=false, onDelete="set null")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
+     */
+    private $comments;
+
+    /**
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks", cascade={"persist"})
+     */
+    private $author;
 
     public function getId(): ?int
     {
@@ -124,6 +142,57 @@ class Trick
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function __construct()
+    {
+        $this->medias = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
+
+    public function addMedia(Media $media)
+    {
+       $this->medias[] = $media;
+    }
+
+    public function deleteMedia(Media $media)
+    {
+       $this->medias->deleteMedia($media);
+    }
+
+    public function getMedias() 
+    {
+        return $this->medias;
+    }
+
+    public function addComment(Comment $comment)
+    {
+       $this->comments[] = $comment;
+    }
+
+    public function deleteComment(Comment $comment)
+    {
+       $this->comments->deleteComment($comment);
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

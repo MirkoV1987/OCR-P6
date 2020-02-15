@@ -18,22 +18,6 @@ class Comment
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(min=3,
-     *     minMessage="Le prénom de l'auteur doit contenir au moins 3 caractères")
-     */
-    private $authorName;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(min=3,
-     *     minMessage="Le nom de l'auteur doit contenir au moins 2 caractères")
-     */
-    private $authorSurname;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $date_add;
@@ -47,10 +31,10 @@ class Comment
     private $content;
 
     /**
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="set null")
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments", cascade={"persist"})
      */
-    private $user;
+    private $author;
 
     /**
      * @ORM\JoinColumn(nullable=false)
@@ -61,30 +45,6 @@ class Comment
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAuthorName(): ?string
-    {
-        return $this->authorName;
-    }
-
-    public function setAuthorName(string $authorName): self
-    {
-        $this->authorName = $authorName;
-
-        return $this;
-    }
-
-    public function getAuthorSurname(): ?string
-    {
-        return $this->authorSurname;
-    }
-
-    public function setAuthorSurname(string $authorSurname): self
-    {
-        $this->authorSurname = $authorSurname;
-
-        return $this;
     }
 
     public function getDateAdd(): ?\DateTimeInterface
@@ -111,14 +71,14 @@ class Comment
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getAuthor(): ?User
     {
-        return $this->user;
+        return $this->author;
     }
 
-    public function setUser(?User $user): self
+    public function setAuthor(?User $author): self
     {
-        $this->user = $user;
+        $this->author = $author;
 
         return $this;
     }

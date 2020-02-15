@@ -3,9 +3,23 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(
+ *  fields={"username"},
+ *  message="Nom utilisateur déjà utilisé"
+ * )
+ * @UniqueEntity(
+ *  fields={"email"},
+ *  message="Email déjà utilisé"
+ * )
  */
 class User
 {
@@ -60,6 +74,16 @@ class User
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $resetPasswordToken;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", orphanRemoval=true)
+     */
+    private $tricks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
+     */
+    private $comments;
 
     public function getId(): ?int
     {
@@ -172,5 +196,41 @@ class User
         $this->resetPasswordToken = $resetPasswordToken;
 
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->tricks = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
+
+    public function addTrick(Trick $trick)
+    {
+       $this->tricks[] = $trick;
+    }
+
+    public function deleteTrick(Trick $trick)
+    {
+       $this->tricks->deleteTrick($trick);
+    }
+
+    public function getTricks()
+    {
+        return $this->tricks;
+    }
+
+    public function addComment(Comment $comment)
+    {
+       $this->comments[] = $comment;
+    }
+
+    public function deleteComment(Comment $comment)
+    {
+       $this->comments->deleteComment($comment);
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
     }
 }
