@@ -49,14 +49,15 @@ class TrickType extends AbstractType
                 'choice_label'=> 'name'
             ])
             ->add('mediaUrl', FileType::class, [
+                'label'=>'Ajouter une image',
                 'mapped' => false
             ])
-            ->add('medias', CollectionType::class, [
-                'entry_type' => MediaType::class,
-                'entry_options' => ['label' => true], 
-                'allow_add' => true,
-                'allow_delete' => true
-            ])
+            // ->add('medias', CollectionType::class, [
+            //     'entry_type' => MediaType::class,
+            //     'entry_options' => ['label' => true], 
+            //     'allow_add' => true,
+            //     'allow_delete' => true
+            // ])
             ->add('save', SubmitType::class, [
                 'label'=>'Ajouter'
             ])
