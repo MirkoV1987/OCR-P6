@@ -18,59 +18,75 @@ class AppFixtures extends Fixture
     {
         $faker = Faker\Factory::create('fr_FR');
 
-        for ($i = 0; $i < 6; $i++) {
-            $category = new Category();
-            $category->setName($faker->text($maxNbChars = 10));
-            $manager->persist($category);
-        }
+        //Initialisation des variables
+        $authors = [];
+        $categories = [];
+        $tricks = [];
+        $medias = [];
+        $categoryDemoName = ['Stances', 'Straight Airs', 'Grabs', 'Spins', 'Flips', 'Slides'];
+        $mediaDemoName = ['FlipVideo.mp4', 'Nollieimg.png', 'Bloody-Dracula.jpg', 'TailPress.png', '50-50.jpg'];
+        $tricksDemoName = ['Goofy', 'Ollie', 'Nollie', 'Beef Curtains', 'Bloody Dracula', 'Canadian Bacon', 'Front Flip', 'Lando-Roll', '50-50', 'TailPress'];
 
-        for ($i = 0; $i < 5; $i++) {
-            $comment = new Comment();
-            $comment->setDateAdd($faker->dateTimeThisDecade($max = 'now', $timezone = null));
-            $comment->setContent($faker->text);
-            $comment->setAuthor(new User(), $faker->biasedNumberBetween($min = 10, $max = 1000, $function = 'sqrt'));
-            $comment->getTrick(new Trick(), $faker->biasedNumberBetween($min = 237, $max = 1000, $function = 'sqrt'));
-            $manager->persist($comment);
-        }
-
-        for ($i = 0; $i < 3; $i++) {
-            $media = new Media();
-            $media->setName($faker->name);
-            $media->setCaption($faker->text);
-            $media->setMediaUrl($faker->imageUrl($width = 244, $height = 420, 'cats'));
-            //$media->setMediaFile(new  UploadedFile(), $faker->file($sourceDir = 'public/uploads', $targetDir = 'public/uploads/tricks'));
-            $media->setDateAdd($faker->dateTimeThisDecade($max = 'now', $timezone = null));
-            $media->getTrick(new Trick(), $faker->biasedNumberBetween($min = 237, $max = 1000, $function = 'sqrt'));
-            $manager->persist($media);
-        }
-
-        for ($i = 0; $i < 8; $i++) {
-            $user = new User();
-            $user->setUsername($faker->name);
-            $user->setEmail($faker->email);
-            $user->setPassword($faker->sha256);
-            $user->setComfirmPassword($faker->sha256);
-            $user->setDateAdd($faker->dateTimeThisDecade($max = 'now', $timezone = null));
-            $user->setDateUpdate($faker->dateTimeThisDecade($max = 'now', $timezone = null));
-            $user->setIsActive($faker->boolean($chanceOfGettingTrue = 50));
-            $user->setValidationToken($faker->md5);
-            $user->setResetPasswordToken($faker->sha256);
-            $user->getComments(new Comment(), $faker->biasedNumberBetween($min = 237, $max = 1000, $function = 'sqrt'));
-            $user->getTricks(new Trick(), $faker->randomDigitNotNull);
-            $manager->persist($user);
-        }
         
         for ($i = 0; $i < 10; $i++) {
+            $user = new User();
+            $user->setUsername($faker->name)
+                ->setEmail($faker->safeEmail)
+                ->setPassword($faker->sha256)
+                ->setComfirmPassword($faker->sha256)
+                ->setDateAdd($faker->dateTimeBetween($startDate = '-8 months', $endDate = 'now', $timezone = null))
+                ->setDateUpdate($faker->dateTimeBetween($startDate = '-8 months', $endDate = 'now', $timezone = null))
+                ->setIsActive(true)
+                ->setValidationToken($faker->md5)
+                ->setResetPasswordToken($faker->sha256);
+
+            $manager->persist($user);
+            $authors[] = $user;
+        }
+
+        foreach ($categoryDemoName as $categoryName) {
+            $category = new Category();
+            $category->setName($categoryName);
+        
+            $manager->persist($category);
+            $categories[] = $category;
+        }
+
+        foreach ($tricksDemoName as $trickName) { 
             $trick = new Trick();
-            $trick->setName($faker->name);
-            $trick->setDescription($faker->text);
-            $trick->setDateAdd($faker->dateTimeThisDecade($max = 'now', $timezone = null));
-            $trick->setDateUpdate($faker->dateTimeThisDecade($max = 'now', $timezone = null));
-            $trick->getCategory(new Category(), $faker->biasedNumberBetween($min = 255, $max = 280, $function = 'sqrt'));
-            $trick->getMedias(new Media(), $faker->biasedNumberBetween($min = 237, $max = 1000, $function = 'sqrt'));
-            $trick->getComments(new Comment(), $faker->biasedNumberBetween($min = 40, $max = 1000, $function = 'sqrt'));
-            $trick->setAuthor(new User(), $faker->biasedNumberBetween($min = 43, $max = 58, $function = 'sqrt'));
-            $manager->persist($trick);
+            $trick->setName($trickName)
+                ->setDescription($faker->text)
+                ->setDateAdd($faker->dateTimeBetween($startDate = '-8 months', $endDate = 'now', $timezone = null))
+                ->setDateUpdate($faker->dateTimeBetween($startDate = '-8 months', $endDate = 'now', $timezone = null))
+                ->setCategory($faker->randomElement($categories))
+                ->setAuthor($faker->randomElement($authors));
+
+                $manager->persist($trick);
+                $tricks[] = $trick;
+            }
+
+        foreach ($mediaDemoName as $mediaName) {
+            $media = new Media();
+            $media->setName($mediaName)
+                ->setCaption($faker->text)
+                ->setMediaUrl($faker->imageUrl($width = 244, $height = 420, 'cats'))
+                ->setDateAdd($faker->dateTimeBetween($startDate = '-4 months', $endDate = 'now', $timezone = null))
+                ->setTrick($faker->randomElement($tricks));
+
+            $manager->persist($media);
+            $medias[] = $media;
+        }
+        
+        for ($i = 0; $i < 15; $i++) {
+            $comment = new Comment();
+            $comment->setAuthor($faker->randomElement($authors))
+                    ->setTrick($faker->randomElement($tricks))
+                    ->setDateAdd(new \Datetime)
+                    ->setContent($faker->text);
+
+            $manager->persist($comment);
+            $comments[] = $comment;
+            $tricks[] = $trick;
         }
 
         $manager->flush();
