@@ -6,24 +6,34 @@ namespace App\Service;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\ErrorHandler\ErrorHandler;
 
 class UploaderHelper
 {
-    private $uploadsPath;
+    private $targetDirectory;
 
-    public function __construct(string $uploadsPath)
+    public function __construct($targetDirectory)
     {
-        $this->uploadsPath = $uploadsPath;
+        $this->targetDirectory = $targetDirectory;
     }
-    public function uploadTrickImage(UploadedFile $uploadedFile): string
+
+    public function uploadTrickFile(UploadedFile $file): string
     {
-        $destination = $this->uploadsPath.'/uploads';
-        $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-        $newFilename = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$uploadedFile->guessExtension();
-        $uploadedFile->move(
-            $destination,
-            $newFilename
-        );
-        return $newFilename;
+        $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+        try {
+            $file->move($this->getTargetDirectory(), $fileName);
+        } catch (FileException $e) {
+            throw new Exception("Erreur de chargement du fichier", 1);   
+        }
+
+        return $fileName;
     }
+
+    public function getTargetDirectory()
+    {
+        return $this->targetDirectory;
+    }  
 }
