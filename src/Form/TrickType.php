@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -48,9 +49,10 @@ class TrickType extends AbstractType
                 'class'=>Category::class,
                 'choice_label'=> 'name'
             ])
-            ->add('mediaUrl', FileType::class, [
+            ->add('mediaFile', FileType::class, [
                 'label'=>'Ajouter une image',
-                'mapped' => false
+                'mapped' => false,
+                'required' => false,
             ])
             // ->add('medias', CollectionType::class, [
             //     'entry_type' => MediaType::class,
