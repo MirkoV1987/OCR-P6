@@ -13,8 +13,8 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     App\Service\UploaderHelper:
-        arguments: ['@uploadedFile']
-            $targetDirectory: '%media_directory%'
+        arguments: ['@doctrine.orm.entity_manager']
+
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
