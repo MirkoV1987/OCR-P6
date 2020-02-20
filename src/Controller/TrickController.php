@@ -43,14 +43,9 @@ class TrickController extends AbstractController
 
             /** @var UploaderHelper $mediaUrl */
 
-            // $mediaFile = new UploadedFile($trick->getMediaFile(), "MediaFile");
-            // $mediaUrl = $uploaderHelper->upload($mediaFile);
-            // $trick->setMediaFile("$mediaUrl");
-
             $mediaFile = $form->get('mediaFile')->getData();
             if ($mediaFile) {
-                $mediaUrl = $uploaderHelper->upload($mediaFile);
-                $trick->setMediaUrl($mediaUrl);
+                $mediaUrl = $uploaderHelper->uploadTrickFile($mediaFile, $trick);
             }
             
             $entityManager = $this->getDoctrine()->getManager();
