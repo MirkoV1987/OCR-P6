@@ -37,11 +37,6 @@ class Media
     private $caption;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $mediaUrl;
-
-    /**
      * @Assert\File(
      *     maxSize = "10000k",
      *     maxSizeMessage = "La taille du fichier ne peut pas dépasser 10Mo",
@@ -97,18 +92,6 @@ class Media
     public function setCaption(string $caption): self
     {
         $this->caption = $caption;
-
-        return $this;
-    }
-
-    public function getMediaUrl(): ?string
-    {
-        return $this->mediaUrl;
-    }
-
-    public function setMediaUrl(string $mediaUrl): self
-    {
-        $this->mediaUrl = $mediaUrl;
 
         return $this;
     }
