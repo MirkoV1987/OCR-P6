@@ -115,7 +115,7 @@ class Trick
         return $this->date_add;
     }
 
-    public function setDateAdd(\DateTimeInterface $date_add): self
+    public function setDateAdd($date_add): self
     {
         $this->date_add = $date_add;
 
@@ -127,7 +127,7 @@ class Trick
         return $this->date_update;
     }
 
-    public function setDateUpdate(\DateTimeInterface $date_update): self
+    public function setDateUpdate($date_update): self
     {
         $this->date_update = $date_update;
 
@@ -150,6 +150,8 @@ class Trick
     {
         $this->medias = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->date_add = new \Datetime('+ 1 hour');
+        $this->date_update = new \Datetime('+ 1 hour');
     }
 
     public function addMedia(Media $media)
@@ -162,7 +164,10 @@ class Trick
        $this->medias->deleteMedia($media);
     }
 
-    public function getMedias() 
+    /**
+     * @return Collection|Media[]
+     */
+    public function getMedias() : Collection
     {
         return $this->medias;
     }
