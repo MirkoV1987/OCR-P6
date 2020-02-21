@@ -39,10 +39,8 @@ class TrickType extends AbstractType
                 'label'=>'Description',
                 'attr'=>[
                     'rows'=>10
+                    //'id'=>'textarea'
                 ]
-            ])
-            ->add('date_add', DateType::class, [
-                'label'=>'Date de création'
             ])
             ->add('category', EntityType::class, [
                 'label'=>'Groupe',
@@ -54,12 +52,16 @@ class TrickType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            // ->add('medias', CollectionType::class, [
-            //     'entry_type' => MediaType::class,
-            //     'entry_options' => ['label' => true], 
-            //     'allow_add' => true,
-            //     'allow_delete' => true
+            // ->add('caption', EntityType::class, [
+            //     'label'=>'Ajouter une légende',
+            //     'class'=>Media::class,
+            //     'choice_label'=> 'caption'
             // ])
+            ->add('medias', CollectionType::class, [
+                'entry_type'=> MediaType::class,
+                'allow_add'=>true,
+                'allow_delete'=>true
+            ])
             ->add('save', SubmitType::class, [
                 'label'=>'Ajouter'
             ])
