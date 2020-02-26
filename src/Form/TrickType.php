@@ -38,8 +38,8 @@ class TrickType extends AbstractType
             ->add('description', TextareaType::class, [
                 'label'=>'Description',
                 'attr'=>[
-                    'rows'=>10
-                    //'id'=>'textarea'
+                    'rows'=>10,
+                    'id'=>'trick_description'
                 ]
             ])
             ->add('category', EntityType::class, [
@@ -47,20 +47,17 @@ class TrickType extends AbstractType
                 'class'=>Category::class,
                 'choice_label'=> 'name'
             ])
-            ->add('mediaFile', FileType::class, [
-                'label'=>'Ajouter une image',
-                'mapped' => false,
-                'required' => false,
-            ])
-            // ->add('caption', EntityType::class, [
-            //     'label'=>'Ajouter une légende',
-            //     'class'=>Media::class,
-            //     'choice_label'=> 'caption'
+            // ->add('mediaFile', FileType::class, [
+            //     'label'=>'Ajouter une image',
+            //     'multiple'=>false,
+            //     'mapped' => false,
+            //     'required' => false,
             // ])
             ->add('medias', CollectionType::class, [
-                'entry_type'=> MediaType::class,
-                'allow_add'=>true,
-                'allow_delete'=>true
+                'entry_type' => MediaType::class,
+                'entry_options' => ['label' => false], 
+                'allow_add' => true,
+                'allow_delete' => true
             ])
             ->add('save', SubmitType::class, [
                 'label'=>'Ajouter'
