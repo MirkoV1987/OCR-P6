@@ -1,7 +1,4 @@
 {
-    "monolog/monolog": {
-        "version": "2.0.2"
-    },
     "php": {
         "version": "7.2"
     },
@@ -16,6 +13,9 @@
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "symfony/asset": {
+        "version": "v5.0.4"
     },
     "symfony/cache": {
         "version": "v5.0.2"
@@ -101,23 +101,6 @@
     "symfony/mime": {
         "version": "v5.0.2"
     },
-    "symfony/monolog-bridge": {
-        "version": "v5.0.2"
-    },
-    "symfony/monolog-bundle": {
-        "version": "3.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "3.3",
-            "ref": "222b46a1bb02cd04bbc59700adec2f44f1a644b7"
-        },
-        "files": [
-            "./config/packages/dev/monolog.yaml",
-            "./config/packages/prod/monolog.yaml",
-            "./config/packages/test/monolog.yaml"
-        ]
-    },
     "symfony/polyfill-intl-idn": {
         "version": "v1.13.1"
     },
@@ -144,11 +127,43 @@
     "symfony/service-contracts": {
         "version": "v2.0.1"
     },
+    "symfony/translation": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "2ad9d2545bce8ca1a863e50e92141f0b9d87ffcd"
+        },
+        "files": [
+            "./config/packages/translation.yaml",
+            "./translations/.gitignore"
+        ]
+    },
     "symfony/var-dumper": {
         "version": "v5.0.2"
     },
     "symfony/var-exporter": {
         "version": "v5.0.2"
+    },
+    "symfony/webpack-encore-bundle": {
+        "version": "1.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.6",
+            "ref": "69e1d805ad95964088bd510c05995e87dc391564"
+        },
+        "files": [
+            "./assets/css/app.css",
+            "./assets/js/app.js",
+            "./config/packages/assets.yaml",
+            "./config/packages/prod/webpack_encore.yaml",
+            "./config/packages/test/webpack_encore.yaml",
+            "./config/packages/webpack_encore.yaml",
+            "./package.json",
+            "./webpack.config.js"
+        ]
     },
     "symfony/yaml": {
         "version": "v5.0.2"
