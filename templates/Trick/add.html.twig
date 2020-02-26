@@ -6,10 +6,11 @@
  
  {{ include("Parts/_dashboard_layout.html.twig") }}
         <!--Content body start-->
-        <div class="content-body my-4">
+        <div class="content-body my-4" style="min-height: auto !important;">
             <div class="container-fluid">
                 {{ include("Trick/_form.html.twig") }}
             </div>
+            {# {{ asset('public/media_directory/' ~ trick.mediaFileName()) }} #}
         </div>
         <!--Content body end-->
         

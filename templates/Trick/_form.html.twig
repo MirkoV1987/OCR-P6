@@ -14,22 +14,38 @@
                             {{ form_row(form.category) }}
                         </div>
                         <div class="col-md-9">
-                            {{ form_row(form.description) }}
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class="col-md-4">
-                            {{ form_row(form.date_add) }}
+                            {{ form_row(form.description,  {'attr': {'id': 'trick_description'}}) }}
+                            <p class="text-right" id="counterBlock">0</p>
                         </div>
                     </div>
                     <div class='row'>
                         <div class="col-md-3">
                             <h3>Images et vidéos</h3>
-                            {# {{ form_row(form.mediaUrl) }} #}
+                            {# {{ form_row(form.mediaFile, {'attr': {'placeholder': 'Ajouter un ou plusieurs médias'}}) }} #}
+                        </div>
+                        <ul id="medias-list" data-prototype="{{ form_widget(form.medias.vars.prototype)|e }}" data-widget-tags="{{ '<li></li>'|e }}" data-widget-counter="{{ form.medias|length }}">
+                            {% for medias in form.medias %}
+                                <li>
+                                    {{ form_errors(medias) }}
+                                    {{ form_widget(medias) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="list-tricks-images col-md-9">
+                            <img id="uploaded-image-1" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
+                            <img id="uploaded-image-2" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
+                            <img id="uploaded-image-3" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
+                            <img id="uploaded-image-4" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
+                            <img id="uploaded-image-4" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
                         </div> 
                     </div>
+                    <button type="button" class="add-another-collection-widget" data-list-selector="#medias-list">Ajouter un autre média</button>
                 {{ form_end(form) }}
             </div>
         </div>
     </div>
 </div>
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    <script src="../build/add-collection-widget.js"></script>
+{% endblock %}
