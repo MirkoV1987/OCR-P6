@@ -96,6 +96,18 @@ class Media
         return $this;
     }
 
+    public function getMediaUrl(): ?string
+    {
+        return $this->mediaUrl;
+    }
+
+    public function setMediaUrl(string $mediaUrl): self
+    {
+        $this->mediaUrl = $mediaUrl;
+
+        return $this;
+    }
+
     public function getMediaFile()
     {
         return $this->mediaFile;

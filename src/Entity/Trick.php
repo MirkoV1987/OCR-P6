@@ -115,19 +115,19 @@ class Trick
         return $this->date_add;
     }
 
-    public function setDateAdd($date_add): self
+    public function setDateAdd(\DateTimeInterface $date_add): self
     {
         $this->date_add = $date_add;
 
         return $this;
     }
 
-    public function getDateUpdate(): ?\DateTimeInterface
+    public function getDateUpdate()
     {
         return $this->date_update;
     }
 
-    public function setDateUpdate($date_update): self
+    public function setDateUpdate(\DateTimeInterface $date_update): self
     {
         $this->date_update = $date_update;
 
@@ -164,10 +164,7 @@ class Trick
        $this->medias->deleteMedia($media);
     }
 
-    /**
-     * @return Collection|Media[]
-     */
-    public function getMedias() : Collection
+    public function getMedias() 
     {
         return $this->medias;
     }
