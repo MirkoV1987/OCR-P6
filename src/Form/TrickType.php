@@ -6,16 +6,10 @@ namespace App\Form;
 
 use App\Entity\Trick;
 use App\Entity\Category;
-use App\Entity\Media;
-use App\Form\MediaType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -47,17 +41,10 @@ class TrickType extends AbstractType
                 'class'=>Category::class,
                 'choice_label'=> 'name'
             ])
-            // ->add('mediaFile', FileType::class, [
-            //     'label'=>'Ajouter une image',
-            //     'multiple'=>false,
-            //     'mapped' => false,
-            //     'required' => false,
-            // ])
-            ->add('medias', CollectionType::class, [
-                'entry_type' => MediaType::class,
-                'entry_options' => ['label' => false], 
-                'allow_add' => true,
-                'allow_delete' => true
+            ->add('mediaName', FileType::class, [
+                'label' => 'Ajouter un ou plusieurs médias',
+                'mapped' => false,
+                'multiple'=> true
             ])
             ->add('save', SubmitType::class, [
                 'label'=>'Ajouter'
