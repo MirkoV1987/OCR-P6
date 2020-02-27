@@ -41,11 +41,10 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            /** @var UploaderHelper $mediaUrl */
-
-            $mediaFile = $form->get('mediaFile')->getData();
-            if ($mediaFile) {
-                $mediaUrl = $uploaderHelper->uploadTrickFile($mediaFile, $trick);
+            $media = $form['mediaName']->getData();
+            
+            if ($media) {
+                $uploaderHelper->uploadTrickFile($media, $trick);
             }
             
             $entityManager = $this->getDoctrine()->getManager();
