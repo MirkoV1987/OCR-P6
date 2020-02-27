@@ -23,8 +23,13 @@ class UploaderHelper
         $this->em = $em;
     } 
 
-    public function uploadTrickFile(UploadedFile $file, Trick $trick): string
+    public function uploadTrickFile(array $files, Trick $trick): string
     {
+        /**
+         * @var UploadedFile $file
+         */
+        foreach ($files as $file) { 
+
         $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFileName);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
@@ -39,12 +44,13 @@ class UploaderHelper
         $media = new Media();
         $media->setName($fileName);
         $media->setCaption($originalFileName);
-        $media->setDateAdd(new \Datetime());
-        $media->setMediaUrl('coucou');
+        $media->setDateAdd(new \Datetime('+ 1 hour'));
         $media->setTrick($trick);
 
         $this->em->persist($media);
         $this->em->flush();
+
+        }
 
         return $fileName;
     }
