@@ -5,22 +5,18 @@
 {% block body %}
  
  {{ include("Parts/_dashboard_layout.html.twig") }}
-        <!--Content body start-->
-        <div class="content-body my-4" style="min-height: auto !important;">
-            <div class="container-fluid">
-                {{ include("Trick/_form.html.twig") }}
-            </div>
-            {# {{ asset('public/media_directory/' ~ trick.mediaFileName()) }} #}
-        </div>
-        <!--Content body end-->
-        
-        <!--Footer start-->
-        <div class="footer">
-            <div class="copyright">
-                <p>Copyright &copy; Mirko Venturi 2020</p>
-            </div>
-        </div>
-        <!--Footer end-->
 
+    <div class="content-body my-4">
+        <div class="container-fluid">
+            <h4 class="card-title text-uppercase mx-3">Ajouter un Trick</h4>
+            {{ include("Trick/_form.html.twig") }}
+        </div>
     </div>
+        
+    <div class="footer">
+        <div class="copyright">
+            <p>Copyright &copy; Mirko Venturi 2020</p>
+        </div>
+    </div>
+
 {% endblock %}
