@@ -64,10 +64,9 @@ class Trick
     private $category;
 
     /**
-     * @ORM\JoinColumn(nullable=false, onDelete="set null")
-     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
+     * @var string
      */
-    private $medias;
+    private $videos;
 
     /**
      * @ORM\JoinColumn(nullable=false, onDelete="set null")
@@ -149,6 +148,7 @@ class Trick
     public function __construct()
     {
         $this->medias = new ArrayCollection();
+        $this->videos = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->date_add = new \Datetime('+ 1 hour');
         $this->date_update = new \Datetime('+ 1 hour');
@@ -169,14 +169,32 @@ class Trick
         return $this->medias;
     }
 
+    public function addVideo(Media $video)
+    {
+       $this->videos[] = $video;
+    }
+
+    public function removeVideo(Media $video)
+    {
+       $this->videos->removeVideo($video);
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos()
+    {
+        return $this->videos;
+    }
+
     public function addComment(Comment $comment)
     {
        $this->comments[] = $comment;
     }
 
-    public function deleteComment(Comment $comment)
+    public function removeComment(Comment $comment)
     {
-       $this->comments->deleteComment($comment);
+       $this->comments->removeComment($comment);
     }
 
     /**
