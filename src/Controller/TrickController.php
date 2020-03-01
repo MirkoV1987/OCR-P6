@@ -12,6 +12,7 @@ use App\Form\TrickType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\UploaderHelper;
+use App\Service\VideoUploader;
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -33,7 +34,7 @@ class TrickController extends AbstractController
      * @param UploaderHelper $UploaderHelper
      * @return Response
      */
-    public function add(Request $request, UploaderHelper $uploaderHelper) : Response
+    public function add(Request $request, UploaderHelper $uploaderHelper, VideoUploader $videoUploader) : Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -42,10 +43,9 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $media = $form['mediaName']->getData();
-            
-            if ($media) {
-                $uploaderHelper->uploadTrickFile($media, $trick);
-            }
+            $video = $form['videos']->getData();
+            $uploaderHelper->uploadTrickFile($media, $trick);
+            $videoUploader->getEmbedUrl($video, $trick);
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($trick);
@@ -65,7 +65,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * Présentation d'une figure
+     * Détails d'un trick
      * @Route("trick/view/{id}", name="app_trick_view", requirements={"id" = "\d+"})
      */
     public function view($id, Request $request, TrickRepository $trickRepo)
@@ -77,49 +77,64 @@ class TrickController extends AbstractController
     }
 
     /**
-     * Modifier une figure
+     * Modifier un trick
      * @Route("trick/edit/{id}", name="app_trick_edit", requirements={"id" = "\d+"})
      */
-    public function edit($id, Request $request)
+    public function edit($id, Request $request, UploaderHelper $uploaderHelper) : Response
     {
-        $trick = new Trick();
+        $entityManager = $this->getDoctrine()->getManager();
+        $trick = $entityManager->getRepository(Trick::class)->find($id);
+
+        if (!$trick) {
+            throw $this->createNotFoundException(
+                'Aucun trick avec l\'identifiant '.$id. ' n\'a été trouvé'
+            );
+        }
 
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $trick = $form->getData();
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $media = $form['mediaName']->getData();
+            $uploaderHelper->uploadTrickFile($media, $trick);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($trick);
+            $trick->setDateUpdate(new \DateTime('+ 1 hour'));
             $entityManager->flush();
 
             $this->addFlash(
-                'notice',
-                'Trick enregistré avec succès !'
+                'success',
+                'Le trick <strong>' . $trick->getName() . '</strong> a bien été modifié !'
             );
 
-            return $this->redirectToRoute('app_trick_home');
+            return $this->redirectToRoute('app_trick_home', [
+                'id' => $trick->getId()
+            ]);
         }
 
         return $this->render('Trick/edit.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
-       
-        //TO DO: Vérifier si les données du formulaire sont valides
     }
 
     /**
-     * Supprimer une figure
+     * Supprimer un trick
      * @Route("trick/delete/{id}", name="app_trick_delete", requirements={"id" = "\d+"})
      */
-    public function delete($id)
+    public function delete($id, Request $request) : Response
     {
-        // Récipérer ici l'$id de la figure à supprimer
+        $entityManager = $this->getDoctrine()->getManager();
+        $trick = $entityManager->getRepository(Trick::class)->find($id);
 
-        // Générer ici la suppression de la figure
+        $entityManager->remove($trick);
+        $entityManager->flush();
 
-        return $this->render('Trick/delete.html.twig');
+        $this->addflash(
+            'success',
+            "Le trick <strong>{$trick->getName()}</strong> a été supprimé avec succès !"
+        );
+
+        return $this->redirectToRoute('app_trick_home');
     }
 }
