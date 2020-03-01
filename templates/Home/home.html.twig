@@ -2,217 +2,99 @@
 
 {% extends "layout.html.twig" %}
 
-{% block stylesheets %}{{ parent() }}{% endblock %}
+{% block stylesheets %}
+  {{ parent() }}
+  <link src="../public/build/app.css" rel="stylesheet">
+
+{% endblock %}
 
 {% block title %}{{ parent() }} Liste des figures {% endblock %}
 
 {% block body %}
 
 <!-- Page Content -->
-<div class="container-fluid">
+<div class="container-fluid" id="trick-container">
   {{ parent() }}
 
-  <div class="row">
-    <img src="../public/img/snowtrick-background.jpg" class="img-fluid" alt="snowtrick">
+  <div class="row py-5" id="trick-lead" style="background-image: url('../public/img/mountain-background.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover">
+    <div class="col-lg-1 col-lg-push-2 col-md-12 d-flex align-items-end my-5"> 
+    </div>
+    <div class="col-lg-5 col-lg-push-2 col-md-12 d-flex align-items-end my-5"> 
+      <h2 class="d-flex text-dark text-center shadow p-3 mb-5 bg-light rounded px-3" style="font-family: 'Montserrat', 'Trebuchet MS', sans-serif">
+        Bienvenue sur le site<br/> de la communauté SnowTricks
+      </h2>
+    </div>
+    <div class="col-lg-5 col-md-12 d-flex">
+      <img src="../public/img/snowboarder-home.png" class="img-fluid py-5" alt="Responsive image"> 
+    </div>
+     <div class="col-lg-1 col-lg-push-2 col-md-12 d-flex align-items-end my-5"> 
+    </div>
   </div>
+  <a id="trick-section-top" href="#trick-section-bottom"><i class="fas fa-arrow-circle-down float-right arrow-up text-blue fa-3x"></i></a>
   <!-- Tricks Section -->
-  <div class="row my-4">
-    <div class="col-lg-1 mb-1">
+    <div class="row text-center">
+      {% for trick in tricks %}
+        <div class="col-lg-2 col-md-12 col-xs-12 my-4 mx-4">
+          <div class="card h-100">
+            <h4 class="card-header">{{ trick.name }}</h4>
+              <div class="float-right">
+                <a href="{{ path('app_trick_edit', {'id': trick.id }) }}">
+                  <i class="fas fa-pencil-alt"></i>
+                </a>
+                <a href="{{ path('app_trick_delete', {'id': trick.id }) }}" onclick="return confirm(`Êtes-vous sûr de vouloir supprimer le trick : {{trick.name}} ?`)">
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+              </div>
+            <div class="card-body">
+              <p class="card-text">{{ trick.description }}</p>
+            </div>
+            <div class="card-footer">
+              <button href="#" class="btn btn-primary text-uppercase">Voir plus</button>
+            </div>
+          </div>
+        </div>
+      {% endfor %} 
     </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-1 mb-4">
-    </div>
-  </div>
-  <!-- /.row -->
-
-  <div class="row my-4">
-    <div class="col-lg-1 mb-1">
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-1 mb-4">
-    </div>
-  </div>
-  <!-- /.row -->
-
-  <div class="row my-4">
-    <div class="col-lg-1 mb-1">
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 mb-4">
-      <div class="card h-100">
-        <h4 class="card-header">Card Title</h4>
-        <div class="card-body">
-          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-1 mb-4">
-    </div>
-  </div>
-  <!-- /.row -->
 
   <!-- Call to Action Section -->
-  <div class="row mb-4 text-center">
-    <div class="align-self-center mx-auto">
-      <a class="btn btn-lg btn-primary btn-block text-uppercase" href="#">Load more tricks</a>
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <button id="loadTrick" class="btn-primary btn-lg center-block text-uppercase" href="#">Voir plus de tricks</button>
+      </div>
     </div>
-  </div>
+    <a id="trick-section-bottom" href="#trick-section-top"><i class="fas fa-arrow-circle-up float-right arrow-up text-blue fa-3x"></i></a>
 
 </div>
+<div class="cRetour"></div>
 <!-- /.container -->
-{% block javascripts %} {{ parent() }} {% endblock %} 
+    {% block javascripts %}
+
+    {{ parent() }}
+
+    <script>
+    {
+    $(document).ready((function() {
+        var e = document.getElementById("loadTrick"),
+            n = $(e).data("next-page");
+        e.addEventListener("click", (function(t) {
+            var a = $("#trick-container");
+            $.ajax({
+                method: "GET",
+                url: "/tricks?page=" + n++,
+                success: function(t) {
+                    a.append(t.html), n > t.pages && (e.style.display = "none")
+                }
+            })
+        }))
+    }))
+}
+}, [
+    ["JIGX", "runtime"]
+]]); 
+</script>
+
+    <script src="../public/build/scroll-button.js"></script>
+
+    {% endblock %} 
+
 {% endblock %}
