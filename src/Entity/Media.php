@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Service\VideoUploader;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
@@ -55,6 +56,11 @@ class Media
     private $mediaFile;
 
     /**
+     * @return mixed
+     */
+    private $mediaUrl;
+
+    /**
      * @ORM\Column(type="datetime")
      * @Assert\Type("\DateTime")
      * @var string A "Y-m-d H:i:s" formatted value
@@ -66,6 +72,11 @@ class Media
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="medias", cascade={"persist", "remove"})
      */
     private $trick;
+    
+    /**
+     * @var
+     */
+    private $videos;
 
     public function getId(): ?int
     {
@@ -108,6 +119,23 @@ class Media
         return $this;
     }
 
+    public function getMediaUrl()
+    {
+        return $this->mediaUrl;
+    }
+
+    public function setMediaUrl(?VideoUploader $mediaUrl): self
+    {
+        $this->mediaUrl = $mediaUrl;
+
+        return $this;
+    }
+
+    public function getVideos()
+    {
+        return $this->videos;
+    }
+
     public function getDateAdd(): ?\DateTimeInterface
     {
         return $this->date_add;
@@ -130,5 +158,22 @@ class Media
         $this->trick = $trick;
 
         return $this;
+    }
+
+    /**
+     * @param $trick
+     * @param $video
+     * @throws \Exception
+     */
+    public function addVideo($trick, $video)
+    {
+            $this->trick = $trick;
+            //$this->id = Uuid::uuid4();
+            $this->trickId = $this->trick->getId();
+            $this->name = 'embed_video';
+            $this->caption = 'test';
+            $this->dateAdd = new \DateTimeImmutable('+ 1 hour');
+            $embedUrl = new VideoUploader($video);
+            $this->mediaUrl = $embedUrl->getEmbedUrl();
     }
 }
