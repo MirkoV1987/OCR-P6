@@ -6,7 +6,6 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title text-uppercase">Ajouter un Trick</h4>
                 {{ form_start(form) }}
                     <div class='row'>
                         <div class="col-md-3">
@@ -18,35 +17,106 @@
                             <p class="text-right" id="counterBlock">0</p>
                         </div>
                     </div>
-                    <div class='row'>
-                        <div class="col-md-3">
-                            <h3>Images et vidéos</h3>
-                            {# {{ form_row(form.medias) }} #}
-                            {# {{ form_row(form.mediaFile, {'attr': {'placeholder': 'Ajouter un ou plusieurs médias'}}) }} #}
+
+                    {# Images Upload #}
+                    <div class='row text-center my-4'>
+                        <div class="col-md-12">
+                            <h3 class="text-uppercase">Médiathèque</h3>
+                            <h4 class="card-title">Ajouter une ou plusieurs images</h4>
                         </div>
-                        {# <ul id="medias-list" data-prototype="{{ form_widget(form.medias.vars.prototype)|e }}" data-widget-tags="{{ '<li></li>'|e }}" data-widget-counter="{{ form.medias|length }}">
-                            {% for medias in form.medias %}
-                                <li>
-                                    {{ form_errors(medias) }}
-                                    {{ form_widget(medias) }}
-                                </li>
-                            {% endfor %}
-                        </ul> #}
-                        <div class="list-tricks-images col-md-9">
+                    </div>
+                    <div class='row '>
+                        <div class="col-lg-3">
+                            {{ form_row(form.mediaName) }}
+                        </div>
+                        <div class="list-tricks-images col-lg-9 text-right">
                             <img id="uploaded-image-1" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
                             <img id="uploaded-image-2" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
                             <img id="uploaded-image-3" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
                             <img id="uploaded-image-4" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
                             <img id="uploaded-image-4" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
-                        </div> 
+                        </div>
                     </div>
-                    {# <button type="button" class="add-another-collection-widget" data-list-selector="#medias-list">Ajouter un autre média</button> #}
+
+                    {# Videos Upload #}
+                    <div class='row text-center my-5'>
+                        <div class="col-md-12">
+                            <h3 class="card-title">Ajouter une ou plusieurs videos</h3>
+                            <h4 class="card-title">Veuillez saisir url de votre video Youtube ou Dailymotion</h4>
+                        </div>
+                    </div>
+
+                    <div class='row text-center my-4'>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon3">Url youtube ou Dailymotion</span>
+                                </div>
+                                <input type="text" class="form-control" id="add_trick_videos_1" name="add_trick[videos][0]" value=""><button data-video="1" class="view-video-btn btn-primary video-1">Voir</button>
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon3">Url youtube ou Dailymotion</span>
+                                </div>
+                                <input type="text" class="form-control" id="add_trick_videos_2" name="add_trick[videos][1]" value=""><button data-video="2" class="view-video-btn btn-primary video-2">Voir</span>
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon3">Url youtube ou Dailymotion</span>
+                                </div>
+                                <input type="text" class="form-control" id="add_trick_videos_3" name="add_trick[videos][2]" value=""><button data-video="3" class="view-video-btn btn-primary video-3">Voir</button>
+                            </div>
+                            <div class="custom-error"><div style="display:none"> {{ form_row(form.videos) }}</div></div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="list-tricks-videos col text-center">
+                                <iframe class="preview-video-1" width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}"></iframe>
+                                <iframe class="preview-video-2" width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}"></iframe>
+                                <iframe class="preview-video-3" width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}"></iframe>
+                                <iframe width="204" height="204" src="//www.youtube.com/embed/1sIWez9HAbA" frameborder="0" allowfullscreen></iframe>
+                                <div>Click the thumbnail</div>
+                                </div>
+                            </div>
+                        </div>
                 {{ form_end(form) }}
             </div>
         </div>
     </div>
 </div>
-{% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
-    <script src="../build/add-collection-widget.js"></script>
-{% endblock %}
+<script type="text/javascript">
+//Page add-trick,detect origin of embed videos, show preview of video
+$('.view-video-btn').click(function () {
+    let videoAttr = $(this).attr('data-video');
+    let videoSrc = $(this).parent('div').children('input').val();
+    var iframe           = $('.preview-video-1');
+    var iframe_src       = iframe.attr('src');
+    var youtube_video_id = iframe_src.match(/youtube\.com.*(\?v=|\/embed\/)(.{11})/).pop();
+    
+    if (youtube_video_id.length == 11) {
+        var video_thumbnail = $('<img src="//img.youtube.com/vi/'+youtube_video_id+'/0.jpg">');
+        $('body').append(video_thumbnail);
+    
+        $('img:first').click(function() {
+            $('iframe:first').fadeToggle('400');
+        });
+    }
+}
+            {# $('.view-video-btn').click(function () {
+                let videoAttr = $(this).attr('data-video');
+                let videoSrc = $(this).parent('div').children('input').val();
+                let regexYoutube = /youtube/g;
+                let regexDailymotion = /dailymotion/g;
+                let youtube = videoSrc.match(regexYoutube);
+                let dailymotion = videoSrc.match(regexDailymotion);
+                if (videoSrc && youtube) {
+                    let finalYoutube = videoSrc.replace("watch?v=", "embed/");
+                    $('.preview-video-' + videoAttr).attr('src', finalYoutube);
+                } else if (videoSrc && dailymotion) {
+                    let finalDailymotion = videoSrc.replace("video", "embed/video");
+                    $('.preview-video-' + videoAttr).attr('src', finalDailymotion);
+                } else {
+                    $('.preview-video-' + videoAttr).attr('src', 'img/default/default-video.jpg');
+                }
+            }); #}
+</script>
