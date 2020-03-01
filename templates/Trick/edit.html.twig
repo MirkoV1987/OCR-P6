@@ -1,12 +1,22 @@
 {# templates/Trick/edit.html.twig #}
 
-{% extends "layout.html.twig" %}
-
-{% block title %}{{ parent() }} Modifier une figure {% endblock %}
+{% extends "dashboard.html.twig" %}
 
 {% block body %}
+ 
+ {{ include("Parts/_dashboard_layout.html.twig") }}
 
-<h2>Modifier une figure</h2>
-<!--TO DO : formulaire pour modifier une figure-->
+    <div class="content-body my-4">
+        <div class="container-fluid">
+            <h4 class="card-title text-uppercase mx-3">Modifier un Trick</h4>
+            {{ include("Trick/_form.html.twig") }}
+        </div>
+    </div>
+        
+    <div class="footer">
+        <div class="copyright">
+            <p>Copyright &copy; Mirko Venturi 2020</p>
+        </div>
+    </div>
 
 {% endblock %}
