@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -42,9 +43,19 @@ class TrickType extends AbstractType
                 'choice_label'=> 'name'
             ])
             ->add('mediaName', FileType::class, [
-                'label' => 'Ajouter un ou plusieurs médias',
+                'label' => 'Ajouter une ou plusieurs images',
                 'mapped' => false,
-                'multiple'=> true
+                'multiple'=> true,
+                'required'=> true
+            ])
+            ->add('videos', CollectionType::class, [
+                'entry_type' => TextType::class,
+                    'prototype' => true,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                'prototype_name' => 'videos',
+                'label' => false,
+                'required' => false,
             ])
             ->add('save', SubmitType::class, [
                 'label'=>'Ajouter'
