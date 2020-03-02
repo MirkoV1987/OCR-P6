@@ -16,7 +16,7 @@
 <div class="container-fluid" id="trick-container">
   {{ parent() }}
 
-  <div class="row py-5" id="trick-lead" style="background-image: url('../public/img/mountain-background.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover">
+  {# <div class="row py-5" id="trick-lead" style="background-image: url('../public/img/mountain-background.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover">
     <div class="col-lg-1 col-lg-push-2 col-md-12 d-flex align-items-end my-5"> 
     </div>
     <div class="col-lg-5 col-lg-push-2 col-md-12 d-flex align-items-end my-5"> 
@@ -29,8 +29,15 @@
     </div>
      <div class="col-lg-1 col-lg-push-2 col-md-12 d-flex align-items-end my-5"> 
     </div>
+  </div> #}
+  <div class="row">
+      <img src="../public/img/snowtrick-background.jpg" class="img-fluid" alt="Responsive image"> 
   </div>
-  <a id="trick-section-top" href="#trick-section-bottom"><i class="fas fa-arrow-circle-down float-right arrow-up text-blue fa-3x"></i></a>
+
+  <!-- Scroll To Bottom Arrow-->
+  <p class="float-right">
+      <a href="javascript:;" id="scrollToBottom"><i class="fa fa-arrow-circle-down fa-3x"></i></a>
+  </p>
   <!-- Tricks Section -->
     <div class="row text-center">
       {% for trick in tricks %}
@@ -62,36 +69,16 @@
         <button id="loadTrick" class="btn-primary btn-lg center-block text-uppercase" href="#">Voir plus de tricks</button>
       </div>
     </div>
-    <a id="trick-section-bottom" href="#trick-section-top"><i class="fas fa-arrow-circle-up float-right arrow-up text-blue fa-3x"></i></a>
 
-</div>
-<div class="cRetour"></div>
+  <!-- Scroll To Top Arrow-->
+    <div class="float-right">
+      <a href="javascript:;" id="scrollToTop"><i class="fa fa-arrow-circle-up fa-3x"></i></a>
+    </div>
+
 <!-- /.container -->
     {% block javascripts %}
 
     {{ parent() }}
-
-    <script>
-    {
-    $(document).ready((function() {
-        var e = document.getElementById("loadTrick"),
-            n = $(e).data("next-page");
-        e.addEventListener("click", (function(t) {
-            var a = $("#trick-container");
-            $.ajax({
-                method: "GET",
-                url: "/tricks?page=" + n++,
-                success: function(t) {
-                    a.append(t.html), n > t.pages && (e.style.display = "none")
-                }
-            })
-        }))
-    }))
-}
-}, [
-    ["JIGX", "runtime"]
-]]); 
-</script>
 
     <script src="../public/build/scroll-button.js"></script>
 
