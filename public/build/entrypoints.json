@@ -3,7 +3,8 @@
     "app": {
       "js": [
         "../public/build/runtime.js",
-        "../public/build/app.js"
+        "../public/build/app.js",
+        "../public/build/scroll-button.js"
       ],
       "css": [
         "../public/build/app.css"
