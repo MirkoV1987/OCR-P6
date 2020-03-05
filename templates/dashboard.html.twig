@@ -1,50 +1,57 @@
 {# templates/dashboard.html.twig #}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>SnowTricks - Dashboard</title>
-    <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <!-- Custom Stylesheet -->
-    <link href="../quixlab-master/css/style.css" rel="stylesheet">
+    <link href="/OCR-P6/public/quixlab-master/css/style.css" rel="stylesheet">
 
     {% block stylesheets %}
-            {# 'app' must match the first argument to addEntry() in webpack.config.js #}
             {{ encore_entry_link_tags('app') }}
-
-            <!-- Renders a link tag (if your module requires any CSS)
-                 <link rel="stylesheet" href="/build/app.css"> -->
     {% endblock %}
 
 </head>
+    
+    {% block body %}{% endblock %}
 
-<body>
-{% block body %} 
+    {% block footer %}{% endblock %}
 
-{% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+         <script>
+    
+    $( document ).ready(function() {
 
-{% block footer %} {% endblock %}
+    console.log('Bonjour !');
+        $('.video').on('click', function(e){
 
-{% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+            var videoUrl = $(this).prev().val();
+            var youtube_video_id = videoUrl.match(/youtube\.com.*(\?v=|\/embed\/)(.{11})/).pop();
+            console.log(youtube_video_id);
+            //$('.preview-video').empty().append( $('iframe').clone().attr({'src': videoUrl}) ); // $iframe: the original iframe for embedding
+            $('.preview-video') [0].src=videoUrl;
+            e.preventDefault();
+            
+            //vérification de l'Url 
+            //url valide
 
-            <!-- Renders app.js & a webpack runtime.js file
-                <script src="/build/runtime.js"></script>
-                <script src="/build/app.js"></script> -->
-{% endblock %}
+           
+           
+        })
+    });
+</script>
+    {% endblock %}
 
-    <!--Scripts-->
-    <script src="../quixlab-master/plugins/common/common.min.js"></script>
-    <script src="../quixlab-master/js/custom.min.js"></script>
-    <script src="../quixlab-master/js/settings.js"></script>
-    <script src="../quixlab-master/js/gleek.js"></script>
-    <script src="../quixlab-master/js/styleSwitcher.js"></script>
-
-</body>
+        <!--Scripts-->
+        <script src="/OCR-P6/public/quixlab-master/plugins/common/common.min.js"></script>
+        <script src="/OCR-P6/public/quixlab-master/js/custom.min.js"></script>
+        <script src="/OCR-P6/public/quixlab-master/js/settings.js"></script>
+        <script src="/OCR-P6/public/quixlab-master/js/gleek.js"></script>
+        <script src="/OCR-P6/public/quixlab-master/js/styleSwitcher.js"></script>
 
 </html>
