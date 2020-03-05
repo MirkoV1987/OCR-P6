@@ -52,31 +52,27 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon3">Url youtube ou Dailymotion</span>
                                 </div>
-                                <input type="text" class="form-control" id="add_trick_videos_1" name="add_trick[videos][0]" value=""><button data-video="1" class="view-video-btn btn-primary video-1">Voir</button>
+                                <input type="text" class="form-control" id="add_trick_videos_1" name="add_trick[videos][]" value=""><div data-video="1" class="view-video-btn btn-primary video">Voir</div>
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon3">Url youtube ou Dailymotion</span>
                                 </div>
-                                <input type="text" class="form-control" id="add_trick_videos_2" name="add_trick[videos][1]" value=""><button data-video="2" class="view-video-btn btn-primary video-2">Voir</span>
+                                <input type="text" class="form-control" id="add_trick_videos_2" name="add_trick[videos][]" value=""><div data-video="2" class="view-video-btn btn-primary video">Voir</div>
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon3">Url youtube ou Dailymotion</span>
                                 </div>
-                                <input type="text" class="form-control" id="add_trick_videos_3" name="add_trick[videos][2]" value=""><button data-video="3" class="view-video-btn btn-primary video-3">Voir</button>
+                                <input type="text" class="form-control" id="add_trick_videos_3" name="add_trick[videos][]" value=""><div data-video="3" class="view-video-btn btn-primary video">Voir</div>
                             </div>
-                            <div class="custom-error"><div style="display:none"> {{ form_row(form.videos) }}</div></div>
+                            <div class="custom-error"><div style="display:block"> {{ form_row(form.videos) }}</div></div>
                         </div>
 
                         <div class="col-lg-6">
                             <div class="list-tricks-videos col text-center">
-                                <iframe class="preview-video-1" width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}"></iframe>
-                                <iframe class="preview-video-2" width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}"></iframe>
-                                <iframe class="preview-video-3" width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}"></iframe>
-                                <iframe width="204" height="204" src="//www.youtube.com/embed/1sIWez9HAbA" frameborder="0" allowfullscreen></iframe>
-                                <div>Click the thumbnail</div>
-                                </div>
+                                <iframe class="preview-video" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}"></iframe>
+
                             </div>
                         </div>
                 {{ form_end(form) }}
@@ -84,9 +80,83 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-//Page add-trick,detect origin of embed videos, show preview of video
-$('.view-video-btn').click(function () {
+{# <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> #}
+
+{% block javascripts %} 
+
+<script>
+
+//document.getElementById("image-file").value
+
+{# $( document ).ready(function() {
+
+console.log('Bonjour !');
+    $('.video').on('click', function(e){
+
+        var videoUrl = $(this).prev().val();
+        console.log(videoUrl);
+
+
+    })
+}); #}
+
+</script>
+{% endblock %} 
+
+{# $('.preview-video-1').on('click', function(e){
+ e.preventDefault();
+ value= '';
+ src = value; // src: the original URL for embedding 
+ $videoContainer.empty().append( $iframe.clone().attr({'src': src}) ); // $iframe: the original iframe for embedding
+ }
+);
+var iframe           = $('iframe:first');
+var iframe_src       = iframe.attr('src');
+var youtube_video_id = iframe_src.match(/youtube\.com.*(\?v=|\/embed\/)(.{11})/).pop();
+
+if (youtube_video_id.length == 11) {
+    var video_thumbnail = $('<img src="//img.youtube.com/vi/'+youtube_video_id+'/0.jpg">');
+    $(body).append(video_thumbnail);
+}
+
+$(document).ready(function(){
+    // Get youtube video thumbnail on user click
+    var url = '';
+    $('#submit').click(function(){
+        // Check for empty input field
+        if($('#url').val() != ''){
+            // Get youtube video's thumbnail url
+            // using jYoutube jQuery plugin
+            url = $.jYoutube($('#url').val());
+            
+            // Now append this image to <div id="thumbs">
+            $('#thumbs').append($('<img src="'+url+'" />'));
+        }
+    });
+}); #}
+
+{# $(function(){
+    $('#add_trick_videos_1').on('change', function(){
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.onload = viewer.load;
+        reader.readAsDataURL(file);
+        viewer.setProperties(file);
+    })
+
+    var viewer = {
+        load : function(e){
+            $('#preview').attr('src', e.target.result);
+        },
+        setProperties : function(file) {
+            $('#filename').text(file.name);
+            $('#filetype').text(file.type);
+            $('#filesize').text(Math.round(file.size/1024));
+        },
+    }
+}); #}
+{# //Page add-trick,detect origin of embed videos, show preview of video #}
+{# $('.view-video-btn').click(function () {
     let videoAttr = $(this).attr('data-video');
     let videoSrc = $(this).parent('div').children('input').val();
     var iframe           = $('.preview-video-1');
@@ -100,6 +170,7 @@ $('.view-video-btn').click(function () {
         $('img:first').click(function() {
             $('iframe:first').fadeToggle('400');
         });
+  
     }
 }
             {# $('.view-video-btn').click(function () {
@@ -118,5 +189,4 @@ $('.view-video-btn').click(function () {
                 } else {
                     $('.preview-video-' + videoAttr).attr('src', 'img/default/default-video.jpg');
                 }
-            }); #}
-</script>
+            }); #} 
