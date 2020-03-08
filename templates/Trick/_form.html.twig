@@ -31,50 +31,36 @@
                         </div>
                         <div class="list-tricks-images col-lg-9 text-right">
                             <img id="uploaded-image-1" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
-                            <img id="uploaded-image-2" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
-                            <img id="uploaded-image-3" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
-                            <img id="uploaded-image-4" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
-                            <img id="uploaded-image-4" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
                         </div>
                     </div>
 
                     {# Videos Upload #}
                     <div class='row text-center my-5'>
                         <div class="col-md-12">
-                            <h3 class="card-title">Ajouter une ou plusieurs videos</h3>
-                            <h4 class="card-title">Veuillez saisir url de votre video Youtube ou Dailymotion</h4>
+                            <h3 class="card-title">Ajouter une ou plusieurs vidéos</h3>
+                            <h4 class="card-title">Veuillez saisir l'url de votre video Youtube ou Dailymotion</h4>
                         </div>
                     </div>
 
-                    <div class='row text-center my-4'>
-                        <div class="col-lg-6">
-                            <div class="input-group mb-3">
+                    <div id="videos" class='row my-4'>
+                        <div class="col-lg-6 video">
+                            <div class="input-group my-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon3">Url youtube ou Dailymotion</span>
+                                    <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
                                 </div>
-                                <input type="text" class="form-control" id="add_trick_videos_1" name="add_trick[videos][]" value=""><div data-video="1" class="view-video-btn btn-primary video">Voir</div>
+                                <input type="text" class="form-control" id="" name="add_trick[videos][]" value="">
+                                <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
+                                <i id="remove" class="fas fa-minus-circle fa-2x py-2 mx-1 video"></i>
+                                <i id="add" class="fas fa-plus-circle fa-2x py-2 mx-1 video"></i>
                             </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon3">Url youtube ou Dailymotion</span>
-                                </div>
-                                <input type="text" class="form-control" id="add_trick_videos_2" name="add_trick[videos][]" value=""><div data-video="2" class="view-video-btn btn-primary video">Voir</div>
+                            <div>
+                                <iframe class="preview-video float-right" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe>   
                             </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon3">Url youtube ou Dailymotion</span>
-                                </div>
-                                <input type="text" class="form-control" id="add_trick_videos_3" name="add_trick[videos][]" value=""><div data-video="3" class="view-video-btn btn-primary video">Voir</div>
-                            </div>
+                        </div>  
+                    </div>
+                     <i id="add" class="fas fa-plus-circle fa-2x py-2 mx-1 video"></i>
+
                             <div class="custom-error"><div style="display:block"> {{ form_row(form.videos) }}</div></div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="list-tricks-videos col text-center">
-                                <iframe class="preview-video" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}"></iframe>
-
-                            </div>
-                        </div>
                 {{ form_end(form) }}
             </div>
         </div>
@@ -84,109 +70,4 @@
 
 {% block javascripts %} 
 
-<script>
-
-//document.getElementById("image-file").value
-
-{# $( document ).ready(function() {
-
-console.log('Bonjour !');
-    $('.video').on('click', function(e){
-
-        var videoUrl = $(this).prev().val();
-        console.log(videoUrl);
-
-
-    })
-}); #}
-
-</script>
 {% endblock %} 
-
-{# $('.preview-video-1').on('click', function(e){
- e.preventDefault();
- value= '';
- src = value; // src: the original URL for embedding 
- $videoContainer.empty().append( $iframe.clone().attr({'src': src}) ); // $iframe: the original iframe for embedding
- }
-);
-var iframe           = $('iframe:first');
-var iframe_src       = iframe.attr('src');
-var youtube_video_id = iframe_src.match(/youtube\.com.*(\?v=|\/embed\/)(.{11})/).pop();
-
-if (youtube_video_id.length == 11) {
-    var video_thumbnail = $('<img src="//img.youtube.com/vi/'+youtube_video_id+'/0.jpg">');
-    $(body).append(video_thumbnail);
-}
-
-$(document).ready(function(){
-    // Get youtube video thumbnail on user click
-    var url = '';
-    $('#submit').click(function(){
-        // Check for empty input field
-        if($('#url').val() != ''){
-            // Get youtube video's thumbnail url
-            // using jYoutube jQuery plugin
-            url = $.jYoutube($('#url').val());
-            
-            // Now append this image to <div id="thumbs">
-            $('#thumbs').append($('<img src="'+url+'" />'));
-        }
-    });
-}); #}
-
-{# $(function(){
-    $('#add_trick_videos_1').on('change', function(){
-        var file = this.files[0];
-        var reader = new FileReader();
-        reader.onload = viewer.load;
-        reader.readAsDataURL(file);
-        viewer.setProperties(file);
-    })
-
-    var viewer = {
-        load : function(e){
-            $('#preview').attr('src', e.target.result);
-        },
-        setProperties : function(file) {
-            $('#filename').text(file.name);
-            $('#filetype').text(file.type);
-            $('#filesize').text(Math.round(file.size/1024));
-        },
-    }
-}); #}
-{# //Page add-trick,detect origin of embed videos, show preview of video #}
-{# $('.view-video-btn').click(function () {
-    let videoAttr = $(this).attr('data-video');
-    let videoSrc = $(this).parent('div').children('input').val();
-    var iframe           = $('.preview-video-1');
-    var iframe_src       = iframe.attr('src');
-    var youtube_video_id = iframe_src.match(/youtube\.com.*(\?v=|\/embed\/)(.{11})/).pop();
-    
-    if (youtube_video_id.length == 11) {
-        var video_thumbnail = $('<img src="//img.youtube.com/vi/'+youtube_video_id+'/0.jpg">');
-        $('body').append(video_thumbnail);
-    
-        $('img:first').click(function() {
-            $('iframe:first').fadeToggle('400');
-        });
-  
-    }
-}
-            {# $('.view-video-btn').click(function () {
-                let videoAttr = $(this).attr('data-video');
-                let videoSrc = $(this).parent('div').children('input').val();
-                let regexYoutube = /youtube/g;
-                let regexDailymotion = /dailymotion/g;
-                let youtube = videoSrc.match(regexYoutube);
-                let dailymotion = videoSrc.match(regexDailymotion);
-                if (videoSrc && youtube) {
-                    let finalYoutube = videoSrc.replace("watch?v=", "embed/");
-                    $('.preview-video-' + videoAttr).attr('src', finalYoutube);
-                } else if (videoSrc && dailymotion) {
-                    let finalDailymotion = videoSrc.replace("video", "embed/video");
-                    $('.preview-video-' + videoAttr).attr('src', finalDailymotion);
-                } else {
-                    $('.preview-video-' + videoAttr).attr('src', 'img/default/default-video.jpg');
-                }
-            }); #} 
