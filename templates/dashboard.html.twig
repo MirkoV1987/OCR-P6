@@ -10,6 +10,7 @@
     <title>SnowTricks - Dashboard</title>
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <link href="/OCR-P6/public/quixlab-master/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
     {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -23,28 +24,89 @@
 
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
-         <script>
-    
+        
+    <script>
     $( document ).ready(function() {
 
     console.log('Bonjour !');
-        $('.video').on('click', function(e){
+    
+        $('.video').on('click', function(){
+
+            const YoutubeUrl = 'https://www.youtube.com/watch?v=';
+            const YoutubeRegex = 'watch?v=';
+            const DailymotionUrl = 'https://www.dailymotion.com/video/';
 
             var videoUrl = $(this).prev().val();
-            var youtube_video_id = videoUrl.match(/youtube\.com.*(\?v=|\/embed\/)(.{11})/).pop();
-            console.log(youtube_video_id);
-            //$('.preview-video').empty().append( $('iframe').clone().attr({'src': videoUrl}) ); // $iframe: the original iframe for embedding
-            $('.preview-video') [0].src=videoUrl;
-            e.preventDefault();
-            
-            //vérification de l'Url 
-            //url valide
+            var finalYoutube = videoUrl.replace("watch?v=", "embed/");
+            var finalDailymotion = videoUrl.replace("video", "embed/video");
 
-           
-           
+            if (finalYoutube.includes('youtube')) {
+                $('.preview-video') [0].src=finalYoutube;
+            } 
+            else if (finalDailymotion.includes('dailymotion')) {
+                $('.preview-video') [0].src=finalDailymotion;
+            } else {
+                    alert('L\'URL n\'est pas valide. Veuillez insérer une URL Youtube ou Dailymotion');
+            }
+            console.log(finalYoutube); 
         })
     });
-</script>
+
+    //define template
+var template = $('#videos .video:first').clone();
+
+//define counter
+var sectionsCount = 1;
+
+//add new section
+$('body').on('click', '#add', function() {
+
+    //increment
+    sectionsCount++;
+
+    //loop through each input
+    var section = template.clone().find(':input').each(function(){
+
+        //set id to store the updated section number
+        var newId = this.id + sectionsCount;
+
+        //update for label
+        $(this).prev().attr('input-group-text', newId);
+
+        //update id
+        this.id = newId;
+
+    }).end()
+
+    //inject new section
+    .appendTo('#videos');
+    return false;
+});
+
+//remove section
+$('#videos').on('click', '#remove', function() {
+    //fade out section
+    $(this).parent().fadeOut(300, function(){
+        //remove parent element (main section)
+        $(this).parent().empty();
+        return false;
+    });
+    return false;
+});
+
+    </script>
+
+    {# <script>
+    $(document).ready(function(event){
+        $('#add').on('click', function(){
+                $('.input-group').clone().appendTo($('#videos'));
+                $('.preview-video').clone().appendTo($('.preview-list'));
+            event.stopPropagation();
+        })
+    });
+    </script> #}
+
+
     {% endblock %}
 
         <!--Scripts-->
