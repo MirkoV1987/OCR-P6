@@ -69,6 +69,11 @@ class Trick
     private $videos;
 
     /**
+     * @var string
+     */
+    private $medias;
+
+    /**
      * @ORM\JoinColumn(nullable=false, onDelete="set null")
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
      */
@@ -164,6 +169,9 @@ class Trick
        $this->medias->deleteMedia($media);
     }
 
+    /**
+     * @return Collection|Media[]
+     */
     public function getMedias() 
     {
         return $this->medias;
