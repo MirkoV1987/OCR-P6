@@ -25,13 +25,24 @@
                             <h4 class="card-title">Ajouter une ou plusieurs images</h4>
                         </div>
                     </div>
-                    <div class='row '>
-                        <div class="col-lg-3">
-                            {{ form_row(form.mediaName) }}
-                        </div>
-                        <div class="list-tricks-images col-lg-9 text-right">
-                            <img id="uploaded-image-1" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="200px" height="200px">
-                        </div>
+
+                    <div id="medias" class='row my-4'>
+                        <div class="col-lg-6 media">
+                            <div class="input-group my-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text files" id="basic-addon3">Image</span>
+                                </div>
+                                <input type="file" class="form-control" id="input-media" name="add_trick[medias][]" value="">
+                                <i class="fas fa-picture fa-2x py-2 mx-1 image"></i>
+                                <i id="remove" class="fas fa-minus-circle fa-2x py-2 mx-1 image"></i>
+                                <i id="addfile" class="fas fa-plus-circle fa-2x py-2 mx-1 image"></i>
+                            </div>
+                            <div>
+                                <img id="uploaded-image" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="450px" height="250px"> 
+                                <input type="text" class="form-control" id="" name="add_trick[caption][]" maxlength="50" value=""> 
+                                {# {{ form_row(form.caption) }} #}
+                            </div>
+                        </div>  
                     </div>
 
                     {# Videos Upload #}
