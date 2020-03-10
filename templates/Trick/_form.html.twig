@@ -32,15 +32,15 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text files" id="basic-addon3">Image</span>
                                 </div>
-                                <input type="file" class="form-control" id="input-media" name="add_trick[medias][]" value="">
+                                <input type="file" class="form-control input-media" name="add_trick[medias][]" value="">
                                 <i class="fas fa-picture fa-2x py-2 mx-1 image"></i>
                                 <i id="remove" class="fas fa-minus-circle fa-2x py-2 mx-1 image"></i>
                                 <i id="addfile" class="fas fa-plus-circle fa-2x py-2 mx-1 image"></i>
                             </div>
                             <div>
                                 <img id="uploaded-image" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="450px" height="250px"> 
-                                <input type="text" class="form-control" id="" name="add_trick[caption][]" maxlength="50" value=""> 
-                                {# {{ form_row(form.caption) }} #}
+                                {# <input type="text" class="form-control" id="" name="add_trick[caption][]" maxlength="50" value="">  #}
+                                {{ form_row(form.caption) }}
                             </div>
                         </div>  
                     </div>
@@ -53,23 +53,47 @@
                         </div>
                     </div>
 
-                    <div id="videos" class='row my-4'>
-                        <div class="col-lg-6 video">
-                            <div class="input-group my-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
+                
+                        <div id="videos">
+                            <div class="col-lg-6 mx-1 video">
+                                <div class="input-group my-1">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
+                                    </div>
+                                    <input type="text" class="form-control input-1" id="" name="add_trick[videos][0]" value="">
+                                    <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
                                 </div>
-                                <input type="text" class="form-control" id="" name="add_trick[videos][]" value="">
-                                <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
-                                <i id="remove" class="fas fa-minus-circle fa-2x py-2 mx-1 video"></i>
-                                <i id="add" class="fas fa-plus-circle fa-2x py-2 mx-1 video"></i>
+                                <div class="input-group my-1">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
+                                    </div>
+                                    <input type="text" class="form-control input-2" id="" name="add_trick[videos][1]" value="">
+                                    <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
+                                </div>
+                                <div class="input-group my-1">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
+                                    </div>
+                                    <input type="text" class="form-control input-3" id="" name="add_trick[videos][2]" value="">
+                                    <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
+                                </div>
+                                <div class="input-group my-1">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
+                                    </div>
+                                    <input type="text" class="form-control input-4" id="" name="add_trick[videos][3]" value="">
+                                    <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
+                                </div>
                             </div>
-                            <div>
-                                <iframe class="preview-video float-right" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe>   
-                            </div>
-                        </div>  
-                    </div>
-                     <i id="add" class="fas fa-plus-circle fa-2x py-2 mx-1 video"></i>
+                            <div class="col-lg-12 video mx-1 my-4 block-center">
+                                <iframe class="preview-video-1" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe>
+                                <iframe class="preview-video-2" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe>
+                                <iframe class="preview-video-3" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe>
+                                <iframe class="preview-video-4" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value="input-4"></iframe>   
+                            </div>   
+                        </div>
+              
+                     {# <i id="add" class="fas fa-plus-circle fa-2x py-2 mx-1 video"></i> #}
 
                             <div class="custom-error"><div style="display:block"> {{ form_row(form.videos) }}</div></div>
                 {{ form_end(form) }}
