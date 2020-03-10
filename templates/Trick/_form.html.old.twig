@@ -1,0 +1,84 @@
+{# templates/Trick/_form.html.twig #}
+
+{# Cette vue sera heritée par add.html.twig et edit.html.twig #}
+
+<div class="form">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                {{ form_start(form) }}
+                    <div class='row'>
+                        <div class="col-md-3">
+                            {{ form_row(form.name) }}
+                            {{ form_row(form.category) }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form_row(form.description,  {'attr': {'id': 'trick_description'}}) }}
+                            <p class="text-right" id="counterBlock">0</p>
+                        </div>
+                    </div>
+
+                    {# Images Upload #}
+                    <div class='row text-center my-4'>
+                        <div class="col-md-12">
+                            <h3 class="text-uppercase">Médiathèque</h3>
+                            <h4 class="card-title">Ajouter une ou plusieurs images</h4>
+                        </div>
+                    </div>
+
+                    <div id="medias" class='row my-4'>
+                        <div class="col-lg-6 media">
+                            <div class="input-group my-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text files" id="basic-addon3">Image</span>
+                                </div>
+                                <input type="file" class="form-control input-media" name="add_trick[medias][]" value="">
+                                <i class="fas fa-picture fa-2x py-2 mx-1 image"></i>
+                                <i id="remove" class="fas fa-minus-circle fa-2x py-2 mx-1 image"></i>
+                                <i id="addfile" class="fas fa-plus-circle fa-2x py-2 mx-1 image"></i>
+                            </div>
+                            <div>
+                                <img id="uploaded-image" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="450px" height="250px"> 
+                                {# <input type="text" class="form-control" id="" name="add_trick[caption][]" maxlength="50" value="">  #}
+                                {{ form_row(form.caption) }}
+                            </div>
+                        </div>  
+                    </div>
+
+                    {# Videos Upload #}
+                    <div class='row text-center my-5'>
+                        <div class="col-md-12">
+                            <h3 class="card-title">Ajouter une ou plusieurs vidéos</h3>
+                            <h4 class="card-title">Veuillez saisir l'url de votre video Youtube ou Dailymotion</h4>
+                        </div>
+                    </div>
+
+                    <div id="videos" class='row my-4'>
+                        <div class="col-lg-6 video">
+                            <div class="input-group my-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
+                                </div>
+                                <input type="text" class="form-control" id="" name="add_trick[videos][]" value="">
+                                <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
+                                <i id="remove" class="fas fa-minus-circle fa-2x py-2 mx-1 video"></i>
+                                <i id="add" class="fas fa-plus-circle fa-2x py-2 mx-1 video"></i>
+                            </div>
+                            <div>
+                                <iframe class="preview-video float-right" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe>   
+                            </div>
+                        </div>  
+                    </div>
+                     <i id="add" class="fas fa-plus-circle fa-2x py-2 mx-1 video"></i>
+
+                            <div class="custom-error"><div style="display:block"> {{ form_row(form.videos) }}</div></div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{# <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> #}
+
+{% block javascripts %} 
+
+{% endblock %} 
