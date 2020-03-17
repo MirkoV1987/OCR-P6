@@ -6,6 +6,8 @@ namespace App\Form;
 
 use App\Entity\Trick;
 use App\Entity\Category;
+use App\Form\MediaType;
+use App\Form\VideoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,8 +27,8 @@ class TrickType extends AbstractType
             ->add('name', TextType::class, [
                 'label'=>'Nom du Trick',
                 'attr'=>[
-                    'maxlength'=>40,
-                    'minlenght'=>3,
+                    'maxlength'=>80,
+                    'minlenght'=>10,
                     'max-width'=> '60px'
                 ]
             ])
@@ -42,20 +44,22 @@ class TrickType extends AbstractType
                 'class'=>Category::class,
                 'choice_label'=> 'name'
             ])
-            ->add('mediaName', FileType::class, [
-                'label' => 'Ajouter une ou plusieurs images',
-                'mapped' => false,
-                'multiple'=> true,
-                'required'=> true
-            ])
-            ->add('videos', CollectionType::class, [
-                'entry_type' => TextType::class,
-                    'prototype' => true,
+            ->add('medias', CollectionType::class, [
+                    'label'=>false,
+                    'entry_type' => MediaType::class,
+                    'entry_options' => ['label' => false],
+                    'block_name' => 'media_block',
                     'allow_add' => true,
                     'allow_delete' => true,
-                'prototype_name' => 'videos',
-                'label' => false,
-                'required' => false,
+                    'by_reference' => false,
+            ])
+            ->add('videos', CollectionType::class, [
+                    'label'=>false,
+                    'entry_type' => VideoType::class,
+                    'entry_options' => ['label' => false],
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
             ])
             ->add('save', SubmitType::class, [
                 'label'=>'Ajouter'
