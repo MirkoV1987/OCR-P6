@@ -61,17 +61,17 @@ class Trick
      * @ORM\JoinColumn(nullable=true, onDelete="set null")
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="name", cascade={"persist"})
      */
-    private $category;
+    protected $category;
 
-    /**
-     * @var string
-     */
-    private $videos;
+    // /**
+    //  * @Assert\Type(type="App\Entity\Media")
+    //  * @Assert\Valid
+    //  */
+    // private $mediaFile;
 
-    /**
-     * @var string
-     */
-    private $medias;
+    protected $medias;
+
+    protected $videos;
 
     /**
      * @ORM\JoinColumn(nullable=false, onDelete="set null")
@@ -164,14 +164,11 @@ class Trick
        $this->medias[] = $media;
     }
 
-    public function deleteMedia(Media $media)
+    public function removeMedia(Media $media)
     {
-       $this->medias->deleteMedia($media);
+       $this->medias->removeMedia($media);
     }
 
-    /**
-     * @return Collection|Media[]
-     */
     public function getMedias() 
     {
         return $this->medias;
