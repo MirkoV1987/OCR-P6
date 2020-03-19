@@ -16,20 +16,6 @@
 <div class="container-fluid" id="trick-container">
   {{ parent() }}
 
-  {# <div class="row py-5" id="trick-lead" style="background-image: url('../public/img/mountain-background.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover">
-    <div class="col-lg-1 col-lg-push-2 col-md-12 d-flex align-items-end my-5"> 
-    </div>
-    <div class="col-lg-5 col-lg-push-2 col-md-12 d-flex align-items-end my-5"> 
-      <h2 class="d-flex text-dark text-center shadow p-3 mb-5 bg-light rounded px-3" style="font-family: 'Montserrat', 'Trebuchet MS', sans-serif">
-        Bienvenue sur le site<br/> de la communauté SnowTricks
-      </h2>
-    </div>
-    <div class="col-lg-5 col-md-12 d-flex">
-      <img src="../public/img/snowboarder-home.png" class="img-fluid py-5" alt="Responsive image"> 
-    </div>
-     <div class="col-lg-1 col-lg-push-2 col-md-12 d-flex align-items-end my-5"> 
-    </div>
-  </div> #}
   <div class="row">
       <img src="../public/img/snowtrick-background.jpg" class="img-fluid" alt="Responsive image"> 
   </div>
@@ -77,11 +63,8 @@
 
 <!-- /.container -->
     {% block javascripts %}
-
-    {{ parent() }}
-
-    <script src="../public/build/scroll-button.js"></script>
-
+      {{ parent() }}
+      {{ encore_entry_script_tags('app') }}
     {% endblock %} 
 
 {% endblock %}
