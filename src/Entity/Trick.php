@@ -63,14 +63,16 @@ class Trick
      */
     protected $category;
 
-    // /**
-    //  * @Assert\Type(type="App\Entity\Media")
-    //  * @Assert\Valid
-    //  */
-    // private $mediaFile;
-
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
     protected $medias;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
     protected $videos;
 
     /**
@@ -159,37 +161,66 @@ class Trick
         $this->date_update = new \Datetime('+ 1 hour');
     }
 
-    public function addMedia(Media $media)
-    {
-       $this->medias[] = $media;
-    }
-
-    public function removeMedia(Media $media)
-    {
-       $this->medias->removeMedia($media);
-    }
-
-    public function getMedias() 
+    /**
+     * @return Collection|Media[]
+     */
+    public function getMedias(): Collection
     {
         return $this->medias;
     }
 
-    public function addVideo(Media $video)
+    public function addMedia(Media $media): self
     {
-       $this->videos[] = $video;
+        if (!$this->medias->contains($media)) {
+            $this->medias[] = $media;
+            $media->setTrick($this);
+        }
+
+        return $this;
     }
 
-    public function removeVideo(Media $video)
+    public function removeMedia(Media $media): self
     {
-       $this->videos->removeVideo($video);
+        if ($this->medias->contains($media)) {
+            $this->medias->removeElement($media);
+            // set the owning side to null (unless already changed)
+            if ($media->getTrick() === $this) {
+                $media->setTrick(null);
+            }
+        }
+
+        return $this;
     }
 
     /**
      * @return Collection|Video[]
      */
-    public function getVideos()
+    public function getVideos() : Collection
     {
         return $this->videos;
+    }
+
+    public function addVideo(Video $video) : self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video) : self
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            //set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
+
+        return $this;
     }
 
     public function addComment(Comment $comment)
