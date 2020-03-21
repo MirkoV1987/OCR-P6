@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -32,32 +30,9 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
+     * @Assert\NotBlank()
      */
     private $caption;
-
-    /**
-     * @Assert\File(
-     *     maxSize = "10000k",
-     *     maxSizeMessage = "La taille du fichier ne peut pas dépasser 10Mo",
-     *     mimeTypes = {
-     *         "application/jpg",
-     *         "application/jpeg",
-     *         "application/png",
-     *         "application/tif",
-     *         "application/mp4",
-     *         "application/avi",
-     *         "application/mov"
-     *     },
-     *     mimeTypesMessage = "Le format du fichier n'est pas valide !"
-     * )
-     */
-    private $mediaFile;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $url;
 
     /**
      * @ORM\Column(type="datetime")
@@ -82,8 +57,8 @@ class Media
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
+    public function setName(string $name) : self
+    { 
         $this->name = $name;
 
         return $this;
@@ -101,28 +76,9 @@ class Media
         return $this;
     }
 
-    public function getMediaFile()
+    public function __construct()
     {
-        return $this->mediaFile;
-    }
-
-    public function setMediaFile(?UploadedFile $mediaFile): self
-    {
-        $this->mediaFile = $mediaFile;
-
-        return $this;
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(string $url): self
-    {
-        $this->url = $url;
-
-        return $this;
+        $this->date_add = new \Datetime('+ 1 hour');
     }
 
     public function getDateAdd(): ?\DateTimeInterface
@@ -137,15 +93,22 @@ class Media
         return $this;
     }
 
-    public function getTrick(): ?Trick
+    public function addTrick(Trick $trick)
+    {
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks->add($trick);
+        }
+    }
+
+    public function getTrick(): Trick
     {
         return $this->trick;
     }
 
-    public function setTrick(?Trick $trick): self
+    public function setTrick(Trick $trick): Trick
     {
         $this->trick = $trick;
 
-        return $this;
+        return $this->trick;
     }
 }
