@@ -6,12 +6,15 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Entity\Media;
+use App\Entity\Video;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\TrickRepository;
 use App\Form\TrickType;
+use App\Form\MediaType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Service\UploaderHelper;
+use App\Service\MediaUploader;
 use App\Service\VideoUploader;
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -23,6 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
 
 class TrickController extends AbstractController
@@ -31,23 +35,28 @@ class TrickController extends AbstractController
      * Ajouter une figure
      * @Route("trick/add", name="app_trick_add", methods={"GET","POST"})
      * @param Request $request
-     * @param UploaderHelper $UploaderHelper
      * @return Response
      */
-    public function add(Request $request, UploaderHelper $uploaderHelper, VideoUploader $videoUploader) : Response
+    public function add(Request $request, MediaUploader $mediaUploader, VideoUploader $videoUploader, EntityManagerInterface $entityManager) : Response
     {
         $trick = new Trick();
+
+        $media = new Media();
+        $trick->getMedias()->add($media);
+
+        $video = new Video();
+        $trick->getVideos()->add($video);
+
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $media = $form['mediaName']->getData();
-            $video = $form['videos']->getData();
-            $uploaderHelper->uploadTrickFile($media, $trick);
-            $videoUploader->getEmbedUrl($video, $trick);
+            //call Media Service
+            $mediaUploader->uploadTrickFile($media = [], $trick);
+            //call Video Service
+            $videoUploader->uploadTrickVideo($video = [], $trick);
             
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($trick);
             $entityManager->flush();
 
@@ -63,6 +72,7 @@ class TrickController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 
     /**
      * Détails d'un trick
@@ -80,7 +90,7 @@ class TrickController extends AbstractController
      * Modifier un trick
      * @Route("trick/edit/{id}", name="app_trick_edit", requirements={"id" = "\d+"})
      */
-    public function edit($id, Request $request, UploaderHelper $uploaderHelper) : Response
+    public function edit($id, Request $request) : Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $trick = $entityManager->getRepository(Trick::class)->find($id);
@@ -98,7 +108,7 @@ class TrickController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $media = $form['mediaName']->getData();
-            $uploaderHelper->uploadTrickFile($media, $trick);
+            //$uploaderHelper->uploadTrickFile($media, $trick);
 
             $trick->setDateUpdate(new \DateTime('+ 1 hour'));
             $entityManager->flush();
