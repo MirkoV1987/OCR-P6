@@ -7,16 +7,22 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Entity\Media;
 use App\Entity\Video;
+use App\Entity\User;
+use App\Entity\Comment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Repository\TrickRepository;
 use App\Form\TrickType;
 use App\Form\MediaType;
+use App\Form\CommentType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\MediaUploader;
 use App\Service\VideoUploader;
 use Gedmo\Sluggable\Util\Urlizer;
+use App\Repository\MediaRepository;
+use App\Repository\TrickRepository;
+use App\Repository\VideoRepository;
+use App\Repository\CommentRepository;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -52,16 +58,23 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            //call Media Service
-            $mediaUploader->uploadTrickFile($media = [], $trick);
-            //call Video Service
+            $uploadedFile = $form['name']->getData();
+
+            if ($uploadedFile instanceof UploadedFile) {
+                $mediaFileName = $mediaUploader->uploadTrickMedia($uploadedFile);
+                $media->setName($mediaFileName);
+        }
+            //On récupère le traitement des données de la function manageMedia - service MediaUploder
+            $mediaUploader->manageMedia($media = [], $trick);
+
+            //On récupère le traitement des données de la function uploadTrickVideo - service VideoUploder
             $videoUploader->uploadTrickVideo($video = [], $trick);
             
             $entityManager->persist($trick);
             $entityManager->flush();
 
             $this->addFlash(
-                'notice',
+                'success',
                 'Trick enregistré avec succès !'
             );
 
@@ -73,24 +86,48 @@ class TrickController extends AbstractController
         ]);
     }
 
-
     /**
      * Détails d'un trick
      * @Route("trick/view/{id}", name="app_trick_view", requirements={"id" = "\d+"})
      */
-    public function view($id, Request $request, TrickRepository $trickRepo)
+    public function view(Trick $trick, Request $request, TrickRepository $trickRepo, CommentRepository $commentRepo, MediaRepository $mediaRepo, VideoRepository $videoRepo, EntityManagerInterface $entityManager)
     {
-        return $this->render(
-            'Trick/view.html.twig',
-            ['id' => $id]
-        );
+        $comment = new Comment();
+        
+        //TO DO -> gestion objet User
+        //$user = new User; 
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $comment->setDateAdd(new \DateTime());
+            $comment->setTrick($trick);
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_trick_view', ['id' => $trick->getId(), '_fragment' => $comment->getId()]);
+        }
+
+        $medias = $mediaRepo->findBy(array('trick' => $trick->getId()));
+        $videos = $videoRepo->findBy(array('trick' => $trick->getId()));
+        $comments = $commentRepo->findBy(array('trick' => $trick->getId()));
+
+        return $this->render('Trick/view.html.twig', [
+            'trick' => $trick,
+            'medias' => $medias,
+            'videos' => $videos,
+            'comments' => $comments,
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * Modifier un trick
      * @Route("trick/edit/{id}", name="app_trick_edit", requirements={"id" = "\d+"})
      */
-    public function edit($id, Request $request) : Response
+    public function edit($id, Request $request, MediaUploader $mediaUploader, VideoUploader $videoUploader, EntityManagerInterface $entityManager) : Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $trick = $entityManager->getRepository(Trick::class)->find($id);
@@ -107,15 +144,25 @@ class TrickController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
-            $media = $form['mediaName']->getData();
-            //$uploaderHelper->uploadTrickFile($media, $trick);
+            // //call Media Services
+            /** @var MediaUploader $uploadedFile */
+            $uploadedFile = $form['name']->getData();
+        
+            if ($uploadedFile) {
+            $mediaFileName = $mediaUploader->uploadTrickMedia($uploadedFile);
+            $media->setName($mediaFileName);
+        }
+
+            $mediaUploader->manageMedia($media = [], $trick);
+
+            $videoUploader->uploadTrickVideo($video = [], $trick);
 
             $trick->setDateUpdate(new \DateTime('+ 1 hour'));
             $entityManager->flush();
 
             $this->addFlash(
                 'success',
-                'Le trick <strong>' . $trick->getName() . '</strong> a bien été modifié !'
+                'Le trick ' . $trick->getName() . ' a bien été modifié !'
             );
 
             return $this->redirectToRoute('app_trick_home', [
@@ -142,7 +189,7 @@ class TrickController extends AbstractController
 
         $this->addflash(
             'success',
-            "Le trick <strong>{$trick->getName()}</strong> a été supprimé avec succès !"
+            "Le trick {$trick->getName()} a été supprimé avec succès !"
         );
 
         return $this->redirectToRoute('app_trick_home');
