@@ -4,19 +4,28 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    media_directory: '%kernel.project_dir%/public/media_directory'
+    uploadsPath: '%kernel.project_dir%/public/uploads/images/tricks'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false
 
-    App\Service\UploaderHelper:
-        arguments: ['@doctrine.orm.entity_manager']
+        bind:
+            $markdownLogger: '@monolog.logger.markdown'
+            $isDebug: '%kernel.debug%'
+            $uploadsPath: '%kernel.project_dir%/public/uploads/images/tricks'
+
+    App\Service\MediaUploader:
+        arguments: 
+            $uploadsPath: '%kernel.project_dir%/public/uploads/images/tricks'
+        autowire: true
     
     App\Service\VideoUploader:
         arguments: ['@doctrine.orm.entity_manager']
+
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
