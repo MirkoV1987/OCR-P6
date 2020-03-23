@@ -1,6 +1,6 @@
 <?php
 
-// src/Service/UploaderHelper
+// src/Service/MediaUploader
 
 namespace App\Service;
 
@@ -16,52 +16,45 @@ class MediaUploader
 {
     private $params;
     private $em;
+    private $uploadsPath;
 
-    public function __construct(ContainerBagInterface $params, EntityManagerInterface $em)
+    public function __construct(string $uploadsPath, ContainerBagInterface $params, EntityManagerInterface $em)
     {
         $this->params = $params;
         $this->em = $em;
+        $this->uploadsPath = $uploadsPath;
     }
 
-    public function uploadTrickFile(array $medias, Trick $trick): string
+    public function uploadTrickMedia(UploadedFile $uploadedFile)
     {
-        /**
-         * @var UploadedFile $medias
-         */
-        foreach ($medias as $media) {
+        $destination = $this->uploadsPath.'/public/uploads/images/tricks';
+        $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+        $fileName = $safeFilename.'-'.uniqid().'.'.$uploadedFile->guessExtension();
 
-        $caption = pathinfo($media->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $caption);
-        $name = $safeFilename.'-'.uniqid().'.'.$media->guessExtension();
-
-            try {
-                $mediaDirectory = $this->params->get('/uploads/images');
-                $media->move($mediaDirectory, $name);
-            } catch (FileException $e) {
-                throw new Exception("Erreur de chargement du fichier", 1);
-            }
-
+        try {
+            $uploadedFile->move($destination, $fileName);
+        } catch (FileException $e) {
+            throw new Exception("Erreur de chargement du fichier");
         }
 
+        return $fileName;
+    }
+
+    public function manageMedia(array $medias, Trick $trick)
+    {
         $medias = $trick->getMedias();
-        foreach($medias as $media) {
-
+        foreach ($medias as $media) {
             $media->setTrick($trick);
-
             $media->setName($media->getName());
+            //$media->setImageFile($media->getImageFile());
             $media->setCaption($media->getCaption());
             $now = new \DateTime('+ 1 hour');
             $media->getDateAdd($now);
             $this->em->persist($media);
             $this->em->flush();
-                
         }
 
         return $medias;
-    }
-
-    public function getTargetDirectory()
-    {
-        return $this->targetDirectory;
     }
 }
