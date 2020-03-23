@@ -7,6 +7,7 @@
         <div class="card">
             <div class="card-body">
                 {{ form_start(form) }}
+                 {# {{ form_start(form, {'multipart': true}) }} #}
                     <div class='row'>
                         <div class="col-md-3">
                             {{ form_row(form.name) }}
@@ -17,92 +18,69 @@
                             <p class="text-right" id="counterBlock">0</p>
                         </div>
                     </div>
+                    <hr>
+                    <div class="row text-center my-3">
+                        <div class="col-lg-12">
+                            <h3 class="text-uppercase py-4">Médiathèque</h3>
+                        </div>
+                    </div>
+                <div class="row text-center center-block">
+                    <div class="col-lg-6">
+                        <h4 class="card-title text-uppercase">Ajouter une ou plusieurs images</h4><hr>
+                            <div class="medias" data-prototype="{{ form_widget(form.medias.vars.prototype)|e('html_attr') }}">
+                                <div class="card shadow col-12">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('img/default/snowboarder.png') }}" alt="trick-image" class="preview img-thumbnail" width="280px" height="280px" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row my-2">
+                                            <div class="col-12">
+                                            <button type="button" class="btn btn-outline-info center-block" id="add-image">Ajouter une image</button>
+                                            {# <i id="image-preview" class="fas fa-eye fa-2x mx-1"></i> #}
+                                            </div>
+                                        </div>
+                                            {% for media in form.medias %}
+                                                {{ form_widget(form.medias) }}
+                                            {% endfor %}
+                                        <input type="hidden" id="image-counter" value="0">
+                                        <span class="counter-image text-primary"></span>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
 
-                    {# Images Upload #}
-                    <div class='row text-center my-4'>
-                        <div class="col-md-12">
-                            <h3 class="text-uppercase">Médiathèque</h3>
-                            <h4 class="card-title">Ajouter une ou plusieurs images</h4>
+                    <div class="col-lg-6 center-block">
+                        <h4 class="card-title text-uppercase">Ajouter une ou plusieurs videos</h4><hr>
+                            <div class="videos" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+                                <div class="card shadow col-12">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12 my-1">
+                                            <iframe class="preview-video" id="" name="add_trick[videos][0]" frameborder='0' allowfullscreen width="200" height="200" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe></br>
+                                            <button type="button" class="btn btn-outline-info" id="add-video">Ajouter une vidéo</button><i id="preview" class="fas fa-eye fa-2x mx-1"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% for video in form.videos %}
+                                    {{ form_widget(form.videos) }}
+                                {% endfor %}
+                                <input type="hidden" id="video-counter" value="0">
+                                <span class="counter-video text-primary"></span>
+                            </div>
                         </div>
                     </div>
 
-                    <div id="medias" class='row my-4'>
-                        <div class="col-lg-6 media">
-                            <div class="input-group my-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text files" id="basic-addon3">Image</span>
-                                </div>
-                                <input type="file" class="form-control input-media" name="add_trick[medias][]" value="">
-                                <i class="fas fa-picture fa-2x py-2 mx-1 image"></i>
-                                <i id="remove" class="fas fa-minus-circle fa-2x py-2 mx-1 image"></i>
-                                <i id="addfile" class="fas fa-plus-circle fa-2x py-2 mx-1 image"></i>
-                            </div>
-                            <div>
-                                <img id="uploaded-image" src="{{ asset('img/default/200x200.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="450px" height="250px"> 
-                                {# <input type="text" class="form-control" id="" name="add_trick[caption][]" maxlength="50" value="">  #}
-                                {{ form_row(form.caption) }}
-                            </div>
-                        </div>  
-                    </div>
-
-                    {# Videos Upload #}
-                    <div class='row text-center my-5'>
-                        <div class="col-md-12">
-                            <h3 class="card-title">Ajouter une ou plusieurs vidéos</h3>
-                            <h4 class="card-title">Veuillez saisir l'url de votre video Youtube ou Dailymotion</h4>
-                        </div>
-                    </div>
-
-                
-                        <div id="videos">
-                            <div class="col-lg-6 mx-1 video">
-                                <div class="input-group my-1">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
-                                    </div>
-                                    <input type="text" class="form-control input-1" id="" name="add_trick[videos][0]" value="">
-                                    <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
-                                </div>
-                                <div class="input-group my-1">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
-                                    </div>
-                                    <input type="text" class="form-control input-2" id="" name="add_trick[videos][1]" value="">
-                                    <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
-                                </div>
-                                <div class="input-group my-1">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
-                                    </div>
-                                    <input type="text" class="form-control input-3" id="" name="add_trick[videos][2]" value="">
-                                    <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
-                                </div>
-                                <div class="input-group my-1">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon3">Url Youtube ou Dailymotion</span>
-                                    </div>
-                                    <input type="text" class="form-control input-4" id="" name="add_trick[videos][3]" value="">
-                                    <i class="fas fa-tv fa-2x py-2 mx-1 video"></i>
-                                </div>
-                            </div>
-                            <div class="col-lg-12 video mx-1 my-4 block-center">
-                                <iframe class="preview-video-1" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe>
-                                <iframe class="preview-video-2" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe>
-                                <iframe class="preview-video-3" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe>
-                                <iframe class="preview-video-4" id="" name="add_trick[videos][]" frameborder='0' allowfullscreen width="204" height="204" src="{{ asset('img/default/default-video.jpg') }}" value="input-4"></iframe>   
-                            </div>   
-                        </div>
-              
-                     {# <i id="add" class="fas fa-plus-circle fa-2x py-2 mx-1 video"></i> #}
-
-                            <div class="custom-error"><div style="display:block"> {{ form_row(form.videos) }}</div></div>
+                </div>
                 {{ form_end(form) }}
             </div>
         </div>
     </div>
 </div>
-{# <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> #}
 
 {% block javascripts %} 
+
+{{ encore_entry_script_tags('app') }}
 
 {% endblock %} 
