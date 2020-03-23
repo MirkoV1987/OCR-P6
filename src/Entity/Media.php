@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
@@ -23,9 +24,9 @@ class Media
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @Assert\NotBlank()
-     */
+    * @ORM\Column(type="string", length=125)
+    * @Assert\NotBlank()
+    */
     private $name;
 
     /**
@@ -33,6 +34,12 @@ class Media
      * @Assert\NotBlank()
      */
     private $caption;
+
+    // /**
+    // * 
+    // * @Assert\File(maxSize="6000000")
+    // */
+    // private $imageFile;
 
     /**
      * @ORM\Column(type="datetime")
@@ -57,8 +64,8 @@ class Media
         return $this->name;
     }
 
-    public function setName(string $name) : self
-    { 
+    public function setName(string $name): self
+    {
         $this->name = $name;
 
         return $this;
@@ -75,6 +82,18 @@ class Media
 
         return $this;
     }
+
+    // public function getImageFile(): ?UploadedFile
+    // {
+    //     return $this->imageFile;
+    // }
+
+    // public function setImageFile(UploadedFile $imageFile): self
+    // {
+    //     $this->imageFile = $imageFile;
+
+    //     return $this;
+    // }
 
     public function __construct()
     {
