@@ -1,6 +1,6 @@
 {# templates/Home/home.html.twig #}
 
-{% extends "layout.html.twig" %}
+{% extends "dashboard.html.twig" %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -12,6 +12,8 @@
 
 {% block body %}
 
+{{ include("Parts/_header.html.twig") }}
+
 <!-- Page Content -->
 <div class="container-fluid" id="trick-container">
   {{ parent() }}
@@ -19,6 +21,15 @@
   <div class="row">
       <img src="../public/img/snowtrick-background.jpg" class="img-fluid" alt="Responsive image"> 
   </div>
+  {% for message in app.flashes('success') %}
+    <div class="col-12 alert alert-success alert-dismissible fade show mb-0 mt-1 text-center" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <i class="fa fa-check mx-2"></i>
+      <strong>{{ message }}</strong>
+    </div>
+  {% endfor %}
 
   <!-- Scroll To Bottom Arrow-->
   <p class="float-right">
@@ -38,11 +49,14 @@
                   <i class="fas fa-trash-alt"></i>
                 </a>
               </div>
+              {# {% for medias in media %} #}
             <div class="card-body">
+              {# <img class="card-img-top home" src="{{ asset('public/img/uploads/tricks/'trick.mediaFileName) }}" alt="Trick"></a> #}
+              {# {% endfor %} #}
               <p class="card-text">{{ trick.description }}</p>
             </div>
             <div class="card-footer">
-              <button href="#" class="btn btn-primary text-uppercase">Voir plus</button>
+              <a href="{{ path('app_trick_view', {'id': trick.id }) }}" class="btn btn-primary text-uppercase">Voir plus</a>
             </div>
           </div>
         </div>
