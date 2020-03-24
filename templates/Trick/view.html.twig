@@ -1,6 +1,6 @@
 {# templates/Trick/view.html.twig #}
 
-{% extends "dashboard.html.twig" %}
+{% extends "layout.html.twig" %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -123,7 +123,7 @@
                                 {{ form_row(form.content) }}
                             </div>
                             <div class="form-group text-center">
-                                <button type="submit" class="btn btn-success mt-3">Commenter</button>
+                                <button type="submit" class="btn btn-primary mt-3">Commenter</button>
                             </div>
                             {{ form_end(form) }}
                         </div>
@@ -151,7 +151,7 @@
                                     {# <img src="/images/{{ comment.user.avatar }}" class="entry-comments-avatar" alt="{{ comment.user.username }}"> #}
                                         <div class="entry-comments-body">
                                             {# <span class="entry-comments-author"><a href="{{ path('user_profile', { 'id' : comment.user.id }) }}" target="_blank">{{ comment.user.username }}</a></span> #}
-                                            <span class="comment-date">le {{ comment.dateAdd | date('d/m/Y') }} à {{ comment.dateAdd | date('H:i') }}</span>
+                                            <span class="comment-date text-dark">le {{ comment.dateAdd | date('d/m/Y') }} à {{ comment.dateAdd | date('H:i') }}</span>
                                             <p class="comment-content text-justify">{{ comment.content }}</p>
                                         </div>
                                     </div>
