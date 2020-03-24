@@ -131,6 +131,7 @@ class TrickController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $trick = $entityManager->getRepository(Trick::class)->find($id);
+        $media = $entityManager->getRepository(Media::class)->find($id);
 
         if (!$trick) {
             throw $this->createNotFoundException(
@@ -148,7 +149,7 @@ class TrickController extends AbstractController
             /** @var MediaUploader $uploadedFile */
             $uploadedFile = $form['name']->getData();
         
-            if ($uploadedFile) {
+            if ($uploadedFile instanceof UploadedFile) {
             $mediaFileName = $mediaUploader->uploadTrickMedia($uploadedFile);
             $media->setName($mediaFileName);
         }
