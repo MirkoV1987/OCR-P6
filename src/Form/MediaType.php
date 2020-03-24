@@ -19,6 +19,7 @@ class MediaType extends AbstractType
         $builder
         ->add('name', FileType::class, [
             'label' => false,
+            'data_class' => null,
             //'mapped'=> true,
             'row_attr' => ['class' => 'add-image'],
             'attr' => [
