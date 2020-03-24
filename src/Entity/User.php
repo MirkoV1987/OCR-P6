@@ -61,9 +61,14 @@ class User
     private $date_update;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isActive;
+    * @Assert\File(maxSize="6000000")
+    */
+    private $file;
+
+    /**
+    * @ORM\Column(type="boolean")
+    */
+    private $isActive; 
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -76,12 +81,12 @@ class User
     private $resetPasswordToken;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="author", orphanRemoval=true)
      */
     private $tricks;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author", orphanRemoval=true)
      */
     private $comments;
 
@@ -162,6 +167,18 @@ class User
         return $this;
     }
 
+    public function getFile(): ?UploadedFile
+    {
+        return $this->file;
+    }
+
+    public function setfile(UploadedFile $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
     public function getIsActive(): ?bool
     {
         return $this->isActive;
@@ -204,32 +221,64 @@ class User
         $this->comments = new ArrayCollection();
     }
 
-    public function addTrick(Trick $trick)
+    /**
+     * @return Collection|Trick[]
+     */
+    public function addTrick(Trick $trick): self
     {
-       $this->tricks[] = $trick;
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
+            $trick->setTrick($this);
+        }
+
+        return $this;
     }
 
-    public function deleteTrick(Trick $trick)
+    public function removeTrick(Trick $trick): self
     {
-       $this->tricks->deleteTrick($trick);
+        if ($this->tricks->contains($trick)) {
+            $this->medias->removeElement($trick);
+            // set the owning side to null (unless already changed)
+            if ($trick->getTrick() === $this) {
+                $trick->setTrick(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function getTricks()
+    public function getTricks(): Collection
     {
         return $this->tricks;
     }
 
-    public function addComment(Comment $comment)
+    /**
+     * @return Collection|Comment[]
+     */
+    public function addComment(Comment $comment): self
     {
-       $this->comments[] = $comment;
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setComemnt($this);
+        }
+
+        return $this;
     }
 
-    public function deleteComment(Comment $comment)
+    public function removeComment(Comment $comment): self
     {
-       $this->comments->deleteComment($comment);
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getComment() === $this) {
+                $comment->setComment(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function getComments()
+    public function getComments(): Collection
     {
         return $this->comments;
     }
