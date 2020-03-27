@@ -1,10 +1,10 @@
 doctrine:
     dbal:
         # DATABASE configuration
-        dbname: 'db_snowtricks_2'
-        host: 'localhost'
-        port: 3306
-        user: 'root'
+        dbname: 'DB_NAME'
+        host: 'DB_HOST'
+        port: 'PORT_NUMBER'
+        user: 'DB_USER'
         password: ''
         driver: 'pdo_mysql'
         url: '%env(resolve:DATABASE_URL)%'
