@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
  * @UniqueEntity(
- *     fields={"name"},
- *     message="Ce nom de fichier est déjà utilisé !"
+ *     fields={"id"},
+ *     message="Ce fichier existe déjà !"
  * )
  */
 class Media
@@ -25,7 +25,6 @@ class Media
 
     /**
     * @ORM\Column(type="string", length=125)
-    * @Assert\NotBlank()
     */
     private $name;
 
@@ -34,12 +33,6 @@ class Media
      * @Assert\NotBlank()
      */
     private $caption;
-
-    // /**
-    // * 
-    // * @Assert\File(maxSize="6000000")
-    // */
-    // private $imageFile;
 
     /**
      * @ORM\Column(type="datetime")
@@ -53,6 +46,11 @@ class Media
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="medias", cascade={"persist", "remove"})
      */
     private $trick;
+
+    /**
+     * @var UploadedFile
+     */
+    protected $file;
 
     public function getId(): ?int
     {
@@ -83,17 +81,17 @@ class Media
         return $this;
     }
 
-    // public function getImageFile(): ?UploadedFile
-    // {
-    //     return $this->imageFile;
-    // }
+    public function getFile()
+    {
+        return $this->file;
+    }
 
-    // public function setImageFile(UploadedFile $imageFile): self
-    // {
-    //     $this->imageFile = $imageFile;
+    public function setFile(UploadedFile $file): self
+    {
+        $this->file = $file;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function __construct()
     {
