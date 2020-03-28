@@ -18,15 +18,10 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\MediaUploader;
 use App\Service\VideoUploader;
-use Gedmo\Sluggable\Util\Urlizer;
 use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
 use App\Repository\CommentRepository;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -43,12 +38,11 @@ class TrickController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function add(Request $request, MediaUploader $mediaUploader, VideoUploader $videoUploader, EntityManagerInterface $entityManager) : Response
+    public function add(Request $request, MediaUploader $mediaUploader, VideoUploader $videoUploader, EntityManagerInterface $em) : Response
     {
         $trick = new Trick();
-
+        
         $media = new Media();
-        $trick->getMedias()->add($media);
 
         $video = new Video();
         $trick->getVideos()->add($video);
@@ -57,21 +51,28 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $medias = $trick->getMedias();
 
-            $uploadedFile = $form['name']->getData();
+            foreach ($medias as $media) {
+                // Append each media to Trick
+                $media->setTrick($trick);
 
-            if ($uploadedFile instanceof UploadedFile) {
-                $mediaFileName = $mediaUploader->uploadTrickMedia($uploadedFile);
-                $media->setName($mediaFileName);
-        }
-            //On récupère le traitement des données de la function manageMedia - service MediaUploder
-            $mediaUploader->manageMedia($media = [], $trick);
+                // Call to mediaUploader Service
+                $mediaUploader->manageMedia($media);
+            
+                $media->setCaption($media->getCaption());
+                $now = new \DateTime('+ 1 hour');
+                $media->setDateAdd($now);
 
-            //On récupère le traitement des données de la function uploadTrickVideo - service VideoUploder
+                $em->persist($media);
+                $em->flush();
+            }
+
+            // Call to videoUploader Service
             $videoUploader->uploadTrickVideo($video = [], $trick);
             
-            $entityManager->persist($trick);
-            $entityManager->flush();
+            $em->persist($trick);
+            $em->flush();
 
             $this->addFlash(
                 'success',
@@ -93,15 +94,11 @@ class TrickController extends AbstractController
     public function view(Trick $trick, Request $request, TrickRepository $trickRepo, CommentRepository $commentRepo, MediaRepository $mediaRepo, VideoRepository $videoRepo, EntityManagerInterface $entityManager)
     {
         $comment = new Comment();
-        
-        //TO DO -> gestion objet User
-        //$user = new User; 
 
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $comment->setDateAdd(new \DateTime());
             $comment->setTrick($trick);
 
@@ -127,39 +124,26 @@ class TrickController extends AbstractController
      * Modifier un trick
      * @Route("trick/edit/{id}", name="app_trick_edit", requirements={"id" = "\d+"})
      */
-    public function edit($id, Request $request, MediaUploader $mediaUploader, VideoUploader $videoUploader, EntityManagerInterface $entityManager) : Response
+    public function edit($id, Request $request, EntityManagerInterface $em) : Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $trick = $entityManager->getRepository(Trick::class)->find($id);
-        $media = $entityManager->getRepository(Media::class)->find($id);
-
-        if (!$trick) {
-            throw $this->createNotFoundException(
-                'Aucun trick avec l\'identifiant '.$id. ' n\'a été trouvé'
-            );
-        }
+        $em = $this->getDoctrine()->getManager();
+        $trick = $em->getRepository(Trick::class)->find($id);
+        $media = $em->getRepository(Media::class)->find($id);
 
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid())
-        {
-            // //call Media Services
-            /** @var MediaUploader $uploadedFile */
-            $uploadedFile = $form['name']->getData();
-        
-            if ($uploadedFile instanceof UploadedFile) {
-            $mediaFileName = $mediaUploader->uploadTrickMedia($uploadedFile);
-            $media->setName($mediaFileName);
-        }
-
-            $mediaUploader->manageMedia($media = [], $trick);
-
-            $videoUploader->uploadTrickVideo($video = [], $trick);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $medias = $trick->getMedias();
+            
+            foreach ($medias as $media) {
+                $media->setTrick($trick);
+                $em->persist($media);
+            }
 
             $trick->setDateUpdate(new \DateTime('+ 1 hour'));
-            $entityManager->flush();
+            $em->flush();
 
             $this->addFlash(
                 'success',
@@ -180,13 +164,13 @@ class TrickController extends AbstractController
      * Supprimer un trick
      * @Route("trick/delete/{id}", name="app_trick_delete", requirements={"id" = "\d+"})
      */
-    public function delete($id, Request $request) : Response
+    public function delete($id, Request $request, EntityManagerInterface $em) : Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $trick = $entityManager->getRepository(Trick::class)->find($id);
+        $em = $this->getDoctrine()->getManager();
+        $trick = $em->getRepository(Trick::class)->find($id);
 
-        $entityManager->remove($trick);
-        $entityManager->flush();
+        $em->remove($trick);
+        $em->flush();
 
         $this->addflash(
             'success',
