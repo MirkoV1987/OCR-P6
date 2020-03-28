@@ -6,7 +6,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterType;
-use App\Service\Mailer;
+use App\Form\ProfileType;
+use App\Form\FileType;
+use App\Service\MailerManager;
+use App\Repository\UserRepository;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,37 +20,34 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Twig\Environment;
-
 
 class UserController extends AbstractController
 {
     /**
-     * Register
+     * Register new User
      * @Route("user/register", name="app_user_register")
      */
-    public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, Mailer $mailer)
-    { 
+    public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, MailerManager $mailerManager)
+    {
         $user = new User();
 
         $form = $this->createForm(RegisterType::class, $user);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $file = $user->getFile();
             // Créer un nom unique pour le fichier
             $name = md5(uniqid()) . '.' . $file->guessExtension();
             // Déplace le fichier
             $path = 'img/users';
             $file->move($path, $name);
-            // Donner le path et le nom au fichier dans la base de données
-            $user->setImagePath($path);
-            $user->setImageName($name);
 
             $password = $encoder->encodePassword($user, $user->getPassword());
+            $confirmPassword = $encoder->encodePassword($user, $user->getConfirmPassword());
             $user->setPassword($password)
+                 ->setConfirmPassword($confirmPassword)
                  ->setDateAdd(new \DateTime('+ 1 hour'))
                  ->setIsActive(false)
                  ->setValidationToken(md5(random_bytes(10)));
@@ -53,8 +55,9 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
             
-            //Call to Mailer Service
-            $mailer->sendMail($username);
+            //Call to MailerController Service
+            //$mailer = new Email();
+            $mailerManager->sendEmail($mailer);
 
             $this->addFlash(
                 'success',
@@ -69,27 +72,62 @@ class UserController extends AbstractController
         ]);
     }
 
-
-  /**
-     * Login
-     * @Route("user/login", name="app_user_login")
+    /**
+     * Validation de l'email après une inscription
+     * @Route("User/email-validation/{username}/{validationToken}", name="app_user_email_validation")
      */
-    public function login(Request $request)
+    public function emailValidation(UserRepository $userRepo, $username, $validationToken, EntityManagerInterface $em)
     {
-        //Si la requête est en POST, l'utilisateur a soumis le formulaire
+        $user = $userRepo->findOneByUsername($username);
 
-        if ($request->isMethod('POST')) {
+        if ($validationToken != null && $validationToken === $user->getValidationToken())
+        {
+            $user->setIsActive(true);
+            $em->persist($user);
+            $em->flush();
 
-            // Formulaire de login
-
-            $this->addFlash('notice', 'Vous etes connecté !');
-
-            // Rédirection vers la page d'accueil pour les utilisateurs connectés
-
-            return $this->redirectToRoute('app_home_logged', ['id' => 4]);
+            $this->addFlash(
+                'success',
+                "Votre compte a été activé avec succès ! Vous pouvez désormais vous connecter !"
+            );
         }
-        // Si on n'est pas en POST, on affiche le formulaire de login
-        return $this->render('User/login.html.twig');
+        else
+        {
+            $this->addFlash(
+                'danger',
+                "La validation de votre compte a échoué. Le lien de validation a expiré !"
+            );   
+        }
+
+        return $this->redirectToRoute('app_user_login'); 
     }
 
+    /**
+     * Edit User Profile
+     * @Route("user/edit", name="app_user_edit")
+     */
+    public function edit(Request $request, EntityManagerInterface $em)
+    {
+        $em = $this->getDoctrine()->getManager();
+        // $user = $em->getRepository(User::class)->findBy($id);
+        $user = new User();
+
+        $form = $this->createForm(ProfileType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre profile a été modifié avec succès !'
+            );
+        }
+
+        return $this->render('User/profile.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 }
