@@ -21,6 +21,7 @@ class Category
     /**
      * 
      * @ORM\Column(type="string", length=50)
+     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="category", orphanRemoval=true)
      */
     private $name;
 
