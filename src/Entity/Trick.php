@@ -7,6 +7,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -56,6 +57,16 @@ class Trick
      * @var string A "Y-m-d H:i:s" formatted value
      */
     private $date_update;
+
+    /**
+    * @Assert\File(maxSize="6000000")
+    */
+    private $file;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $fileName;
 
     /**
      * @ORM\JoinColumn(nullable=true, onDelete="set null")
@@ -140,6 +151,30 @@ class Trick
         return $this;
     }
 
+    public function getFile(): ?UploadedFile
+    {
+        return $this->file;
+    }
+
+    public function setfile(UploadedFile $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
+    }
+
+    public function setFileName(string $fileName): self
+    {
+        $this->fileName = $fileName;
+
+        return $this;
+    }
+
     public function getCategory(): ?Category
     {
         return $this->category;
@@ -157,8 +192,8 @@ class Trick
         $this->medias = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->date_add = new \Datetime('+ 1 hour');
-        $this->date_update = new \Datetime('+ 1 hour');
+        $this->date_add = new \Datetime('+ 2 hour');
+        $this->date_update = new \Datetime('+ 2 hour');
     }
 
     /**
