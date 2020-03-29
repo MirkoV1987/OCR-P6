@@ -6,6 +6,7 @@ namespace App\Form;
 
 use App\Entity\Trick;
 use App\Entity\Category;
+use App\Entity\Media;
 use App\Form\MediaType;
 use App\Form\VideoType;
 use Symfony\Component\Form\AbstractType;
@@ -43,6 +44,12 @@ class TrickType extends AbstractType
                 'label'=>'Groupe',
                 'class'=>Category::class,
                 'choice_label'=> 'name'
+            ])
+            ->add('file', FileType::class, [
+                'label' => 'Image de couverture',
+                'attr' => [
+                    'placeholder' => 'Charger l\'image de couverture',
+                ] 
             ])
             ->add('medias', CollectionType::class, [
                     'label'=>false,
