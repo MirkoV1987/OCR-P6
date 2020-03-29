@@ -51,6 +51,10 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // Call to MediaUploader Service
+            $mediaUploader->coverImage($trick);
+
             $medias = $trick->getMedias();
 
             foreach ($medias as $media) {
@@ -124,7 +128,7 @@ class TrickController extends AbstractController
      * Modifier un trick
      * @Route("trick/edit/{id}", name="app_trick_edit", requirements={"id" = "\d+"})
      */
-    public function edit($id, Request $request, EntityManagerInterface $em) : Response
+    public function edit($id, Request $request, MediaUploader $mediaUploader, VideoUploader $videoUploader, EntityManagerInterface $em) : Response
     {
         $em = $this->getDoctrine()->getManager();
         $trick = $em->getRepository(Trick::class)->find($id);
@@ -135,6 +139,10 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // Call to MediaUploader Service
+            $mediaUploader->coverImage($trick);
+
             $medias = $trick->getMedias();
             
             foreach ($medias as $media) {
