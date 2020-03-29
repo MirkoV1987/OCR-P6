@@ -1,10 +1,11 @@
 {# templates/Home/home.html.twig #}
 
-{% extends "dashboard.html.twig" %}
+{% extends "layout.html.twig" %}
 
 {% block stylesheets %}
   {{ parent() }}
-  <link src="../public/build/app.css" rel="stylesheet">
+  {# <link src="../public/build/app.css" rel="stylesheet"> #}
+  {{ encore_entry_link_tags('home') }}
 
 {% endblock %}
 
@@ -19,7 +20,7 @@
   {{ parent() }}
 
   <div class="row">
-      <img src="../public/img/snowtrick-background.jpg" class="img-fluid" alt="Responsive image"> 
+      <img src="../public/img/design/snowtrick-background.jpg" class="img-fluid" alt="Responsive image"> 
   </div>
   {% for message in app.flashes('success') %}
     <div class="col-12 alert alert-success alert-dismissible fade show mb-0 mt-1 text-center" role="alert">
@@ -38,7 +39,7 @@
   <!-- Tricks Section -->
     <div class="row text-center">
       {% for trick in tricks %}
-        <div class="col-lg-2 col-md-12 col-xs-12 my-4 mx-4">
+        <div class="col-lg-2 col-md-5 col-xs-12 my-4 mx-4">
           <div class="card h-100">
             <h4 class="card-header">{{ trick.name }}</h4>
               <div class="float-right">
@@ -49,12 +50,11 @@
                   <i class="fas fa-trash-alt"></i>
                 </a>
               </div>
-              {# {% for medias in media %} #}
-            <div class="card-body">
-              {# <img class="card-img-top home" src="{{ asset('public/img/uploads/tricks/'trick.mediaFileName) }}" alt="Trick"></a> #}
-              {# {% endfor %} #}
-              <p class="card-text">{{ trick.description }}</p>
-            </div>
+              <div class="card-body">
+                <a href="{{ path('app_trick_view', {'id': trick.id}) }}"><img class="card-img-top home border border-primary py-1 px-1 " src="../public/img/tricks/covers/{{ trick.fileName }}" alt="Trick"></a>
+                <p class="card-text my-2"><strong>Ajouté le {{ trick.dateAdd | date('d/m/Y') }} à {{ trick.dateAdd | date('H:i') }}</strong></p>
+                {# <p class="card-text">{{ trick.author }}</p> #}
+              </div>
             <div class="card-footer">
               <a href="{{ path('app_trick_view', {'id': trick.id }) }}" class="btn btn-primary text-uppercase">Voir plus</a>
             </div>
