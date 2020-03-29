@@ -12,6 +12,8 @@
                         <div class="col-md-3">
                             {{ form_row(form.name) }}
                             {{ form_row(form.category) }}
+                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('img/design/snowboarder.png') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="auto" value="" />
+                            {{ form_row(form.file) }}
                         </div>
                         <div class="col-md-9">
                             {{ form_row(form.description,  {'attr': {'id': 'trick_description'}}) }}
@@ -32,7 +34,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
-                                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('img/default/snowboarder.png') }}" alt="trick-image" class="preview img-thumbnail" width="280px" height="280px" value="" />
+                                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('img/design/snowboarder.png') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="280px" value="" />
                                             </div>
                                         </div>
                                         <div class="row my-2">
@@ -41,9 +43,9 @@
                                             {# <i id="image-preview" class="fas fa-eye fa-2x mx-1"></i> #}
                                             </div>
                                         </div>
-                                            {% for media in form.medias %}
-                                                {{ form_widget(form.medias) }}
-                                            {% endfor %}
+                                            {{ form_errors(form.medias) }}
+                                            {{ form_widget(form.medias) }}
+                                            {{ form_help(form.medias) }}
                                         <input type="hidden" id="image-counter" value="0">
                                         <span class="counter-image text-primary"></span>
                                     </div>
@@ -63,9 +65,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                {% for video in form.videos %}
+                                    {{ form_errors(form.videos) }}
                                     {{ form_widget(form.videos) }}
-                                {% endfor %}
+                                    {{ form_help(form.videos) }}
                                 <input type="hidden" id="video-counter" value="0">
                                 <span class="counter-video text-primary"></span>
                             </div>
