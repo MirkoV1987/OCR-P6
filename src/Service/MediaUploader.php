@@ -4,8 +4,9 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Entity\Media;
+use App\Entity\Trick;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MediaUploader
 {
@@ -22,5 +23,18 @@ class MediaUploader
         $media->setName($fileName);
 
         return $media;
+    }
+
+    public function coverImage(Trick $trick): Trick
+    {
+        /** @var UploadedFile $file */
+        $file = $trick->getFile();
+        $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+        $path = 'img/tricks/covers';
+        $file->move($path, $fileName);
+
+        $trick->setFileName($fileName);
+
+        return $trick;
     }
 }
