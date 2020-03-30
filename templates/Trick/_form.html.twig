@@ -12,7 +12,7 @@
                         <div class="col-md-3">
                             {{ form_row(form.name) }}
                             {{ form_row(form.category) }}
-                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('img/design/snowboarder.png') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="auto" value="" />
+                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('uploads/images/defaults/snowboard-default.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="auto" value="" />
                             {{ form_row(form.file) }}
                         </div>
                         <div class="col-md-9">
@@ -34,17 +34,16 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
-                                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('img/design/snowboarder.png') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="280px" value="" />
+                                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('uploads/images/defaults/snowboard.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="280px" value="" />
                                             </div>
                                         </div>
                                         <div class="row my-2">
                                             <div class="col-12">
-                                            <button type="button" class="btn btn-outline-info center-block" id="add-image">Ajouter une image</button>
-                                            {# <i id="image-preview" class="fas fa-eye fa-2x mx-1"></i> #}
+                                            <button type="button" class="btn btn-outline-info center-block" id="add-image">Ajouter une image</button><i id="remove-image" class="fas fa-trash-alt fa-2x mx-2"></i>
                                             </div>
                                         </div>
                                             {{ form_errors(form.medias) }}
-                                            {{ form_widget(form.medias) }}
+                                            {{ form_widget(form.medias) }} 
                                             {{ form_help(form.medias) }}
                                         <input type="hidden" id="image-counter" value="0">
                                         <span class="counter-image text-primary"></span>
@@ -60,8 +59,8 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12 my-1">
-                                            <iframe class="preview-video" id="" name="add_trick[videos][0]" frameborder='0' allowfullscreen width="200" height="200" src="{{ asset('img/default/default-video.jpg') }}" value=""></iframe></br>
-                                            <button type="button" class="btn btn-outline-info" id="add-video">Ajouter une vidéo</button><i id="preview" class="fas fa-eye fa-2x mx-1"></i>
+                                            <iframe class="preview-video" id="" name="add_trick[videos][0]" frameborder='0' allowfullscreen width="200" height="200" src="{{ asset('uploads/images/defaults/video-default.jpg') }}" value=""></iframe></br>
+                                            <button type="button" class="btn btn-outline-info" id="add-video">Ajouter une vidéo</button><i id="preview" class="fas fa-eye fa-2x mx-1"></i><i id="remove-video" class="fas fa-trash-alt fa-2x mx-2"></i>
                                             </div>
                                         </div>
                                     </div>
