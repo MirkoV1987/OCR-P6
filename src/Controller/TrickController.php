@@ -17,7 +17,6 @@ use App\Form\CommentType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\MediaUploader;
-use App\Service\VideoUploader;
 use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
@@ -38,14 +37,13 @@ class TrickController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function add(Request $request, MediaUploader $mediaUploader, VideoUploader $videoUploader, EntityManagerInterface $em) : Response
+    public function add(Request $request, MediaUploader $mediaUploader, EntityManagerInterface $em) : Response
     {
         $trick = new Trick();
         
         $media = new Media();
 
-        $video = new Video();
-        $trick->getVideos()->add($video);
+        //$videos = new Video();
 
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
@@ -65,15 +63,21 @@ class TrickController extends AbstractController
                 $mediaUploader->manageMedia($media);
             
                 $media->setCaption($media->getCaption());
-                $now = new \DateTime('+ 1 hour');
+                $now = new \DateTime('+ 2 hour');
                 $media->setDateAdd($now);
 
                 $em->persist($media);
                 $em->flush();
             }
 
-            // Call to videoUploader Service
-            $videoUploader->uploadTrickVideo($video = [], $trick);
+            $videos = $trick->getVideos();
+
+            foreach ($videos as $video) {
+                $video->setTrick($trick);
+                $video->setUrl($video->getUrl());
+                $em->persist($video);
+                $em->flush();
+            }
             
             $em->persist($trick);
             $em->flush();
@@ -128,7 +132,7 @@ class TrickController extends AbstractController
      * Modifier un trick
      * @Route("trick/edit/{id}", name="app_trick_edit", requirements={"id" = "\d+"})
      */
-    public function edit($id, Request $request, MediaUploader $mediaUploader, VideoUploader $videoUploader, EntityManagerInterface $em) : Response
+    public function edit($id, Request $request, MediaUploader $mediaUploader, EntityManagerInterface $em) : Response
     {
         $em = $this->getDoctrine()->getManager();
         $trick = $em->getRepository(Trick::class)->find($id);
@@ -142,15 +146,34 @@ class TrickController extends AbstractController
 
             // Call to MediaUploader Service
             $mediaUploader->coverImage($trick);
-
-            $medias = $trick->getMedias();
             
+            $medias = $trick->getMedias();
+
             foreach ($medias as $media) {
-                $media->setTrick($trick);
+                // Append each media to Trick
+                $media->getTrick($trick);
+
+                // Call to mediaUploader Service
+                $mediaUploader->manageMedia($media);
+            
+                $media->setCaption($media->getCaption());
+                $now = new \DateTime('+ 2 hour');
+                $media->setDateAdd($now);
+
                 $em->persist($media);
+                $em->flush();
             }
 
-            $trick->setDateUpdate(new \DateTime('+ 1 hour'));
+            $videos = $trick->getVideos();
+
+            foreach ($videos as $video) {
+                $video->setTrick($trick);
+                $video->setUrl($video->getUrl());
+                $em->persist($video);
+                $em->flush();
+            }
+
+            $trick->setDateUpdate(new \DateTime('+ 2 hour'));
             $em->flush();
 
             $this->addFlash(
