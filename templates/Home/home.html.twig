@@ -51,8 +51,8 @@
                 </a>
               </div>
               <div class="card-body">
-                <a href="{{ path('app_trick_view', {'id': trick.id}) }}"><img class="card-img-top home border border-primary py-1 px-1 " src="../public/img/tricks/covers/{{ trick.fileName }}" alt="Trick"></a>
-                <p class="card-text my-2"><strong>Ajouté le {{ trick.dateAdd | date('d/m/Y') }} à {{ trick.dateAdd | date('H:i') }}</strong></p>
+                <a href="{{ path('app_trick_view', {'id': trick.id}) }}"><img class="card-img-top home border border-primary py-1 px-1" src="../public/img/tricks/covers/{{ trick.fileName }}" alt="Trick"></a>
+                <p class="card-text my-2 text-left"><strong>Ajouté le {{ trick.dateAdd | date('d/m/Y') }} à {{ trick.dateAdd | date('H:i') }}</strong></p>
                 {# <p class="card-text">{{ trick.author }}</p> #}
               </div>
             <div class="card-footer">
