@@ -23,7 +23,14 @@
         <div class="row justify-content-center mt-5">
             <div class="col-md-10 col-md-offset-1 mt-5 mb-4">
                 <div class="card mt-5">
-                    {# <img class="card-img-top" src="/images/{{ trick.image }}" alt="{{ trick.title }}-main"> #}
+                    <div class="row">
+                        <div class="col-lg-4 mx-4 my-2 border border-primary py-1 px-1">
+                            <img class="card-img-top img-fluid" src="http://localhost/OCR-P6/public/img/tricks/covers/{{ trick.fileName }}" alt="{{ trick.name }}-main">
+                        </div>
+                        <div class="col-lg-6 mt-4 ml-6">
+                            <img class="card-img-top img-fluid text-right" src="http://localhost/OCR-P6/public/img/tricks/covers/snowtrick-banner.png" alt="snowtricks">
+                        </div>
+                    </div>
                     <div class="card-body">
                         <ul class="list-inline trick-data">
                             <li class="list-inline-item">
@@ -48,14 +55,14 @@
                                 <div class="col-lg-6 col-md-12">
                                     <div id="carousel" class="carousel slide mt-3 mb-2" data-ride="carousel">
                                         <ol class="carousel-indicators">
-                                            {% for media in medias %}
+                                            {% for media in trick.medias %}
                                                 <li data-target=".carousel" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %} class="active" {% endif %}></li>
                                             {% endfor %}
                                         </ol>
                                         <div class="carousel-inner enlarge">
-                                            {% for media in medias %}
+                                            {% for media in trick.medias %}
                                                 <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
-                                                    {# <img class="d-block" src="/images/{{ media.name }}" alt="{{ trick.title }}-image-{{ media.id }}"> #}
+                                                    <img class="d-block img-fluid" src="http://localhost/OCR-P6/public/uploads/images/tricks/{{ media.name }}" alt="{{ trick.name }}-image-{{ media.id }}">
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -70,14 +77,35 @@
                                 <div class="col-lg-6 col-md-12">
                                     <div id="carousel-v" class="carousel slide mt-3 mb-2" data-ride="carousel">
                                         <ol class="carousel-indicators">
-                                            {% for video in videos %}
+                                            {% for video in trick.videos %}
                                                 <li data-target="#carousel-v" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %} class="active" {% endif %}></li>
                                             {% endfor %}
                                         </ol>
-                                        <div class="carousel-inner">
-                                            {% for video in videos %}
+                                        <div class="carousel-inner enlarge">
+                                            {% for video in trick.videos %}
                                                 <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
-                                                    <iframe class="preview-video" name="add_trick[videos][0]" frameborder='0' allowfullscreen="1" src="{{ video.url }}" value=""></iframe>
+                                                    <iframe id="video-reader" frameborder='0' allowfullscreen="1" src="{{ video.url }}" value=""></iframe>
+                                                    <script>
+                                                        let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                                                        let dailyMotionRegex = "^.+dailymotion.com\\/(video|embed)\\/([^_]+)[^#]*(#video=([^_&]+))?";
+                                                        let url = "{{ video.url }}";
+                                                        let match = url.match(regExp);
+                                                        let matchTwo = url.match(dailyMotionRegex);
+                                                        if (match && match[2].length == 11) 
+                                                        {
+                                                            let id = match[2];
+                                                            let embedlink = "http://www.youtube.com/embed/" + id;
+                                                            let iframe = document.getElementById("video-reader");
+                                                            iframe.src = embedlink;
+                                                        }
+                                                        else if (matchTwo && match[2].length >= 7) 
+                                                        {
+                                                            let dailyMotionId = match[2];
+                                                            let dEmbedlink = "https://www.dailymotion.com/embed/" + dailyMotionId;
+                                                            let iframe = document.getElementById("video-reader");
+                                                            iframe.src = dEmbedlink;
+                                                        }                                                        
+                                                    </script>
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -114,10 +142,10 @@
                 <!--  End Trick -->
 
                 <!-- Start Comment Add Form -->
-                {# {% if app.user %} #}
+                    {% if app.user %}
                       <div class="col-lg-12 px-0 mb-30">
                         <div class="cmt padDiv">
-                        {# <h6 class="mb-30">Bonjour {{ app.user.username }} !</h6> #}
+                          <h6 class="mb-30">Bonjour {{ app.user.username }} !</h6>
                             {{ form_start(form) }}
                             <div class="form-group">
                                 {{ form_row(form.content) }}
@@ -128,13 +156,13 @@
                             {{ form_end(form) }}
                         </div>
                     </div>
-                    {# {% else %} #}
+                    {% else %}
                     <div class="col-md-12 px-0 mb-30">
                         <div class="comments text-center p-3">
-                            <p><a href="{{ path('app_user_register') }}">Inscrivez-vous</a> ou <a href="{{ path('app_user_login') }}">connectez vous</a> pour commenter cet article</p>
+                            <p><a href="{{ path('app_user_register') }}"><strong>Inscrivez-vous</strong></a> ou <a href="{{ path('app_user_login') }}"><strong>connectez vous</strong></a> pour laisser un commentaire</p>
                         </div>
                     </div>
-                    {# {% endif %} #}
+                    {% endif %}
                 <!-- Start Comment Add Form -->
 
                 <!-- Start Comments -->
@@ -166,3 +194,6 @@
         </div>
     </div>
 {% endblock %}
+{% block javascripts %}
+      {{ encore_entry_script_tags('trick') }}
+{% endblock %} 
