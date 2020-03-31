@@ -56,8 +56,8 @@ class UserController extends AbstractController
             $em->flush();
             
             //Call to MailerController Service
-            //$mailer = new Email();
-            $mailerManager->sendEmail($mailer);
+            //$mailer = new MailerInterface();
+            //$mailerManager->sendEmail($mailer);
 
             $this->addFlash(
                 'success',
@@ -103,13 +103,40 @@ class UserController extends AbstractController
     }
 
     /**
+     * Show User Profile
+     * @Route("user/view/{id}", name="app_user_view", requirements={"id" = "\d+"})
+     */
+    public function view(User $user, Request $request, UserRepository $userRepo, EntityManagerInterface $em)
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(ProfileType::class, $user);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Les modifications du profil ont été enregistrées avec succès !'
+            );
+        }
+        return $this->render('User/profile.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * Edit User Profile
      * @Route("user/edit", name="app_user_edit")
      */
     public function edit(Request $request, EntityManagerInterface $em)
     {
         $em = $this->getDoctrine()->getManager();
-        // $user = $em->getRepository(User::class)->findBy($id);
+        //$user = $em->getRepository(User::class)->findBy($id);
         $user = new User();
 
         $form = $this->createForm(ProfileType::class, $user);
