@@ -69,8 +69,7 @@ class Trick
     private $fileName;
 
     /**
-     * @ORM\JoinColumn(nullable=true, onDelete="set null")
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="name", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks")
      */
     protected $category;
 
