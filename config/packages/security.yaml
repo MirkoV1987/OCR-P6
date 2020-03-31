@@ -1,0 +1,50 @@
+# config/packages/security.yaml
+
+security:
+    encoders: 
+        App\Entity\User:
+            algorithm: auto #bcrypt
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        users_in_memory: { memory: null }
+        users:
+        # in_database:
+            entity: 
+                class: App\Entity\User
+                property: 'username'
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            user_checker: App\Security\UserChecker        
+            anonymous: lazy
+            form_login:
+                login_path: app_user_login
+                check_path: app_user_login
+                # default_target_path: app_trick_home
+                # always_use_default_target_path: true
+                csrf_token_generator: security.csrf.token_manager
+            provider: users_in_memory
+            guard:
+                authenticators:
+                    - App\Security\AppUserAuthenticator
+            logout:
+                path: app_user_logout
+                # where to redirect after logout
+                target: app_trick_home
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        # { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/user, roles: ROLE_USER }
+        
