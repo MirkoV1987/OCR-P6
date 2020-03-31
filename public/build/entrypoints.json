@@ -3,12 +3,38 @@
     "app": {
       "js": [
         "../public/build/runtime.js",
-        "../public/build/app.js",
-        "../public/build/scroll-button.js"
+        "../assets/js/counter.js",
+        "../assets/js/scroll-button.js",
+        "../assets/js/trick-add.js",
+        "../assets/js/bootstrap.bundle.min.js"
+      ],
+      "css": [
+        "../public/build/app.css",
+        "../public/build/arrow.css",
+        "../assets/css/style.css",
+        "../assets/css/home.css",
+        "../assets/css/style.css.map"
+      ]
+    },
+    "trick": {
+      "js": [
+        "../assets/js/trick-add.js",
+        "../assets/js/bootstrap.bundle.min.js"
       ],
       "css": [
         "../public/build/app.css"
       ]
+    },
+    "home": { 
+       "js": [
+
+
+      ],
+      "css": [
+        "../assets/css/font-awesome.min.css",
+        "../assets/css/flag-icon.min.css",
+        "../assets/css/cryptocoins.css"
+      ]
+      }
     }
   }
-}
