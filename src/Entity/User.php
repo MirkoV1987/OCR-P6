@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+//use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -21,7 +22,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *  message="Email déjà utilisé"
  * )
  */
-class User
+//class User implements UserInterface
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -36,6 +38,11 @@ class User
     private $username;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $email;
@@ -46,9 +53,9 @@ class User
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var $confirmPassowrd
      */
-    private $comfirmPassword;
+    private $confirmPassword;
 
     /**
      * @ORM\Column(type="datetime")
@@ -76,7 +83,8 @@ class User
     private $validationToken;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Blank
      */
     private $resetPasswordToken;
 
@@ -119,26 +127,26 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword()
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password)
     {
         $this->password = $password;
 
         return $this;
     }
 
-    public function getComfirmPassword(): ?string
+    public function getConfirmPassword(): ?string
     {
-        return $this->comfirmPassword;
+        return $this->confirmPassword;
     }
 
-    public function setComfirmPassword(string $comfirmPassword): self
+    public function setConfirmPassword(string $confirmPassword): self
     {
-        $this->comfirmPassword = $comfirmPassword;
+        $this->confirmPassword = $confirmPassword;
 
         return $this;
     }
@@ -282,4 +290,47 @@ class User
     {
         return $this->comments;
     }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+        // return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    // public function encodePassword($raw, $salt) {}
+
+    // public function isPasswordValid($encoded, $raw, $salt){}
+
+    // public function needsRehash(string $encoded): bool{}
 }
