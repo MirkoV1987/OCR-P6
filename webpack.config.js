@@ -8,14 +8,14 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
     // directory where compiled assets will be stored
-    .setOutputPath('public/build/')
+    .setOutputPath('build/')
     // public path used by the web server to access the output path
-    .setPublicPath('/build')
+    .setPublicPath('/public/build')
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
 
-    .copyFiles({
-            from: './uploads/images/tricks',
+    //.copyFiles({
+      //      from: './uploads/images/tricks',
         
             // optional target path, relative to the output dir
             //to: 'images/[path][name].[ext]',
@@ -24,8 +24,8 @@ Encore
             //to: 'images/[path][name].[hash:8].[ext]',
         
             // only copy files matching this pattern
-            pattern: /\.(png|jpg|jpeg)$/
-        })
+        //    pattern: /\.(png|jpg|jpeg)$/
+        //})
 
     /*
      * ENTRY CONFIG
@@ -37,10 +37,9 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
-    .addEntry('home', './assets/css/home.css')
+    //.addEntry('app', './assets/css/app.css')
+    .addEntry('scroll', './assets/js/scroll-button.js')
     .addEntry('trick', './assets/js/trick-add.js')
-    //.addEntry('page1', './assets/js/page1.js')
-    //.addEntry('page2', './assets/js/page2.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -48,6 +47,10 @@ Encore
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
+
+    .enableSassLoader()
+
+    .addStyleEntry('home', './assets/css/style.css')
 
     /*
      * FEATURE CONFIG
