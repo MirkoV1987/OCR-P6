@@ -1,0 +1,116 @@
+/* assets/css/app.css */
+
+/* @import '../assets/css/arrow.css'; */
+@import 'style.css';
+
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700"); */
+
+body {
+    background-color: lightgray;
+}
+
+.red {
+    color : #ff0000 !important;
+}
+
+textarea {
+    border: 2px solid #D9E3F9;
+    border-radius: 4px;
+    padding: 8px 14px;
+}
+  
+h1 {
+    color: #1da1f2;
+      font-size: 33px;
+      font-weight: 300;
+      line-height: 33px;
+      margin-bottom: 11px;
+}
+
+p#counterBlock {
+    color: #456; 
+    font-size: 37px;
+    font-weight: bold;
+    margin-top:7px
+}
+
+/******************************************
+***************Home Page*******************
+*******************************************/
+
+#trick-lead {
+    height: 1000px; 
+    background-image: url('../public/img/snowtrick-background.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover
+}
+
+/*******************************************
+**********Video Preview*********************
+********************************************/
+
+.youtube-box,
+.youtube-frame {
+  display:block;
+  width:420px; /* video width */
+  height:315px; 
+  background-color:black;
+  background-size:100%;
+  position:relative;
+  border:none;
+  margin:0px auto 15px;
+}
+
+.youtube-box span {
+  display:block;
+  position:absolute;
+  top:0px;
+  right:0px;
+  bottom:0px;
+  left:0px;
+}
+
+.youtube-box .youtube-title {
+  background-color:rgba(0,0,0,0.4);
+  font:bold 15px Verdana,Arial,Sans-Serif;
+  color:white;
+  text-shadow:0px 1px 2px black;
+  bottom:auto;
+  line-height:30px;
+  height:30px;
+  overflow:hidden;
+  padding:0px 15px;
+}
+
+.youtube-box .youtube-bar {
+  background: #000;
+  height:35px;
+  top:auto;
+}
+
+.youtube-box .youtube-bar .yt-bar-left {
+  background: #999;
+}
+
+.youtube-box .youtube-bar .yt-bar-right {
+  background: #999;
+}
+
+.youtube-box .youtube-play {
+  cursor:pointer;
+  width:83px;
+  height:56px;
+  top:50%;
+  left:50%;
+  margin:-28px 0px 0px -42px;
+  background: #999;
+  color: #fff;
+  line-height: 56px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.youtube-box .youtube-play:hover {
+  background-color: #000;
+}
