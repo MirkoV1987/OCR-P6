@@ -1,14 +1,12 @@
 {# templates/Trick/view.html.twig #}
 
-{% extends "layout.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block stylesheets %}
   {{ parent() }}
-  <link src="../public/build/app.css" rel="stylesheet">
-
 {% endblock %}
 
-{% block title %}{{ parent() }} Liste des figures {% endblock %}
+{% block title %}{{ parent() }} Liste des Tricks {% endblock %}
 
 {% block body %}
 
@@ -16,7 +14,6 @@
 
 <!-- Page Content -->
 <div class="container-fluid" id="trick-container">
-  {{ parent() }}
 
   <!-- Start Trick -->
     <div class="container mt-5">
@@ -159,7 +156,7 @@
                     {% else %}
                     <div class="col-md-12 px-0 mb-30">
                         <div class="comments text-center p-3">
-                            <p><a href="{{ path('app_user_register') }}"><strong>Inscrivez-vous</strong></a> ou <a href="{{ path('app_user_login') }}"><strong>connectez vous</strong></a> pour laisser un commentaire</p>
+                            <p><a href="{{ path('app_user_register') }}"><strong>Inscrivez-vous</strong></a> ou <a href="{{ path('app_login') }}"><strong>connectez vous</strong></a> pour laisser un commentaire</p>
                         </div>
                     </div>
                     {% endif %}
@@ -194,6 +191,7 @@
         </div>
     </div>
 {% endblock %}
+
 {% block javascripts %}
-      {{ encore_entry_script_tags('trick') }}
+      {{ encore_entry_script_tags('app') }}
 {% endblock %} 
