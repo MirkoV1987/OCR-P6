@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
+//use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 //use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
@@ -53,6 +54,11 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @ORM\Column(type="string", length=255) 
+     */
+    private $avatar;
+
+    /**
      * @var $confirmPassowrd
      */
     private $confirmPassword;
@@ -94,7 +100,7 @@ class User implements UserInterface
     private $tricks;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
      */
     private $comments;
 
@@ -127,14 +133,29 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPassword()
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->password;
+        return (string) $this->password;
     }
 
-    public function setPassword(string $password)
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }
@@ -186,6 +207,11 @@ class User implements UserInterface
 
         return $this;
     }
+
+    // public function serialize(UploadedFile $file): self
+    // {
+    //     return serialize($this->file);
+    // }
 
     public function getIsActive(): ?bool
     {
@@ -267,7 +293,7 @@ class User implements UserInterface
     {
         if (!$this->comments->contains($comment)) {
             $this->comments[] = $comment;
-            $comment->setComemnt($this);
+            $comment->setComment($this);
         }
 
         return $this;
@@ -291,9 +317,6 @@ class User implements UserInterface
         return $this->comments;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -327,10 +350,4 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
-    // public function encodePassword($raw, $salt) {}
-
-    // public function isPasswordValid($encoded, $raw, $salt){}
-
-    // public function needsRehash(string $encoded): bool{}
 }
