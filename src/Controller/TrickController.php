@@ -42,10 +42,7 @@ class TrickController extends AbstractController
     public function add(Request $request, MediaUploader $mediaUploader, EntityManagerInterface $em) : Response
     {
         $trick = new Trick();
-        
         $media = new Media();
-
-        //$videos = new Video();
 
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
@@ -112,7 +109,6 @@ class TrickController extends AbstractController
         $commentRepo->findBy([], ['date_add' => 'DESC'], 5);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $comment->setDateAdd(new \DateTime('+ 2 hour'));
             $comment->setTrick($trick);
             $comment->setUser($this->getUser());
@@ -144,7 +140,7 @@ class TrickController extends AbstractController
 
     /**
      * Get the 5 next comments in the database and create a Twig file with them that will be displayed via Javascript
-     * 
+     *
      * @Route("trick/view/{id}/{start}", name="loadComments", requirements={"start": "\d+"})
      */
     public function loadMoreComments(CommentRepository $commentRepo, $id, $start = 5)
@@ -173,34 +169,14 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // Call to MediaUploader Service
-            $mediaUploader->coverImage($trick);
-            
             $medias = $trick->getMedias();
 
             foreach ($medias as $media) {
-                // Append each media to Trick
                 $media->getTrick($trick);
-
                 // Call to mediaUploader Service
                 $mediaUploader->manageMedia($media);
-            
-                $media->setCaption($media->getCaption());
-                $now = new \DateTime('+ 2 hour');
-                $media->setDateAdd($now);
 
                 $em->persist($media);
-                $em->flush();
-            }
-
-            $videos = $trick->getVideos();
-
-            foreach ($videos as $video) {
-                $video->setTrick($trick);
-                $video->setUrl($video->getUrl());
-                $em->persist($video);
-                $em->flush();
             }
 
             $trick->setDateUpdate(new \DateTime('+ 2 hour'));
