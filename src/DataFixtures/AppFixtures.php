@@ -19,8 +19,11 @@ class AppFixtures extends Fixture
         $faker = Faker\Factory::create('fr_FR');
 
         //Initialisation des variables
+        $width = 40;
+        $height = 40;
         $tricks = [];
         $authors = [];
+        $users = [];
         $categories = [];
         $categoryDemoName = ['Stances', 'Straight Airs', 'Grabs', 'Spins', 'Flips', 'Slides'];
         $file = '679448aa836134509f5953518b8e6492.jpeg';
@@ -47,7 +50,8 @@ class AppFixtures extends Fixture
                 ->setDateUpdate($faker->dateTimeBetween($startDate = '-8 months', $endDate = 'now', $timezone = null))
                 ->setIsActive(true)
                 ->setValidationToken($faker->md5)
-                ->setResetPasswordToken($faker->sha256);
+                ->setResetPasswordToken($faker->sha256)
+                ->setAvatar($faker->imageUrl($width, $height, 'cats', true, 'Faker', true));
 
             $manager->persist($user);
             $authors[] = $user;
@@ -65,6 +69,7 @@ class AppFixtures extends Fixture
 
                 $manager->persist($trick);
                 $tricks[] = $trick;
+                //$authors[] = $authors;
         }
 
         foreach ($mediaDemoName as $mediaName) {
@@ -90,7 +95,7 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 15; $i++) {
             $comment = new Comment();
-            $comment->setAuthor($faker->randomElement($authors))
+            $comment->setUser($faker->randomElement($authors))
                     ->setTrick($faker->randomElement($tricks))
                     ->setDateAdd(new \Datetime)
                     ->setContent($faker->text);
@@ -98,6 +103,7 @@ class AppFixtures extends Fixture
             $manager->persist($comment);
             $comments[] = $comment;
             $tricks[] = $trick;
+            $authors[] = $user;
         }
 
         $manager->flush();
