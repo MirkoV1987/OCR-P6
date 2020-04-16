@@ -250,9 +250,9 @@ class Trick
         if ($this->videos->contains($video)) {
             $this->videos->removeElement($video);
             //set the owning side to null (unless already changed)
-            if ($video->getTrick() === $this) {
-                $video->setTrick(null);
-            }
+            // if ($video->getTrick() === $this) {
+            //     $video->setTrick(null);
+            // }
         }
 
         return $this;
