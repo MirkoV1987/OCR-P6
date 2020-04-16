@@ -16,9 +16,11 @@ use App\Form\MediaType;
 use App\Form\CommentType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+//use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use App\Service\MediaUploader;
 use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
+use App\Repository\UserRepository;
 use App\Repository\VideoRepository;
 use App\Repository\CommentRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,22 +104,34 @@ class TrickController extends AbstractController
     public function view(Trick $trick, Request $request, TrickRepository $trickRepo, CommentRepository $commentRepo, MediaRepository $mediaRepo, VideoRepository $videoRepo, EntityManagerInterface $entityManager)
     {
         $comment = new Comment();
+        //$user = new User();
 
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
+        $commentRepo->findBy([], ['date_add' => 'DESC'], 5);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setDateAdd(new \DateTime());
+
+            $comment->setDateAdd(new \DateTime('+ 2 hour'));
             $comment->setTrick($trick);
+            $comment->setUser($this->getUser());
 
             $entityManager->persist($comment);
             $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre commentaire a été posté !'
+            );
+
             return $this->redirectToRoute('app_trick_view', ['id' => $trick->getId(), '_fragment' => $comment->getId()]);
         }
 
         $medias = $mediaRepo->findBy(array('trick' => $trick->getId()));
         $videos = $videoRepo->findBy(array('trick' => $trick->getId()));
         $comments = $commentRepo->findBy(array('trick' => $trick->getId()));
+        //$comments2 = $commentRepo->findBy([], ['id' => 'DESC'], 5, $start);
 
         return $this->render('Trick/view.html.twig', [
             'trick' => $trick,
@@ -125,6 +139,22 @@ class TrickController extends AbstractController
             'videos' => $videos,
             'comments' => $comments,
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * Get the 5 next comments in the database and create a Twig file with them that will be displayed via Javascript
+     * 
+     * @Route("trick/view/{id}/{start}", name="loadComments", requirements={"start": "\d+"})
+     */
+    public function loadMoreComments(CommentRepository $commentRepo, $id, $start = 5)
+    {
+        //$comment = $commentRepo->findOneById($id);
+        $comments = $commentRepo->findBy([], ['date_add' => 'DESC'], 5, $start);
+
+        return $this->render('Trick/comments_load.html.twig', [
+            'comments' => $comments,
+            'start' => $start
         ]);
     }
 

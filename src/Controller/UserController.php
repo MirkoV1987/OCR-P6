@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
 
@@ -45,12 +46,14 @@ class UserController extends AbstractController
             $file->move($path, $name);
 
             $password = $encoder->encodePassword($user, $user->getPassword());
-            $confirmPassword = $encoder->encodePassword($user, $user->getConfirmPassword());
+       
             $user->setPassword($password)
-                 ->setConfirmPassword($confirmPassword)
-                 ->setDateAdd(new \DateTime('+ 1 hour'))
+                 ->setAvatar($name)
+                 ->setDateAdd(new \DateTime('+ 2 hour'))
+                 ->setDateUpdate(new \DateTime('+ 2 hour'))
                  ->setIsActive(false)
-                 ->setValidationToken(md5(random_bytes(10)));
+                 ->setValidationToken(md5(random_bytes(10)))
+                 ->setResetPasswordToken('e542&jjhdd8$%kjh');
 
             $em->persist($user);
             $em->flush();
@@ -99,51 +102,30 @@ class UserController extends AbstractController
             );   
         }
 
-        return $this->redirectToRoute('app_user_login'); 
-    }
-
-    /**
-     * Show User Profile
-     * @Route("user/view/{id}", name="app_user_view", requirements={"id" = "\d+"})
-     */
-    public function view(User $user, Request $request, UserRepository $userRepo, EntityManagerInterface $em)
-    {
-        $user = $this->getUser();
-
-        $form = $this->createForm(ProfileType::class, $user);
-
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-
-            $em->persist($user);
-            $em->flush();
-
-            $this->addFlash(
-                'success',
-                'Les modifications du profil ont été enregistrées avec succès !'
-            );
-        }
-        return $this->render('User/profile.html.twig', [
-            'form' => $form->createView()
-        ]);
+        return $this->redirectToRoute('app_login'); 
     }
 
     /**
      * Edit User Profile
-     * @Route("user/edit", name="app_user_edit")
+     * Require ROLE_USER for only this controller method.
+     * @Route("user/edit/{id}", name="app_user_edit", requirements={"id" = "\d+"})
+     * @IsGranted("ROLE_USER")
      */
-    public function edit(Request $request, EntityManagerInterface $em)
+    public function edit($id, Request $request, EntityManagerInterface $em)
     {
         $em = $this->getDoctrine()->getManager();
-        //$user = $em->getRepository(User::class)->findBy($id);
-        $user = new User();
+        $user = $em->getRepository(User::class)->find($id);
 
         $form = $this->createForm(ProfileType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $user->setUsername($user->getUsername());
+            $user->setEmail($user->getEmail());
+            $user->setFile($user->getFile());
+
             $em->persist($user);
             $em->flush();
 
@@ -156,5 +138,27 @@ class UserController extends AbstractController
         return $this->render('User/profile.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * Delete User 
+     * Require ROLE_USER for only this controller method.
+     * @Route("user/delete/{id}", name="app_user_delete", requirements={"id" = "\d+"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function delete($id, Request $request, EntityManagerInterface $em) : Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(Trick::class)->find($id);
+
+        $em->remove($user);
+        $em->flush();
+
+        $this->addflash(
+            'success',
+            "L'utilisateur' {$user->getUsername()} a été supprimé avec succès !"
+        );
+
+        return $this->redirectToRoute('app_trick_home');
     }
 }
