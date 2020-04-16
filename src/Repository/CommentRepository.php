@@ -19,6 +19,16 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
+    // public function orderByDateAdd($dateAdd): ?Comment
+    // {
+    //     return $this->createQueryBuilder('c')
+    //         ->andWhere('c.date_add = :val')
+    //         ->setParameter('date_add', $dateAdd)
+    //         ->getQuery()
+    //         ->getOneOrNullResult()
+    //     ;
+    // }
+
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */
