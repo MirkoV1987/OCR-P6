@@ -1,0 +1,23 @@
+{# src/templates/Trick/comments_load.html.twig  #}
+
+{% for comment in comments | slice(start, start + 5) %}
+    <div class="comment row">
+        <div class="card">
+            <div class="card-body">
+                <span class="comment-anchor" id="{{ comment.id }}"></span>
+                <li>
+                    <div class="entry-comments-item">
+                        <div class="entry-comments-body">
+                            <p>
+                            <img class="rounded" src="http://localhost/OCR-P6/public/img/users/{{ comment.user.avatar }}" height="40" width="40" alt="{{ comment.user.username }}" /><br/>
+                            <span class="entry-comments-author"><strong>Posté par <a class="text-dark" href="{{ path('app_user_view', { 'id' : comment.user.id }) }}" target="_blank">{{ comment.user.username }}</a></strong>, </span>
+                            <span class="comment-date text-dark">le {{ comment.dateAdd | date('d/m/Y') }} à {{ comment.dateAdd | date('H:i') }}</span>
+                            </p> 
+                            <p class="comment-content text-justify">{{ comment.content }}</p>
+                        </div>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </div>
+{% endfor %}

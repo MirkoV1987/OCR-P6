@@ -142,7 +142,6 @@
                     {% if app.user %}
                       <div class="col-lg-12 px-0 mb-30">
                         <div class="cmt padDiv">
-                          <h6 class="mb-30">Bonjour {{ app.user.username }} !</h6>
                             {{ form_start(form) }}
                             <div class="form-group">
                                 {{ form_row(form.content) }}
@@ -156,7 +155,7 @@
                     {% else %}
                     <div class="col-md-12 px-0 mb-30">
                         <div class="comments text-center p-3">
-                            <p><a href="{{ path('app_user_register') }}"><strong>Inscrivez-vous</strong></a> ou <a href="{{ path('app_login') }}"><strong>connectez vous</strong></a> pour laisser un commentaire</p>
+                            <p><a href="{{ path('app_user_register') }}"><strong>Inscrivez-vous</strong></a> ou <a href="{{ path('app_user_login') }}"><strong>connectez vous</strong></a> pour laisser un commentaire</p>
                         </div>
                     </div>
                     {% endif %}
@@ -167,31 +166,86 @@
                 <div class="col-md-12 pl-0 pr-0">
                     <div class="comments text-left padDiv mb-30">
                         <div class="entry-comments">
+                        {% for message in app.flashes('success') %}
+                            <div class="col-12 alert alert-success alert-dismissible fade show mb-0 mt-1 text-center" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <i class="fa fa-check mx-2"></i>
+                            <strong>{{ message }}</strong>
+                            </div>
+                        {% endfor %}
                         <h6 class="mb-30">{{ trick.comments | length }} commentaires</h6>
-                            <ul class="entry-comments-list list-unstyled">
+                            <ul class="entry-comments-list list-unstyled" id="commentSection">
                                 {% for comment in comments %}
-                                <span class="comment-anchor" id="{{ comment.id }}"></span>
-                                <li>
-                                <div class="entry-comments-item">
-                                    {# <img src="/images/{{ comment.user.avatar }}" class="entry-comments-avatar" alt="{{ comment.user.username }}"> #}
-                                        <div class="entry-comments-body">
-                                            {# <span class="entry-comments-author"><a href="{{ path('user_profile', { 'id' : comment.user.id }) }}" target="_blank">{{ comment.user.username }}</a></span> #}
-                                            <span class="comment-date text-dark">le {{ comment.dateAdd | date('d/m/Y') }} à {{ comment.dateAdd | date('H:i') }}</span>
-                                            <p class="comment-content text-justify">{{ comment.content }}</p>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <span class="comment-anchor" id="{{ comment.id }}"></span>
+                                        <li>
+                                        <div class="entry-comments-item">
+                                            <div class="entry-comments-body">
+                                                <p>
+                                                <img class="rounded" src="http://localhost/OCR-P6/public/img/users/{{ comment.user.avatar }}" height="40" width="40" alt="{{ comment.user.username }}" /><br/>
+                                                <span class="entry-comments-author"><strong>Posté par <a class="text-dark" href="{{ path('app_user_view', { 'id' : comment.user.id }) }}" target="_blank">{{ comment.user.username }}</a></strong>, </span>
+                                                <span class="comment-date text-dark">le {{ comment.dateAdd | date('d/m/Y') }} à {{ comment.dateAdd | date('H:i') }}</span>
+                                                </p> 
+                                                <p class="comment-content text-justify">{{ comment.content }}</p>
+                                            </div>
                                         </div>
+                                        </li>
                                     </div>
-                                </li>
+                                </div>
                                 {% endfor %}
                             </ul>
                         </div>
                     </div>
                 </div>
                 <!-- End Comments -->
+                <!-- Call to Action Section -->
+                <div class="row mb-4">
+                    <div class="col-12 text-center">
+                        <button id="loadComments" class="btn-primary btn-lg center-block text-uppercase" href="#">Voir plus de commentaires</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
-      {{ encore_entry_script_tags('app') }}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+/**----------------------------------------------------
+---------------------Show more Comments------------------
+----------------------------------------------------**/
+  click = 0;
+  function loadMoreComments (event) {
+    event.preventDefault ();
+    click++;
+    let start = 3 * click;
+    const url = "{{ path('loadComments', {'id': trick.id} ) }}" + start;
+    axios
+      .get (url)
+      .then (function (response) {
+        console.log (response);
+        $ ('#commentSection').append (response.data);
+      })
+      .catch (function (error) {
+        if (response.status === 403) {
+          window.alert ("Vous n'êtes pas autorisé à effectuer cette action !");
+        } else if (response.status === 404) {
+          window.alert ("La page appelé n'existe pas");
+        } else {
+          window.alert ('Une erreur est survenue !');
+        }
+      });
+  }
+  document
+    .getElementById ('loadComments')
+    .addEventListener ('click', loadMoreComments);
+  </script>
 {% endblock %} 
