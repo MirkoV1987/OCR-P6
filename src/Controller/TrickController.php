@@ -55,9 +55,8 @@ class TrickController extends AbstractController
             $medias = $trick->getMedias();
 
             foreach ($medias as $media) {
-                // Append each media to Trick
-                $media->setTrick($trick);
 
+                $media->getTrick($trick);
                 // Call to mediaUploader Service
                 $mediaUploader->manageMedia($media);
             
@@ -66,7 +65,6 @@ class TrickController extends AbstractController
                 $media->setDateAdd($now);
 
                 $em->persist($media);
-                $em->flush();
             }
 
             $videos = $trick->getVideos();
