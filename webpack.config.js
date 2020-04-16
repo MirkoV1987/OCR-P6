@@ -38,7 +38,7 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     //.addEntry('app', './assets/css/app.css')
-    .addEntry('scroll', './assets/js/scroll-button.js')
+    .addEntry('main', './assets/js/main.js')
     .addEntry('trick', './assets/js/trick-add.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
@@ -51,6 +51,8 @@ Encore
     .enableSassLoader()
 
     .addStyleEntry('home', './assets/css/style.css')
+
+    .setManifestKeyPrefix('build/')
 
     /*
      * FEATURE CONFIG
