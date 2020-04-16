@@ -11,18 +11,27 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        public: false
+        # public: false
+        #tags: [doctrine.fixture.orm]
+        # public:
+        #     get_set_method_normalizer:
+        #         class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+        #         tags: [serializer.normalizer]
 
-        bind:
-            $markdownLogger: '@monolog.logger.markdown'
-            $isDebug: '%kernel.debug%'
-            $uploadsPath: '%kernel.project_dir%/public/uploads/images/tricks'
+        # bind:
+        #     $markdownLogger: '@monolog.logger.markdown'
+        #     $isDebug: '%kernel.debug%'
+        #     $uploadsPath: '%kernel.project_dir%/public/uploads/images/tricks'
 
     App\Service\MediaUploader:
-        arguments: 
+        arguments:
             $uploadsPath: '%kernel.project_dir%/public/uploads/images/tricks'
         autowire: true
-    
+
+    # App\Security\UserService:
+    #     #arguments: ['@doctrine.orm.entity_manager']
+    #     autowire: true
+
     App\Service\VideoUploader:
         arguments: ['@doctrine.orm.entity_manager']
 
