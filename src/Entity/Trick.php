@@ -4,6 +4,7 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -92,7 +93,7 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks", cascade={"persist"})
      */
     private $author;
@@ -218,9 +219,9 @@ class Trick
         if ($this->medias->contains($media)) {
             $this->medias->removeElement($media);
             // set the owning side to null (unless already changed)
-            if ($media->getTrick() === $this) {
-                $media->setTrick(null);
-            }
+            // if ($media->getTrick() === $this) {
+            //     $media->setTrick(null);
+            // }
         }
 
         return $this;
