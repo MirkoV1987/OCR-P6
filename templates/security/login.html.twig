@@ -12,8 +12,8 @@
 <div class="container-fluid">
 
   <div class="row justify-content-center" style="margin-top: 8%;">
-    {% for message in app.flashes('success') %}
-        <div class="col-12 alert alert-success alert-dismissible fade show mb-0 mt-1 text-center" role="alert">
+    {% for message in app.flashes('warning') %}
+        <div class="col-4 alert alert-warning alert-dismissible fade show mb-0 mt-1 text-center" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
@@ -35,13 +35,15 @@
 
         {% if app.user %}
             <div class="mb-3">
-                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                Vous êtes connecté comme {{ app.user.username }}, <a href="{{ path('app_user_logout') }}">Logout</a>
             </div>
         {% endif %}
 
         {# <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1> #}
+        {# <label for="inputEmail" class="sr-only">Email</label>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus> #}
         <label for="inputUsername">Nom d'utilisateur</label>
-        <input type="text" value="{{ last_username }}" name="_username" id="inputUsername" class="form-control" required autofocus>
+        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
         <label for="inputPassword">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" required>
 
