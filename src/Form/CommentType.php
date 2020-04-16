@@ -19,6 +19,7 @@ class CommentType extends AbstractType
                 'label' => 'Écrire un commentaire !',
                 'attr' => [
                     'rows'=>10,
+                    'minlenght'=>30,
                     'placeholder' => 'Écrivez ici votre commentaire'
                 ],
             ])
