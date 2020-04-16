@@ -41,7 +41,7 @@
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
                                 <span class="activity active"></span>
-                                {# <img src="../public/img/users/{{ user.avatar }}" height="40" width="40" alt="utilisateur"> #}
+                                <img src="http://localhost/OCR-P6/public/img/users/{{ app.user.avatar }}" height="40" width="40" alt="{{ app.user.username }}">
                             </div>
                             <div class="drop-down dropdown-profile dropdown-menu">
                                 <div class="dropdown-content-body">
@@ -72,9 +72,7 @@
                 <ul class="metismenu my-2" id="menu">
                     <li class="nav-label" style="font-family: 'Trebuchet MS';">Born to snowboard</li>
                     <li>
-                        {# <a href="{{ path('app_user_edit', {'id': app.user.id }) }}" aria-expanded="false"> #}
-                        {# <a href="{{ path('app_user_view', {'id': app.user.id }) }}" aria-expanded="false"> #}
-                        {# <a href="{{ path('app_user_edit') }}" aria-expanded="false"> #}
+                        <a href="{{ path('app_user_edit', {'id': user.id }) }}" aria-expanded="false">
                             <i class="icon-user menu-icon"></i><span class="nav-text">Mon Profil</span>
                         </a>
                     </li>
