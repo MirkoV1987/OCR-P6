@@ -104,7 +104,9 @@ class TrickController extends AbstractController
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
-        $commentRepo->findBy([], ['date_add' => 'DESC'], 5);
+        $findTrick = $trickRepo->findById($trick->getId());
+        $comments = $commentRepo->findBy(['trick' => $findTrick], ['date_add' => 'DESC'], 5);
+        dump($comments);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setDateAdd(new \DateTime('+ 2 hour'));
@@ -124,8 +126,6 @@ class TrickController extends AbstractController
 
         $medias = $mediaRepo->findBy(array('trick' => $trick->getId()));
         $videos = $videoRepo->findBy(array('trick' => $trick->getId()));
-        $comments = $commentRepo->findBy(array('trick' => $trick->getId()));
-        //$comments2 = $commentRepo->findBy([], ['id' => 'DESC'], 5, $start);
 
         return $this->render('Trick/view.html.twig', [
             'trick' => $trick,
@@ -139,12 +139,12 @@ class TrickController extends AbstractController
     /**
      * Get the 5 next comments in the database and create a Twig file with them that will be displayed via Javascript
      *
-     * @Route("trick/view/{id}/{start}", name="loadComments", requirements={"start": "\d+"})
+     * @Route("comment/more/{id}/{start}", name="loadComments", requirements={"id": "\d+", "start": "\d+"})
      */
-    public function loadMoreComments(CommentRepository $commentRepo, $id, $start = 5)
+    public function loadMoreComments(Trick $trick, TrickRepository $trickRepo, CommentRepository $commentRepo, $id, $start = 5)
     {
-        //$comment = $commentRepo->findOneById($id);
-        $comments = $commentRepo->findBy([], ['date_add' => 'DESC'], 5, $start);
+        $findTrick = $trickRepo->findById($trick->getId());
+        $comments = $commentRepo->findBy(['trick' => $findTrick], ['date_add' => 'DESC'], 5, $start);
 
         return $this->render('Trick/comments_load.html.twig', [
             'comments' => $comments,
