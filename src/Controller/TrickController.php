@@ -167,7 +167,9 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $medias = $trick->getMedias();
+            $mediaUploader->coverImage($trick);
 
             foreach ($medias as $media) {
                 $media->getTrick($trick);
