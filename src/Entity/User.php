@@ -94,7 +94,7 @@ class User implements UserInterface
     private $resetPasswordToken;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="author", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", orphanRemoval=true)
      */
     private $tricks;
 
