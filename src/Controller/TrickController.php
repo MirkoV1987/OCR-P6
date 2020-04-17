@@ -75,6 +75,8 @@ class TrickController extends AbstractController
                 $em->persist($video);
                 $em->flush();
             }
+
+            //$trick->setAuthor($trick->getAuthor());
             
             $em->persist($trick);
             $em->flush();
