@@ -43,6 +43,7 @@ class TrickController extends AbstractController
     {
         $trick = new Trick();
         $media = new Media();
+        $user = new User();
 
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
@@ -76,7 +77,7 @@ class TrickController extends AbstractController
                 $em->flush();
             }
 
-            //$trick->setAuthor($trick->getAuthor());
+            $trick->setUser($this->getUser());
             
             $em->persist($trick);
             $em->flush();
