@@ -93,7 +93,7 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks", cascade={"persist"})
      */
     private $author;
