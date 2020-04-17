@@ -10,6 +10,7 @@ use App\Form\ProfileType;
 use App\Form\FileType;
 use App\Service\MailerManager;
 use App\Repository\UserRepository;
+use App\Repository\TrickRepository;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,7 +54,7 @@ class UserController extends AbstractController
                  ->setDateUpdate(new \DateTime('+ 2 hour'))
                  ->setIsActive(false)
                  ->setValidationToken(md5(random_bytes(10)))
-                 ->setResetPasswordToken('e542&jjhdd8$%kjh');
+                 ->setResetPasswordToken(md5(random_bytes(10)));
 
             $em->persist($user);
             $em->flush();
@@ -105,11 +106,26 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_login'); 
     }
 
+    // /**
+    //  * Get all the the tricks posted by a same User
+    //  *
+    //  * @Route("tricks/user/{id}", name="app_user_tricks", requirements={"id": "\d+"})
+    //  */
+    // public function userTricks(User $tricks, TrickRepository $trickRepo, UserRepository $userRepo, $id)
+    // {
+    //     $findTricks = $userRepo->findAll($tricks->getTricks());
+    //     $author = $trickRepo->findBy(['author' => $findTricks], ['date_add' => 'DESC']);
+
+    //     return $this->render('User/user_tricks.html.twig', [
+    //         'tricks' => $tricks,
+    //         'author' => $author
+    //     ]);
+    // }
+
     /**
      * Edit User Profile
      * Require ROLE_USER for only this controller method.
      * @Route("user/edit/{id}", name="app_user_edit", requirements={"id" = "\d+"})
-     * @IsGranted("ROLE_USER")
      */
     public function edit($id, Request $request, EntityManagerInterface $em)
     {
@@ -124,7 +140,6 @@ class UserController extends AbstractController
 
             $user->setUsername($user->getUsername());
             $user->setEmail($user->getEmail());
-            $user->setFile($user->getFile());
 
             $em->persist($user);
             $em->flush();
@@ -133,6 +148,8 @@ class UserController extends AbstractController
                 'success',
                 'Votre profile a été modifié avec succès !'
             );
+
+            return $this->redirectToRoute('app_trick_home');
         }
 
         return $this->render('User/profile.html.twig', [
@@ -142,21 +159,19 @@ class UserController extends AbstractController
 
     /**
      * Delete User 
-     * Require ROLE_USER for only this controller method.
      * @Route("user/delete/{id}", name="app_user_delete", requirements={"id" = "\d+"})
-     * @IsGranted("ROLE_USER")
      */
     public function delete($id, Request $request, EntityManagerInterface $em) : Response
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository(Trick::class)->find($id);
+        $user = $em->getRepository(User::class)->find($id);
 
         $em->remove($user);
         $em->flush();
 
         $this->addflash(
             'success',
-            "L'utilisateur' {$user->getUsername()} a été supprimé avec succès !"
+            "L'utilisateur {$user->getUsername()} a été supprimé avec succès !"
         );
 
         return $this->redirectToRoute('app_trick_home');
