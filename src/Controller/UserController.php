@@ -5,6 +5,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Trick;
 use App\Form\RegisterType;
 use App\Form\ProfileType;
 use App\Form\FileType;
@@ -106,21 +107,24 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_login'); 
     }
 
-    // /**
-    //  * Get all the the tricks posted by a same User
-    //  *
-    //  * @Route("tricks/user/{id}", name="app_user_tricks", requirements={"id": "\d+"})
-    //  */
-    // public function userTricks(User $tricks, TrickRepository $trickRepo, UserRepository $userRepo, $id)
-    // {
-    //     $findTricks = $userRepo->findAll($tricks->getTricks());
-    //     $author = $trickRepo->findBy(['author' => $findTricks], ['date_add' => 'DESC']);
+    /**
+     * Get all the tricks posted by the User
+     *
+     * @Route("trick/user/{id}", name="app_user_tricks", requirements={"id" = "\d+"})
+     */
+    public function showTricksByUser(Request $request, $id)
+    {
+        $user = $this->getDoctrine()
+        ->getRepository(User::class)
+        ->find($id);
 
-    //     return $this->render('User/user_tricks.html.twig', [
-    //         'tricks' => $tricks,
-    //         'author' => $author
-    //     ]);
-    // }
+        $tricks = $user->getTricks();
+
+        return $this->render('User/user_tricks.html.twig', [
+            'tricks' => $tricks,
+            'user' => $user
+        ]);
+    }
 
     /**
      * Edit User Profile
