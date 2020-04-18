@@ -43,7 +43,6 @@ class TrickController extends AbstractController
     {
         $trick = new Trick();
         $media = new Media();
-        $user = new User();
 
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
@@ -71,10 +70,10 @@ class TrickController extends AbstractController
             $videos = $trick->getVideos();
 
             foreach ($videos as $video) {
+
                 $video->setTrick($trick);
                 $video->setUrl($video->getUrl());
                 $em->persist($video);
-                $em->flush();
             }
 
             $trick->setUser($this->getUser());
