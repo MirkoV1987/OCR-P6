@@ -17,21 +17,22 @@
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
                                 <span class="activity active"></span>
-                                {# <img src="../public/img/users/{{ user.avatar }}" height="40" width="40" alt="utilisateur"> #}
-                                <img src="../img/users/user.jpeg" height="40" width="40" alt="utilisateur">
+                                <a href="{{ path('app_user_edit', {'id': app.user.id }) }}" aria-expanded="false">
+                                <img src="http://localhost/OCR-P6/public/img/users/{{ app.user.avatar }}" height="40" width="40" alt="utilisateur">
+                                </a>
                             </div>
                             <div class="drop-down dropdown-profile dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="#"><i class="icon-user"></i> <span>Profil</span></a>
+                                            <a href="{{ path('app_user_edit', {'id': app.user.id }) }}"><i class="icon-user"></i> <span>Profil</span></a>
                                         </li>
                                         <li>
                                             <a href="#"><i class="icon-lock"></i> <span>Mot de passe</span></a>
                                         </li>                        
                                         <hr class="my-2">
                                         <li>
-                                            <a href="#"><i class="icon-key"></i> <span>Logout</span></a>
+                                            <a href="{{ path('app_user_logout') }}"><i class="icon-key"></i> <span>Déconnexion</span></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -73,46 +74,8 @@
         <!--Main-Section-End-->
 
         <!--Sidebar start-->
-        <div class="nk-sidebar">           
-            <div class="nk-nav-scroll text-uppercase font-weight-bold py-6">
-                <ul class="metismenu my-2" id="menu">
-                    <li class="nav-label" style="font-family: 'Trebuchet MS';">Born to snowboard</li>
-                    <li>
-                        {# <a href="{{ path('app_user_edit', {'id': app.user.id }) }}" aria-expanded="false"> #}
-                        {# <a href="{{ path('app_user_view', {'id': app.user.id }) }}" aria-expanded="false"> #}
-                        {# <a href="{{ path('app_user_edit') }}" aria-expanded="false"> #}
-                        <a href="#" aria-expanded="false">
-                            <i class="icon-user menu-icon"></i><span class="nav-text">Mon Profil</span>
-                        </a>
-                    </li>
-                    <hr class="my-2">
-                    <li>
-                        <a href="#" aria-expanded="false">
-                            <i class="icon-lock menu-icon"></i><span class="nav-text">Mon mot de passe</span>
-                        </a>
-                    </li>
-                    <hr class="my-2">
-                    <li>
-                        <a href="#" aria-expanded="false">
-                            <i class="icon-list menu-icon"></i><span class="nav-text">Mes Tricks</span>
-                        </a>
-                    </li>
-                    <hr class="my-2">
-                    <li>
-                        <a href="{{ path('app_trick_add') }}" aria-expanded="false">
-                            <i class="icon-note menu-icon"></i><span class="nav-text">Ajouter un Trick</span>
-                        </a>
-                    </li>
-                    <hr class="my-2">
-                    <li>
-                        <a href="#" aria-expanded="false">
-                            <i class="icon-notebook menu-icon"></i><span class="nav-text">Mes commentaires</span>
-                        </a>
-                    </li>
-                </ul>
-                <img class="img-fluid my-5" src="/OCR-P6/public/img/design/snowboarder.png" alt="snowtricks" />
-            </div>
-        <!--Sidebar end-->
+        {{ include("Parts/_sidebar.html.twig") }}
+        <!--end-sidebar-->
 
 {% endblock %}
 
