@@ -82,7 +82,6 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @Assert\Valid()
      */
     protected $videos;
 

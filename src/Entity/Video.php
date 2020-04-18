@@ -35,8 +35,7 @@ class Video
     private $caption;
 
     /**
-     * @ORM\JoinColumn(onDelete="set null")
-     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="videos", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="videos", cascade={"persist"})
      */
     private $trick;
 
@@ -69,22 +68,15 @@ class Video
         return $this;
     }
 
-    public function addTrick(Trick $trick)
-    {
-        if (!$this->tricks->contains($trick)) {
-            $this->tricks->add($trick);
-        }
-    }
-
-    public function getTrick(): Trick
+    public function getTrick(): ?Trick
     {
         return $this->trick;
     }
 
-    public function setTrick(Trick $trick): Trick
+    public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
 
-        return $this->trick;
+        return $this;
     }
 }

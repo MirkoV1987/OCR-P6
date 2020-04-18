@@ -257,11 +257,16 @@ class User implements UserInterface
     /**
      * @return Collection|Trick[]
      */
+    public function getTricks(): Collection
+    {
+        return $this->tricks;
+    }
+
     public function addTrick(Trick $trick): self
     {
         if (!$this->tricks->contains($trick)) {
             $this->tricks[] = $trick;
-            $trick->setTrick($this);
+            $trick->setUser($this);
         }
 
         return $this;
@@ -270,29 +275,29 @@ class User implements UserInterface
     public function removeTrick(Trick $trick): self
     {
         if ($this->tricks->contains($trick)) {
-            $this->medias->removeElement($trick);
+            $this->tricks->removeElement($trick);
             // set the owning side to null (unless already changed)
-            if ($trick->getTrick() === $this) {
-                $trick->setTrick(null);
+            if ($trick->getUser() === $this) {
+                $trick->setUser(null);
             }
         }
 
         return $this;
     }
 
-    public function getTricks(): Collection
-    {
-        return $this->tricks;
-    }
-
     /**
      * @return Collection|Comment[]
      */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
     public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {
             $this->comments[] = $comment;
-            $comment->setComment($this);
+            $comment->setUser($this);
         }
 
         return $this;
@@ -303,17 +308,12 @@ class User implements UserInterface
         if ($this->comments->contains($comment)) {
             $this->comments->removeElement($comment);
             // set the owning side to null (unless already changed)
-            if ($comment->getComment() === $this) {
-                $comment->setComment(null);
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
             }
         }
 
         return $this;
-    }
-
-    public function getComments(): Collection
-    {
-        return $this->comments;
     }
 
     public function getRoles(): array
