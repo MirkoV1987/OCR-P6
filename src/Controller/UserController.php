@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Trick;
+use App\Entity\Comment;
 use App\Form\RegisterType;
 use App\Form\ProfileType;
 use App\Form\FileType;
