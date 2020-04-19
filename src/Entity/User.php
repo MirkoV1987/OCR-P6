@@ -8,7 +8,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
+//use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+//use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -21,7 +23,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *  message="Email déjà utilisé"
  * )
  */
-class User
+//class User implements UserInterface
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -36,6 +39,11 @@ class User
     private $username;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $email;
@@ -46,9 +54,14 @@ class User
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255) 
      */
-    private $comfirmPassword;
+    private $avatar;
+
+    /**
+     * @var $confirmPassowrd
+     */
+    private $confirmPassword;
 
     /**
      * @ORM\Column(type="datetime")
@@ -61,9 +74,14 @@ class User
     private $date_update;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isActive;
+    * @Assert\File(maxSize="6000000")
+    */
+    private $file;
+
+    /**
+    * @ORM\Column(type="boolean")
+    */
+    private $isActive; 
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -71,7 +89,7 @@ class User
     private $validationToken;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $resetPasswordToken;
 
@@ -114,9 +132,12 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->password;
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -126,14 +147,26 @@ class User
         return $this;
     }
 
-    public function getComfirmPassword(): ?string
+    public function getAvatar(): ?string
     {
-        return $this->comfirmPassword;
+        return $this->avatar;
     }
 
-    public function setComfirmPassword(string $comfirmPassword): self
+    public function setAvatar(string $avatar): self
     {
-        $this->comfirmPassword = $comfirmPassword;
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getConfirmPassword(): ?string
+    {
+        return $this->confirmPassword;
+    }
+
+    public function setConfirmPassword(string $confirmPassword): self
+    {
+        $this->confirmPassword = $confirmPassword;
 
         return $this;
     }
@@ -161,6 +194,23 @@ class User
 
         return $this;
     }
+
+    public function getFile(): ?UploadedFile
+    {
+        return $this->file;
+    }
+
+    public function setfile(UploadedFile $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    // public function serialize(UploadedFile $file): self
+    // {
+    //     return serialize($this->file);
+    // }
 
     public function getIsActive(): ?bool
     {
@@ -204,33 +254,99 @@ class User
         $this->comments = new ArrayCollection();
     }
 
-    public function addTrick(Trick $trick)
-    {
-       $this->tricks[] = $trick;
-    }
-
-    public function deleteTrick(Trick $trick)
-    {
-       $this->tricks->deleteTrick($trick);
-    }
-
-    public function getTricks()
+    /**
+     * @return Collection|Trick[]
+     */
+    public function getTricks(): Collection
     {
         return $this->tricks;
     }
 
-    public function addComment(Comment $comment)
+    public function addTrick(Trick $trick): self
     {
-       $this->comments[] = $comment;
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
+            $trick->setUser($this);
+        }
+
+        return $this;
     }
 
-    public function deleteComment(Comment $comment)
+    public function removeTrick(Trick $trick): self
     {
-       $this->comments->deleteComment($comment);
+        if ($this->tricks->contains($trick)) {
+            $this->tricks->removeElement($trick);
+            // set the owning side to null (unless already changed)
+            if ($trick->getUser() === $this) {
+                $trick->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function getComments()
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+        // return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }

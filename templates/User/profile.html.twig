@@ -1,0 +1,160 @@
+{# templates/User/profile.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+
+  {{ parent() }}
+  <link src="../public/build/app.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block title %}SnowTricks - Mon profil{% endblock %}
+
+{% block body %}
+
+   <!--Header start-->
+        <div class="header">    
+            <div class="header-content clearfix">
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <ul class="clearfix">
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                {# <img src="../public/img/users/{{ user.avatar }}" height="40" width="40" alt="utilisateur"> #}
+                                <img src="http://localhost/OCR-P6/public/img/users/{{ app.user.avatar }}" height="40" width="40" alt="utilisateur">
+                            </div>
+                            <div class="drop-down dropdown-profile dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#"><i class="icon-lock"></i> <span>Mot de passe</span></a>
+                                        </li>                        
+                                        <hr class="my-2">
+                                        <li>
+                                            <a href="{{ path('app_user_logout') }}"><i class="icon-key"></i> <span>Déconnexion</span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--Header end-->
+
+        <!-- Nav header start-->
+        <div class="nav-header">
+            <div class="brand-logo">
+                <a href="{{ path('app_trick_home') }}">
+                    <b class="logo-abbr"><img src="../uploads/images/defaults/snowboard.jpg" alt="logo"> </b>
+                    <span class="logo-compact"><img src="../img/tricks/covers/snowtrick-banner.png" alt=""></span>
+                    <span class="brand-title">
+                        {# <img src="images/logo-text.png" alt=""> #}
+                    </span>
+                </a>
+            </div>
+        </div>
+        <!--Nav header end-->
+
+ {# {{ include("Parts/_dashboard_layout.html.twig") }} #}
+
+        <div class="content-body my-4">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+
+                 <div class="row justify-content-center">
+                    {% for message in app.flashes('success') %}
+                        <div class="col-4 alert alert-success alert-dismissible fade show mb-0 mt-1 text-center" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <i class="fa fa-check mx-2"></i>
+                        <strong>{{ message }}</strong>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                    <div class="col-lg-6">
+                        <div class="card card-small px-4 py-4 mb-4 pt-3">
+                            <div class="card-header border-bottom">
+                                <h4 class="card-title text-uppercase mx-3 text-center">Mon Profil</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-lg-6"> 
+                                        <h5 class="m-0 text-uppercase mb-1">Détails de mon compte</h6>
+                                        <div class="mb-3 mx-auto">
+                                            <img class="rounded" src="http://localhost/OCR-P6/public/img/users/{{ app.user.avatar }}" alt="Avatar" width="150">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6"> 
+                                        <p class="mb-0" style="visibility:hidden">{{ app.user.id }}<p>
+                                        <h5 class="mb-1">Pseudo</h4>
+                                        <h6 class="mb-1">{{ app.user.username }}</h5>
+                                        <hr>
+                                        <h5 class="mb-1">Email</h4>
+                                        <h6 class="mb-1">{{ app.user.email }}</h5>
+                                    </div>
+                                </div>
+                            </div> 
+                            {# <h4 class="card-title text-uppercase mx-3">Profile</h4> #}
+                            <div class="card-header border-bottom">
+                                <h5 class="m-0">Modifier mon compte</h6>
+                            </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item p-3">
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form_start(form) }}
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12">
+                                                            {{ form_row(form.username) }}
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            {{ form_row(form.email) }}
+                                                        </div>
+                                                        {# <div class="form-group col-md-12">
+                                                            {{ form_row(form.file) }}
+                                                        </div> #}
+                                                    </div>
+                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                                    <div class="row text-center">
+                                                        <div class="form-group col-lg-12 mt-4 text-center">
+                                                            <button type="submit" class="btn btn-primary text-uppercase">Enregistrer les modifications</button>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row text-center">
+                                                        <div class="form-group col-lg-12 mt-3 text-center">
+                                                            <a class="btn btn-danger text-uppercase" href="{{ path('app_user_delete', {'id': app.user.id }) }}" onclick="return confirm(`Êtes-vous sûr de vouloir supprimer votre compte ?`)">
+                                                                <i class="fas fa-trash-alt"></i> Supprimer mon compte
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                {{ form_end(form) }}
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--footer-->
+        {{ include("Parts/_footer.html.twig") }}
+        <!--end-footer-->
+
+        <!--Sidebar start-->
+        {{ include("Parts/_sidebar.html.twig") }}
+        <!--end-sidebar-->
+
+{% endblock %}

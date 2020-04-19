@@ -4,59 +4,181 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Trick;
+use App\Entity\Comment;
+use App\Form\RegisterType;
+use App\Form\ProfileType;
+use App\Form\FileType;
+use App\Service\MailerManager;
+use App\Repository\UserRepository;
+use App\Repository\TrickRepository;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
-
 
 class UserController extends AbstractController
 {
-
-  /**
-     * Login
-     * @Route("user/login", name="app_user_login")
+    /**
+     * Register new User
+     * @Route("user/register", name="app_user_register")
      */
-    public function login(Request $request)
+    public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, MailerManager $mailerManager)
     {
-        //Si la requête est en POST, l'utilisateur a soumis le formulaire
+        $user = new User();
 
-        if ($request->isMethod('POST')) {
+        $form = $this->createForm(RegisterType::class, $user);
 
-            // Formulaire de login
+        $form->handleRequest($request);
 
-            $this->addFlash('notice', 'Vous etes connecté !');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $user->getFile();
+            // Créer un nom unique pour le fichier
+            $name = md5(uniqid()) . '.' . $file->guessExtension();
+            // Déplace le fichier
+            $path = 'img/users';
+            $file->move($path, $name);
 
-            // Rédirection vers la page d'accueil pour les utilisateurs connectés
+            $password = $encoder->encodePassword($user, $user->getPassword());
+       
+            $user->setPassword($password)
+                 ->setAvatar($name)
+                 ->setDateAdd(new \DateTime('+ 2 hour'))
+                 ->setDateUpdate(new \DateTime('+ 2 hour'))
+                 ->setIsActive(false)
+                 ->setValidationToken(md5(random_bytes(10)))
+                 ->setResetPasswordToken(md5(random_bytes(10)));
 
-            return $this->redirectToRoute('app_home_logged', ['id' => 4]);
+            $em->persist($user);
+            $em->flush();
+            
+            //Call to MailerController Service
+            //$mailer = new MailerInterface();
+            //$mailerManager->sendEmail($mailer);
+
+            $this->addFlash(
+                'success',
+                "Votre compte a été créé avec succès ! Pour vous connecter, veuillez valider votre compte via le mail qui vous a été envoyé !"
+            );
+
+            return $this->redirectToRoute('app_user_login');
         }
-        // Si on n'est pas en POST, on affiche le formulaire de login
-        return $this->render('User/login.html.twig');
+
+        return $this->render('User/register.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
-     * Login
-     * @Route("user/register", name="app_user_register")
+     * Validation de l'email après une inscription
+     * @Route("User/email-validation/{username}/{validationToken}", name="app_user_email_validation")
      */
-    public function register(Request $request)
+    public function emailValidation(UserRepository $userRepo, $username, $validationToken, EntityManagerInterface $em)
     {
-        //Si la requête est en POST, l'utilisateur a soumis le formulaire
+        $user = $userRepo->findOneByUsername($username);
 
-        if ($request->isMethod('POST')) {
+        if ($validationToken != null && $validationToken === $user->getValidationToken())
+        {
+            $user->setIsActive(true);
+            $em->persist($user);
+            $em->flush();
 
-            // Formulaire de login
-
-            $this->addFlash('notice', 'Votre compte a été créé !');
-
-            // Rédirection vers la page d'accueil pour les utilisateurs connectés
-
-            return $this->redirectToRoute('app_user_login', ['id' => 4]);
+            $this->addFlash(
+                'success',
+                "Votre compte a été activé avec succès ! Vous pouvez désormais vous connecter !"
+            );
         }
-        // Si on n'est pas en POST, on affiche le formulaire de login
-        return $this->render('User/register.html.twig');
+        else
+        {
+            $this->addFlash(
+                'danger',
+                "La validation de votre compte a échoué. Le lien de validation a expiré !"
+            );   
+        }
+
+        return $this->redirectToRoute('app_login'); 
     }
 
+    /**
+     * Get all the tricks posted by the User
+     *
+     * @Route("trick/user/{id}", name="app_user_tricks", requirements={"id" = "\d+"})
+     */
+    public function showTricksByUser(Request $request, $id)
+    {
+        $user = $this->getDoctrine()
+        ->getRepository(User::class)
+        ->find($id);
+
+        $tricks = $user->getTricks();
+
+        return $this->render('User/user_tricks.html.twig', [
+            'tricks' => $tricks,
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * Edit User Profile
+     * Require ROLE_USER for only this controller method.
+     * @Route("user/edit/{id}", name="app_user_edit", requirements={"id" = "\d+"})
+     */
+    public function edit($id, Request $request, EntityManagerInterface $em)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+
+        $form = $this->createForm(ProfileType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $user->setUsername($user->getUsername());
+            $user->setEmail($user->getEmail());
+
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre profile a été modifié avec succès !'
+            );
+
+            return $this->redirectToRoute('app_trick_home');
+        }
+
+        return $this->render('User/profile.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * Delete User 
+     * @Route("user/delete/{id}", name="app_user_delete", requirements={"id" = "\d+"})
+     */
+    public function delete($id, Request $request, EntityManagerInterface $em) : Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+
+        $em->remove($user);
+        $em->flush();
+
+        $this->addflash(
+            'success',
+            "L'utilisateur {$user->getUsername()} a été supprimé avec succès !"
+        );
+
+        return $this->redirectToRoute('app_trick_home');
+    }
 }
