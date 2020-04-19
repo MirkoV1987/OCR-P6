@@ -32,12 +32,12 @@ class Comment
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments", cascade={"persist"})
      */
     private $user;
 
     /**
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="comments", cascade={"persist"})
      */
     private $trick;
