@@ -3,16 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
  * @UniqueEntity(
- *     fields={"name"},
- *     message="Ce nom de fichier est déjà utilisé !"
+ *     fields={"id"},
+ *     message="Ce fichier existe déjà !"
  * )
  */
 class Media
@@ -25,34 +24,15 @@ class Media
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @Assert\NotBlank()
-     */
+    * @ORM\Column(type="string", length=125)
+    */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
+     * @Assert\NotBlank()
      */
     private $caption;
-
-    /**
-     * @Assert\File(
-     *     maxSize = "10000k",
-     *     maxSizeMessage = "La taille du fichier ne peut pas dépasser 10Mo",
-     *     mimeTypes = {
-     *         "application/jpg",
-     *         "application/jpeg",
-     *         "application/png",
-     *         "application/tif",
-     *         "application/mp4",
-     *         "application/avi",
-     *         "application/mov"
-     *     },
-     *     mimeTypesMessage = "Le format du fichier n'est pas valide !"
-     * )
-     */
-    private $mediaFile;
 
     /**
      * @ORM\Column(type="datetime")
@@ -66,6 +46,11 @@ class Media
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="medias", cascade={"persist", "remove"})
      */
     private $trick;
+
+    /**
+     * @var UploadedFile
+     */
+    protected $file;
 
     public function getId(): ?int
     {
@@ -96,16 +81,21 @@ class Media
         return $this;
     }
 
-    public function getMediaFile()
+    public function getFile()
     {
-        return $this->mediaFile;
+        return $this->file;
     }
 
-    public function setMediaFile(?UploadedFile $mediaFile): self
+    public function setFile(UploadedFile $file): self
     {
-        $this->mediaFile = $mediaFile;
+        $this->file = $file;
 
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->date_add = new \Datetime('+ 1 hour');
     }
 
     public function getDateAdd(): ?\DateTimeInterface
@@ -120,15 +110,22 @@ class Media
         return $this;
     }
 
-    public function getTrick(): ?Trick
+    public function addTrick(Trick $trick)
+    {
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks->add($trick);
+        }
+    }
+
+    public function getTrick(): Trick
     {
         return $this->trick;
     }
 
-    public function setTrick(?Trick $trick): self
+    public function setTrick(Trick $trick): Trick
     {
         $this->trick = $trick;
 
-        return $this;
+        return $this->trick;
     }
 }

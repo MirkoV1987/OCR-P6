@@ -4,9 +4,11 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -58,16 +60,30 @@ class Trick
     private $date_update;
 
     /**
-     * @ORM\JoinColumn(nullable=true, onDelete="set null")
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="name", cascade={"persist"})
-     */
-    private $category;
+    * @Assert\File(maxSize="6000000")
+    */
+    private $file;
 
     /**
-     * @ORM\JoinColumn(nullable=false, onDelete="set null")
-     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\Column(type="string", length=255)
      */
-    private $medias;
+    private $fileName;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks")
+     */
+    protected $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    protected $medias;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $videos;
 
     /**
      * @ORM\JoinColumn(nullable=false, onDelete="set null")
@@ -77,9 +93,9 @@ class Trick
 
     /**
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
      */
-    private $author;
+    private $user;
 
     public function getId(): ?int
     {
@@ -115,21 +131,45 @@ class Trick
         return $this->date_add;
     }
 
-    public function setDateAdd($date_add): self
+    public function setDateAdd(\DateTimeInterface $date_add): self
     {
         $this->date_add = $date_add;
 
         return $this;
     }
 
-    public function getDateUpdate(): ?\DateTimeInterface
+    public function getDateUpdate()
     {
         return $this->date_update;
     }
 
-    public function setDateUpdate($date_update): self
+    public function setDateUpdate(\DateTimeInterface $date_update): self
     {
         $this->date_update = $date_update;
+
+        return $this;
+    }
+
+    public function getFile(): ?UploadedFile
+    {
+        return $this->file;
+    }
+
+    public function setfile(UploadedFile $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
+    }
+
+    public function setFileName(string $fileName): self
+    {
+        $this->fileName = $fileName;
 
         return $this;
     }
@@ -146,30 +186,87 @@ class Trick
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     public function __construct()
     {
         $this->medias = new ArrayCollection();
+        $this->videos = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->date_add = new \Datetime('+ 1 hour');
-        $this->date_update = new \Datetime('+ 1 hour');
-    }
-
-    public function addMedia(Media $media)
-    {
-       $this->medias[] = $media;
-    }
-
-    public function deleteMedia(Media $media)
-    {
-       $this->medias->deleteMedia($media);
+        $this->date_add = new \Datetime('+ 2 hour');
+        $this->date_update = new \Datetime('+ 2 hour');
     }
 
     /**
      * @return Collection|Media[]
      */
-    public function getMedias() : Collection
+    public function getMedias(): Collection
     {
         return $this->medias;
+    }
+
+    public function addMedia(Media $media): self
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias[] = $media;
+            $media->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(Media $media): self
+    {
+        if ($this->medias->contains($media)) {
+            $this->medias->removeElement($media);
+            // set the owning side to null (unless already changed)
+            // if ($media->getTrick() === $this) {
+            //     $media->setTrick(null);
+            // }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos() : Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video) : self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video) : self
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            //set the owning side to null (unless already changed)
+            // if ($video->getTrick() === $this) {
+            //     $video->setTrick(null);
+            // }
+        }
+
+        return $this;
     }
 
     public function addComment(Comment $comment)
@@ -177,9 +274,9 @@ class Trick
        $this->comments[] = $comment;
     }
 
-    public function deleteComment(Comment $comment)
+    public function removeComment(Comment $comment)
     {
-       $this->comments->deleteComment($comment);
+       $this->comments->removeComment($comment);
     }
 
     /**
@@ -188,17 +285,5 @@ class Trick
     public function getComments(): Collection
     {
         return $this->comments;
-    }
-
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
-
-        return $this;
     }
 }

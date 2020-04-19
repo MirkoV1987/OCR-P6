@@ -1,0 +1,23 @@
+{
+  "entrypoints": {
+    "app": {
+      "js": [
+        "../assets/js/app.js"
+      ],
+      "css": [
+        "../assets/css/app.css",
+        "../assets/css/style.css"
+      ]
+    },
+    "trick-add": {
+      "js": [
+        "../assets/js/trick-add.js"
+      ]
+    },
+    "main": {
+      "js": [
+        "../assets/js/main.js"
+      ]
+    }
+  }
+}

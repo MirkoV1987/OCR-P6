@@ -6,30 +6,82 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title text-uppercase">Ajouter un Trick</h4>
                 {{ form_start(form) }}
+                 {# {{ form_start(form, {'multipart': true}) }} #}
                     <div class='row'>
                         <div class="col-md-3">
                             {{ form_row(form.name) }}
                             {{ form_row(form.category) }}
+                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('uploads/images/defaults/snowboard-default.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="auto" value="" />
+                            {{ form_row(form.file) }}
                         </div>
                         <div class="col-md-9">
-                            {{ form_row(form.description) }}
+                            {{ form_row(form.description,  {'attr': {'id': 'trick_description'}}) }}
+                            <p class="text-right" id="counterBlock">0</p>
                         </div>
                     </div>
-                    <div class='row'>
-                        <div class="col-md-4">
-                            {{ form_row(form.date_add) }}
+                    <hr>
+                    <div class="row text-center my-3">
+                        <div class="col-lg-12">
+                            <h3 class="text-uppercase py-4">Médiathèque</h3>
                         </div>
                     </div>
-                    <div class='row'>
-                        <div class="col-md-3">
-                            <h3>Images et vidéos</h3>
-                            {# {{ form_row(form.mediaUrl) }} #}
-                        </div> 
+                <div class="row text-center center-block">
+                    <div class="col-lg-6">
+                        <h4 class="card-title text-uppercase">Ajouter une ou plusieurs images</h4><hr>
+                            <div class="medias" data-prototype="{{ form_widget(form.medias.vars.prototype)|e('html_attr') }}">
+                                <div class="card shadow col-12">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('uploads/images/defaults/snowboard.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="280px" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row my-2">
+                                            <div class="col-12">
+                                            <button type="button" class="btn btn-outline-info center-block" id="add-image">Ajouter une image</button><i id="remove-image" class="fas fa-trash-alt fa-2x mx-2"></i>
+                                            </div>
+                                        </div>
+                                            {{ form_errors(form.medias) }}
+                                            {{ form_widget(form.medias) }} 
+                                            {{ form_help(form.medias) }}
+                                        <input type="hidden" id="image-counter" value="0">
+                                        <span class="counter-image text-primary"></span>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+
+                    <div class="col-lg-6 center-block">
+                        <h4 class="card-title text-uppercase">Ajouter une ou plusieurs videos</h4><hr>
+                            <div class="videos" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+                                <div class="card shadow col-12">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12 my-1">
+                                            <iframe class="preview-video" id="" name="add_trick[videos][0]" frameborder='0' allowfullscreen width="200" height="200" src="{{ asset('uploads/images/defaults/video-default.jpg') }}" value=""></iframe></br>
+                                            <button type="button" class="btn btn-outline-info" id="add-video">Ajouter une vidéo</button><i id="preview" class="fas fa-eye fa-2x mx-1"></i><i id="remove-video" class="fas fa-trash-alt fa-2x mx-2"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{ form_errors(form.videos) }}
+                                    {{ form_widget(form.videos) }}
+                                    {{ form_help(form.videos) }}
+                                <input type="hidden" id="video-counter" value="0">
+                                <span class="counter-video text-primary"></span>
+                            </div>
+                        </div>
                     </div>
+
+                </div>
                 {{ form_end(form) }}
             </div>
         </div>
     </div>
 </div>
+
+{% block javascripts %} 
+
+{{ encore_entry_script_tags('app') }}
+
+{% endblock %} 
