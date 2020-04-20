@@ -6,7 +6,7 @@
 
 {% block body %}
 
-{{ include("Parts/_header.html.twig") }}
+{{ include("Parts/_main_header.html.twig") }}
 
 <!-- Page Content -->
 <div class="container-fluid">
@@ -35,7 +35,7 @@
 
         {% if app.user %}
             <div class="mb-3">
-                Vous êtes connecté comme {{ app.user.username }}, <a href="{{ path('app_user_logout') }}">Logout</a>
+                Vous êtes connecté comme {{ app.user.username }}, <a href="{{ path('app_user_logout') }}">Déconnexion</a>
             </div>
         {% endif %}
 
@@ -67,7 +67,7 @@
         <p class="text-center">
             {# <a href="{{ path('account_password_forgot') }}">Mot de passe oublié ?</a><br> #}
             <a href="#">Mot de passe oublié ?</a><br>
-            <a href="{{ path('app_user_register') }}">Inscription</a>
+            <a href="{{ path('app_user_register') }}">S'inscrire</a>
         </p>
       </div>
     </div>

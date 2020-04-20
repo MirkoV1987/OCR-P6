@@ -13,63 +13,15 @@
 
 {% block body %}
 
-   <!--Header start-->
-        <div class="header">    
-            <div class="header-content clearfix">
-                <div class="nav-control">
-                    <div class="hamburger">
-                        <span class="toggle-icon"><i class="icon-menu"></i></span>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <ul class="clearfix">
-                        <li class="icons dropdown">
-                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
-                                <span class="activity active"></span>
-                                {# <img src="../public/img/users/{{ user.avatar }}" height="40" width="40" alt="utilisateur"> #}
-                                <img src="http://localhost/OCR-P6/public/img/users/{{ app.user.avatar }}" height="40" width="40" alt="utilisateur">
-                            </div>
-                            <div class="drop-down dropdown-profile dropdown-menu">
-                                <div class="dropdown-content-body">
-                                    <ul>
-                                        <li>
-                                            <a href="#"><i class="icon-lock"></i> <span>Mot de passe</span></a>
-                                        </li>                        
-                                        <hr class="my-2">
-                                        <li>
-                                            <a href="{{ path('app_user_logout') }}"><i class="icon-key"></i> <span>Déconnexion</span></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!--Header end-->
-
-        <!-- Nav header start-->
-        <div class="nav-header">
-            <div class="brand-logo">
-                <a href="{{ path('app_trick_home') }}">
-                    <b class="logo-abbr"><img src="../uploads/images/defaults/snowboard.jpg" alt="logo"> </b>
-                    <span class="logo-compact"><img src="../img/tricks/covers/snowtrick-banner.png" alt=""></span>
-                    <span class="brand-title">
-                        {# <img src="images/logo-text.png" alt=""> #}
-                    </span>
-                </a>
-            </div>
-        </div>
-        <!--Nav header end-->
-
- {# {{ include("Parts/_dashboard_layout.html.twig") }} #}
+    <!--Header start-->
+        {{ include("Parts/_account_header.html.twig") }}
+    <!--Header end-->
 
         <div class="content-body my-4">
             <div class="container-fluid">
                 <div class="row justify-content-center">
 
-                 <div class="row justify-content-center">
+                <div class="row justify-content-center">
                     {% for message in app.flashes('success') %}
                         <div class="col-4 alert alert-success alert-dismissible fade show mb-0 mt-1 text-center" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -90,7 +42,7 @@
                                     <div class="col-lg-6"> 
                                         <h5 class="m-0 text-uppercase mb-1">Détails de mon compte</h6>
                                         <div class="mb-3 mx-auto">
-                                            <img class="rounded" src="http://localhost/OCR-P6/public/img/users/{{ app.user.avatar }}" alt="Avatar" width="150">
+                                            <img class="rounded" src="/../OCR-P6/assets/img/users/{{ app.user.avatar }}" alt="Avatar" width="200">
                                         </div>
                                     </div>
                                     <div class="col-lg-6"> 
@@ -103,7 +55,6 @@
                                     </div>
                                 </div>
                             </div> 
-                            {# <h4 class="card-title text-uppercase mx-3">Profile</h4> #}
                             <div class="card-header border-bottom">
                                 <h5 class="m-0">Modifier mon compte</h6>
                             </div>
@@ -119,11 +70,8 @@
                                                         <div class="form-group col-md-12">
                                                             {{ form_row(form.email) }}
                                                         </div>
-                                                        {# <div class="form-group col-md-12">
-                                                            {{ form_row(form.file) }}
-                                                        </div> #}
                                                     </div>
-                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                                                     <div class="row text-center">
                                                         <div class="form-group col-lg-12 mt-4 text-center">
                                                             <button type="submit" class="btn btn-primary text-uppercase">Enregistrer les modifications</button>

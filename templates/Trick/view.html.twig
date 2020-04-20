@@ -10,7 +10,7 @@
 
 {% block body %}
 
-{{ include("Parts/_header.html.twig") }}
+{{ include("Parts/_main_header.html.twig") }}
 
 <!-- Page Content -->
 <div class="container-fluid" id="trick-container">
@@ -22,16 +22,16 @@
                 <div class="card mt-5">
                     <div class="row">
                         <div class="col-lg-4 mx-4 my-2 border border-primary py-1 px-1">
-                            <img class="card-img-top img-fluid" src="http://localhost/OCR-P6/public/img/tricks/covers/{{ trick.fileName }}" alt="{{ trick.name }}-main">
+                            <img class="card-img-top img-fluid" src="/../OCR-P6/assets/img/tricks/{{ trick.fileName }}" alt="{{ trick.name }}-main">
                         </div>
                         <div class="col-lg-6 mt-4 ml-6">
-                            <img class="card-img-top img-fluid text-right" src="http://localhost/OCR-P6/public/img/tricks/covers/snowtrick-banner.png" alt="snowtricks">
+                            <img class="card-img-top img-fluid text-right" src="{{ asset('../assets/img/design/snowtrick-banner.png') }}" alt="snowtricks">
                         </div>
                     </div>
                     <div class="card-body">
                         <ul class="list-inline trick-data">
                             <li class="list-inline-item">
-                                {# Par : <a target="_blank" href="{{ path('user_profile', { 'id' : trick.user.id }) }}">{{ trick.user.username }}</a> #}
+                                Par : <span>{{ trick.user.username }}</span>
                             </li> |
                             <li class="list-inline-item">
                                 Ajouté le {{ trick.dateAdd | date('d/m/Y') }} (<small>Mise à jour le : {% if trick.dateUpdate is defined %}{{ trick.dateUpdate | date('d/m/Y') }}{% endif %}</small>)
@@ -59,7 +59,7 @@
                                         <div class="carousel-inner enlarge">
                                             {% for media in trick.medias %}
                                                 <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
-                                                    <img class="d-block img-fluid" src="http://localhost/OCR-P6/public/uploads/images/tricks/{{ media.name }}" alt="{{ trick.name }}-image-{{ media.id }}">
+                                                    <img class="d-block img-fluid" src="/../OCR-P6/assets/img/tricks/{{ media.name }}" alt="{{ trick.name }}-image-{{ media.id }}">
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -185,7 +185,7 @@
                                         <div class="entry-comments-item">
                                             <div class="entry-comments-body">
                                                 <p>
-                                                <img class="rounded" src="http://localhost/OCR-P6/public/img/users/{{ comment.user.avatar }}" height="40" width="40" alt="{{ comment.user.username }}" /><br/>
+                                                <img class="rounded" src="/../OCR-P6/assets/img/users/{{ comment.user.avatar }}" height="40" width="40" alt="{{ comment.user.username }}" /><br/>
                                                 <span class="entry-comments-author"><strong>Posté par <a class="text-dark" href="{{ path('app_trick_view', { 'id' : comment.user.id }) }}" target="_blank">{{ comment.user.username }}</a></strong>, </span>
                                                 <span class="comment-date text-dark">le {{ comment.dateAdd | date('d/m/Y') }} à {{ comment.dateAdd | date('H:i') }}</span>
                                                 </p> 

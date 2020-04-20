@@ -3,65 +3,16 @@
 {% extends "base.html.twig" %}
 
 {% block stylesheets %}
-
-  {{ parent() }}
-  <link src="../public/build/app.css" rel="stylesheet">
-
+    {{ parent() }}
 {% endblock %}
 
 {% block title %}SnowTricks - Mes commentaires{% endblock %}
 
 {% block body %}
 
-   <!--Header start-->
-        <div class="header">    
-            <div class="header-content clearfix">
-                <div class="nav-control">
-                    <div class="hamburger">
-                        <span class="toggle-icon"><i class="icon-menu"></i></span>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <ul class="clearfix">
-                        <li class="icons dropdown">
-                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
-                                <span class="activity active"></span>
-                                {# <img src="../public/img/users/{{ user.avatar }}" height="40" width="40" alt="utilisateur"> #}
-                                <img src="http://localhost/OCR-P6/public/img/users/{{ app.user.avatar }}" height="40" width="40" alt="utilisateur">
-                            </div>
-                            <div class="drop-down dropdown-profile dropdown-menu">
-                                <div class="dropdown-content-body">
-                                    <ul>
-                                        <li>
-                                            <a href="#"><i class="icon-lock"></i> <span>Mot de passe</span></a>
-                                        </li>                        
-                                        <hr class="my-2">
-                                        <li>
-                                            <a href="{{ path('app_user_logout') }}"><i class="icon-key"></i> <span>Déconnexion</span></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!--Header end-->
-
-        <!-- Nav header start-->
-        <div class="nav-header">
-            <div class="brand-logo">
-                <a href="{{ path('app_trick_home') }}">
-                    <b class="logo-abbr"><img src="../uploads/images/defaults/snowboard.jpg" alt="logo"> </b>
-                    <span class="logo-compact"><img src="../img/tricks/covers/snowtrick-banner.png" alt=""></span>
-                    <span class="brand-title">
-                        {# <img src="images/logo-text.png" alt=""> #}
-                    </span>
-                </a>
-            </div>
-        </div>
-        <!--Nav header end-->
+    <!--Header start-->
+        {{ include("Parts/_account_header.html.twig") }}
+    <!--Header end-->
 
         <div class="content-body my-4">
             <div class="container-fluid">
@@ -76,7 +27,7 @@
                                 <div class="row">
                                     <div class="col-lg-6"> 
                                         <div class="mb-3 mx-auto">
-                                            <img class="rounded border border-primary py-1 px-1" src="http://localhost/OCR-P6/public/img/tricks/covers/{{ trick.fileName }}" alt="Trick" width="300"></br>
+                                            <img class="rounded border border-primary py-1 px-1" src="/../OCR-P6/assets/img/tricks/{{ trick.fileName }}" alt="Trick" width="300"></br>
                                         </div>
                                     </div>
                                     <div class="col-lg-6"> 
@@ -98,7 +49,7 @@
                                         <div class="entry-comments-item">
                                             <div class="entry-comments-body">
                                                 <p>
-                                                <img class="rounded" src="http://localhost/OCR-P6/public/img/users/{{ comment.user.avatar }}" height="40" width="40" alt="{{ comment.user.username }}" /><br/>
+                                                <img class="rounded" src="/../OCR-P6/assets/img/users/{{ app.user.avatar }}" height="40" width="40" alt="{{ comment.user.username }}" /><br/>
                                                 <span class="entry-comments-author"><strong>Posté par <a class="text-dark" href="{{ path('app_trick_view', { 'id' : comment.user.id }) }}" target="_blank">{{ comment.user.username }}</a></strong>, </span>
                                                 <span class="comment-date text-dark">le {{ comment.dateAdd | date('d/m/Y') }} à {{ comment.dateAdd | date('H:i') }}</span>
                                                 </p> 

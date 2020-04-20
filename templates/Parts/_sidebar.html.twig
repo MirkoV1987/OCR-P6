@@ -31,12 +31,12 @@
                 </li>
                 <hr class="my-2">
                 <li>
-                    <a href="#" aria-expanded="false">
+                    <a href="{{ path('app_user_comments', {'id': app.user.id }) }}" aria-expanded="false">
                         <i class="icon-notebook menu-icon"></i><span class="nav-text">Mes commentaires</span>
                     </a>
                 </li>
             </ul>
-                <img class="img-fluid my-5" src="/OCR-P6/public/img/design/snowboarder.png" alt="snowtricks" />
+                <img class="img-fluid my-5" src="{{ asset('../assets/img/design/snowboarder.png') }}" alt="snowtricks" />
         </div>
     </div>
 <!--Sidebar end-->

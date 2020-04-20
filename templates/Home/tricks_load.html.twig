@@ -5,7 +5,6 @@
             <div class="card h-100">
                 <h4 class="card-header">{{ trick.name }}</h4>
                 {% if app.user %}
-                {# {% if is_granted('ROLE_USER') %} #}
                 <div class="float-right">
                     <a href="{{ path('app_trick_edit', {'id': trick.id }) }}">
                     <i class="fas fa-pencil-alt"></i>
@@ -16,7 +15,7 @@
                 </div>
                 {% endif %}
                 <div class="card-body">
-                    <a href="{{ path('app_trick_view', {'id': trick.id}) }}"><img class="card-img-top home border border-primary py-1 px-1" src="../public/img/tricks/covers/{{ trick.fileName }}" alt="Trick"></a>
+                    <a href="{{ path('app_trick_view', {'id': trick.id}) }}"><img class="card-img-top home border border-primary py-1 px-1" src="../assets/img/tricks/{{ trick.fileName }}" alt="Trick"></a>
                     <p class="card-text my-2 text-left"><strong>Ajouté le {{ trick.dateAdd | date('d/m/Y') }} à {{ trick.dateAdd | date('H:i') }}</strong></p>
                 </div>
                 <div class="card-footer">

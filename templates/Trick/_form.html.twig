@@ -1,18 +1,17 @@
 {# templates/Trick/_form.html.twig #}
 
-{# Cette vue sera heritée par add.html.twig et edit.html.twig #}
+{# This view is herited by add.html.twig and edit.html.twig #}
 
 <div class="form">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
                 {{ form_start(form) }}
-                 {# {{ form_start(form, {'multipart': true}) }} #}
                     <div class='row'>
                         <div class="col-md-3">
                             {{ form_row(form.name) }}
                             {{ form_row(form.category) }}
-                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('uploads/images/defaults/snowboard-default.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="auto" value="" />
+                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('../assets/img/design/snowboard-default.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="auto" value="" />
                             {{ form_row(form.file) }}
                         </div>
                         <div class="col-md-9">
@@ -34,7 +33,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
-                                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('uploads/images/defaults/snowboard.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="280px" value="" />
+                                            <img type="image" id="upload-image" name="form[media][0]" src="{{ asset('../assets/img/design/snowboard.jpg') }}" alt="trick-image" class="preview img-thumbnail" width="230px" height="280px" value="" />
                                             </div>
                                         </div>
                                         <div class="row my-2">
@@ -59,7 +58,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12 my-1">
-                                            <iframe class="preview-video" id="" name="add_trick[videos][0]" frameborder='0' allowfullscreen width="200" height="200" src="{{ asset('uploads/images/defaults/video-default.jpg') }}" value=""></iframe></br>
+                                            <iframe class="preview-video" id="" name="add_trick[videos][0]" frameborder='0' allowfullscreen width="200" height="200" src="{{ asset('../assets/img/design/video-default.jpg') }}" value=""></iframe></br>
                                             <button type="button" class="btn btn-outline-info" id="add-video">Ajouter une vidéo</button><i id="preview" class="fas fa-eye fa-2x mx-1"></i><i id="remove-video" class="fas fa-trash-alt fa-2x mx-2"></i>
                                             </div>
                                         </div>
@@ -81,7 +80,5 @@
 </div>
 
 {% block javascripts %} 
-
-{{ encore_entry_script_tags('app') }}
-
+    {{ encore_entry_script_tags('app') }}
 {% endblock %} 

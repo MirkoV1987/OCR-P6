@@ -6,13 +6,13 @@
 
 {% block body %}
 
-{{ include("Parts/_header.html.twig") }}
+{{ include("Parts/_main_header.html.twig") }}
 
 <!-- Page Content -->
 <div class="container-fluid" id="trick-container">
 
   <div class="row">
-      <img src="../public/img/design/snowtrick-background.jpg" class="img-fluid" alt="Responsive image"> 
+      <img src="{{ asset('../assets/img/design/snowtrick-background.jpg') }}" class="img-fluid" alt="SnowTricks"> 
   </div>
 
   <div class="row justify-content-center">
@@ -38,7 +38,6 @@
           <div class="card h-100">
             <h4 class="card-header">{{ trick.name }}</h4>
               {% if app.user %}
-              {# {% if is_granted('ROLE_USER') %} #}
               <div class="float-right">
                 <a href="{{ path('app_trick_edit', {'id': trick.id }) }}">
                   <i class="fas fa-pencil-alt"></i>
@@ -49,8 +48,8 @@
               </div>
               {% endif %}
               <div class="card-body">
-                <a href="{{ path('app_trick_view', {'id': trick.id}) }}"><img class="card-img-top home border border-primary py-1 px-1" src="../public/img/tricks/covers/{{ trick.fileName }}" alt="Trick"></a>
-                <p class="card-text my-2 text-left"><strong>Ajouté le {{ trick.dateAdd | date('d/m/Y') }} à {{ trick.dateAdd | date('H:i') }}</strong></p>
+                <a href="{{ path('app_trick_view', {'id': trick.id}) }}"><img class="card-img-top home border border-primary py-1 px-1" src="../assets/img/tricks/{{trick.fileName}}" alt="Trick"></a>
+                <p class="card-text my-2 text-left"><strong>Ajouté le {{ trick.dateAdd | date('d/m/Y') }} à {{ trick.dateAdd | date('H:i') }}<br/>Par : <span>{{ trick.user.username }}</span></strong></p>
               </div>
             <div class="card-footer">
               <a href="{{ path('app_trick_view', {'id': trick.id }) }}" class="btn btn-primary text-uppercase">Voir plus</a>
