@@ -45,7 +45,7 @@ class UserController extends AbstractController
             // Créer un nom unique pour le fichier
             $name = md5(uniqid()) . '.' . $file->guessExtension();
             // Déplace le fichier
-            $path = 'img/users';
+            $path = '../assets/img/users';
             $file->move($path, $name);
 
             $password = $encoder->encodePassword($user, $user->getPassword());
