@@ -50,6 +50,18 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 254,
+     *      minMessage = "Votre mot de passe doit contenir au moins 8 caractères.",
+     *      maxMessage = "Votre mot de passe ne peut pas contenir plus que {{ limit }} caractères !"
+     * )
+     * @Assert\Regex(
+     *     pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)^",
+     *     match = true,
+     *     message = "Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial !"
+     * )
      */
     private $password;
 
@@ -206,11 +218,6 @@ class User implements UserInterface
 
         return $this;
     }
-
-    // public function serialize(UploadedFile $file): self
-    // {
-    //     return serialize($this->file);
-    // }
 
     public function getIsActive(): ?bool
     {
