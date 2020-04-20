@@ -50,7 +50,7 @@
                                             <div class="entry-comments-body">
                                                 <p>
                                                 <img class="rounded" src="/../OCR-P6/assets/img/users/{{ app.user.avatar }}" height="40" width="40" alt="{{ comment.user.username }}" /><br/>
-                                                <span class="entry-comments-author"><strong>Posté par <a class="text-dark" href="{{ path('app_trick_view', { 'id' : comment.user.id }) }}" target="_blank">{{ comment.user.username }}</a></strong>, </span>
+                                                <span class="entry-comments-author"><strong>Posté par {{ comment.user.username }}</a></strong>, </span>
                                                 <span class="comment-date text-dark">le {{ comment.dateAdd | date('d/m/Y') }} à {{ comment.dateAdd | date('H:i') }}</span>
                                                 </p> 
                                                 <p class="comment-content text-justify">{{ comment.content }}</p>
