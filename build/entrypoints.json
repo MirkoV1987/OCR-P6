@@ -16,6 +16,12 @@
         "/build/main.js"
       ]
     },
+    "media": {
+      "js": [
+        "/build/runtime.js",
+        "/build/media.js"
+      ]
+    },
     "trick-add": {
       "js": [
         "/build/runtime.js",
