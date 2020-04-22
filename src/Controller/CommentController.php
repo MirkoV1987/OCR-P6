@@ -43,8 +43,12 @@ class CommentController extends AbstractController
      * Comment delete
      * @Route("comment/delete/{id}", name="app_comment_delete", requirements={"id" = "\d+"})
      */
-    public function commentDelete(Comment $comment, EntityManagerInterface $em)
+    public function commentDelete($id, Comment $comment, EntityManagerInterface $em)
     {
+        $em = $this->getDoctrine()->getManager();
+        $comment = $em->getRepository(Comment::class)->find($id);
+
+
         $em->remove($comment);
         $em->flush();
 

@@ -10,11 +10,9 @@ use App\Entity\Comment;
 use App\Form\RegisterType;
 use App\Form\ProfileType;
 use App\Form\FileType;
-use App\Service\MailerManager;
 use App\Repository\UserRepository;
 use App\Repository\TrickRepository;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +30,7 @@ class UserController extends AbstractController
      * Register new User
      * @Route("user/register", name="app_user_register")
      */
-    public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, MailerManager $mailerManager)
+    public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer)
     {
         $user = new User();
 
@@ -49,21 +47,31 @@ class UserController extends AbstractController
             $file->move($path, $name);
 
             $password = $encoder->encodePassword($user, $user->getPassword());
+            $validationToken = md5(random_bytes(80));
        
             $user->setPassword($password)
                  ->setAvatar($name)
                  ->setDateAdd(new \DateTime('+ 2 hour'))
                  ->setDateUpdate(new \DateTime('+ 2 hour'))
                  ->setIsActive(false)
-                 ->setValidationToken(md5(random_bytes(10)))
-                 ->setResetPasswordToken(md5(random_bytes(10)));
+                 ->setValidationToken($validationToken);
 
             $em->persist($user);
             $em->flush();
-            
-            //Call to MailerController Service
-            //$mailer = new MailerInterface();
-            //$mailerManager->sendEmail($mailer);
+
+            $message = (new \Swift_Message('Validation de votre compte SnowTricks'))
+            ->setFrom('noreply@snowtricks.com')
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->renderView('User/emails/account_validation.html.twig', [
+                        'user' => $user,
+                        'username' => $user->getUsername(),
+                        'validationToken' => $user->getValidationToken()
+                    ]),
+                    'text/html'
+                );
+
+            $mailer->send($message);
 
             $this->addFlash(
                 'success',
@@ -105,7 +113,7 @@ class UserController extends AbstractController
             );   
         }
 
-        return $this->redirectToRoute('app_login'); 
+        return $this->redirectToRoute('app_user_login'); 
     }
 
     /**
