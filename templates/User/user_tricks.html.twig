@@ -22,7 +22,6 @@
                             <div class="card-header border-bottom">
                                 <h1 class="card-title text-uppercase mx-3 text-center">Mes tricks</h1>
                                 <hr>
-
                             {% for trick in tricks %}
                                 <div class="row">
                                     <div class="col-lg-6"> 
@@ -50,7 +49,7 @@
                                     </div>
                                 </div>
                             {% endfor %}
-
+                    
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                                             
                                             </div>

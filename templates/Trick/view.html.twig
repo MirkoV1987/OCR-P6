@@ -58,7 +58,7 @@
                                         </ol>
                                         <div class="carousel-inner enlarge">
                                             {% for media in trick.medias %}
-                                                <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
+                                                <div class="trickMedia carousel-item {% if loop.index0 == 0 %} active {% endif %}">
                                                     <img class="d-block img-fluid" src="/../OCR-P6/assets/img/tricks/{{ media.name }}" alt="{{ trick.name }}-image-{{ media.id }}">
                                                 </div>
                                             {% endfor %}
@@ -81,7 +81,7 @@
                                         <div class="carousel-inner enlarge">
                                             {% for video in trick.videos %}
                                                 <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
-                                                    <iframe id="video-reader" frameborder='0' allowfullscreen="1" src="{{ video.url }}" value=""></iframe>
+                                                    <iframe id="video-reader" frameborder='0' allowfullscreen="1" src="{{ video.url }}" width="auto" height="250" value=""></iframe>
                                                     <script>
                                                         let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
                                                         let dailyMotionRegex = "^.+dailymotion.com\\/(video|embed)\\/([^_]+)[^#]*(#video=([^_&]+))?";
@@ -117,10 +117,10 @@
                             </div>
                             <div class="text-center">
                                 <a href="#" id="loadMedia" class="d-md-block d-lg-none">
-                                    <button class="btn btn-outline-secondary">Afficher les médias</button>
+                                    <button class="btn btn-primary text-uppercase">Afficher plus de médias</button>
                                 </a>
                                 <a href="#" id="hideMedia" class="d-none d-md-none d-lg-none">
-                                    <button class="btn btn-outline-secondary mt-3">Masquer les médias</button>
+                                    <button class="btn btn-primary text-uppercase mt-3">Masquer les médias</button>
                                 </a>
                             </div>
                         {% else %}
@@ -215,6 +215,7 @@
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('media') }}
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
@@ -247,5 +248,5 @@
   document
     .getElementById ('loadComments')
     .addEventListener ('click', loadMoreComments);
-  </script>
+</script>
 {% endblock %} 

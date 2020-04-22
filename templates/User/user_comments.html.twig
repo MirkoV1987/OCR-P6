@@ -23,7 +23,7 @@
                                 <h1 class="card-title text-uppercase mx-3 text-center">Mes commentaires</h1>
                                 <hr>
 
-                            {% for trick in tricks %}
+                            {% for trick in app.user.tricks %}
                                 <div class="row">
                                     <div class="col-lg-6"> 
                                         <div class="mb-3 mx-auto">
@@ -41,7 +41,7 @@
                                     </div>
                                 </div>
                             <ul class="entry-comments-list list-unstyled" id="commentSection">
-                                {% for comment in comments %}
+                                {% for comment in app.user.comments %}
                                 <div class="card">
                                     <div class="card-body">
                                         <span class="comment-anchor" id="{{ comment.id }}"></span>
