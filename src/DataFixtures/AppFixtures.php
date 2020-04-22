@@ -52,7 +52,7 @@ class AppFixtures extends Fixture
                 ->setDateUpdate($faker->dateTimeBetween($startDate = '-8 months', $endDate = 'now', $timezone = null))
                 ->setIsActive(true)
                 ->setValidationToken($faker->md5)
-                ->setResetPasswordToken($faker->sha256)
+                //->setResetPasswordToken($faker->sha256)
                 ->setAvatar($faker->randomElement($userAvatar));
 
             $manager->persist($user);
