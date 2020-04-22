@@ -8,9 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
-//use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-//use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -72,6 +70,10 @@ class User implements UserInterface
 
     /**
      * @var $confirmPassowrd
+     * @Assert\EqualTo(
+     *      propertyPath = "password",
+     *      message = "Les mots de passe ne correspondent pas !"
+     * )
      */
     private $confirmPassword;
 
@@ -100,10 +102,11 @@ class User implements UserInterface
      */
     private $validationToken;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $resetPasswordToken;
+    // /**
+    //  * @ORM\Column(type="string", length=255)
+    //  * @ORM\JoinColumn(nullable=true)
+    //  */
+    // private $resetPasswordToken;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", orphanRemoval=true)
@@ -243,17 +246,17 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getResetPasswordToken(): ?string
-    {
-        return $this->resetPasswordToken;
-    }
+    // public function getResetPasswordToken(): ?string
+    // {
+    //     return $this->resetPasswordToken;
+    // }
 
-    public function setResetPasswordToken(?string $resetPasswordToken): self
-    {
-        $this->resetPasswordToken = $resetPasswordToken;
+    // public function setResetPasswordToken(?string $resetPasswordToken): self
+    // {
+    //     $this->resetPasswordToken = $resetPasswordToken;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function __construct()
     {

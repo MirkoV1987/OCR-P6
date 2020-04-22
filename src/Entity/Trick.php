@@ -81,13 +81,13 @@ class Trick
     protected $medias;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"remove"}, orphanRemoval=true)
      */
     protected $videos;
 
     /**
      * @ORM\JoinColumn(nullable=false, onDelete="set null")
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true, cascade={"remove"})
      */
     private $comments;
 

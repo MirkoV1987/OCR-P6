@@ -38,7 +38,7 @@ class Comment
 
     /**
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="comments", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="comments", cascade={"remove"})
      */
     private $trick;
 
