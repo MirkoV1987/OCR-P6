@@ -10,7 +10,6 @@ use App\Entity\Media;
 use App\Form\MediaType;
 use App\Form\VideoType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -37,7 +36,8 @@ class TrickType extends AbstractType
                 'label'=>'Description',
                 'attr'=>[
                     'rows'=>10,
-                    'id'=>'trick_description'
+                    'id'=>'trick_description',
+                    'placeholder' => 'La description doit contenir au moins 30 caractères'
                 ]
             ])
             ->add('category', EntityType::class, [
@@ -66,9 +66,6 @@ class TrickType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
-            ])
-            ->add('save', SubmitType::class, [
-                'label'=>'Ajouter'
             ])
         ;
     }
