@@ -10,22 +10,9 @@ Encore
     // directory where compiled assets will be stored
     .setOutputPath('build/')
     // public path used by the web server to access the output path
-    .setPublicPath('/public/build')
+    .setPublicPath('/build')
     // only needed for CDN's or sub-directory deploy
-    //.setManifestKeyPrefix('build/')
-
-    //.copyFiles({
-      //      from: './uploads/images/tricks',
-        
-            // optional target path, relative to the output dir
-            //to: 'images/[path][name].[ext]',
-        
-            // if versioning is enabled, add the file hash too
-            //to: 'images/[path][name].[hash:8].[ext]',
-        
-            // only copy files matching this pattern
-        //    pattern: /\.(png|jpg|jpeg)$/
-        //})
+    .setManifestKeyPrefix('build/')
 
     /*
      * ENTRY CONFIG
@@ -37,9 +24,12 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
-    //.addEntry('app', './assets/css/app.css')
     .addEntry('main', './assets/js/main.js')
-    .addEntry('trick', './assets/js/trick-add.js')
+    .addEntry('media', './assets/js/media.js')
+    .addEntry('trick-add', './assets/js/trick-add.js')
+
+    //.addEntry('page1', './assets/js/page1.js')
+    //.addEntry('page2', './assets/js/page2.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -47,12 +37,6 @@ Encore
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
-
-    .enableSassLoader()
-
-    .addStyleEntry('home', './assets/css/style.css')
-
-    .setManifestKeyPrefix('build/')
 
     /*
      * FEATURE CONFIG
@@ -86,7 +70,7 @@ Encore
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
 
-    // uncomment if you use API Platform Admin (composer require api-admin)
+    // uncomment if you use API Platform Admin (composer req api-admin)
     //.enableReactPreset()
     //.addEntry('admin', './assets/js/admin.js')
 ;
