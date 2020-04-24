@@ -1,0 +1,16 @@
+<html>
+    <body>
+        <!-- Start Forgot Password Mail-->
+        <h3>Snowtricks - Confirmation de votre compte</h3>
+
+        Bonjour {{ username }} ! 
+        <br>
+        Vous vous êtes inscrit sur SnowTricks avec succès !<br>
+        <br>
+        Pour valider votre compte, veuillez valider votre email en cliquant sur le lien ci-dessous :<br>
+        <a href="{{ url('app_user_email_validation', {username : username , validationToken: validationToken}) }}">Activer mon compte<a><br>
+        <br>
+        Merci !
+        <h3>Snowtricks Team<h3>
+    </body>
+</html>

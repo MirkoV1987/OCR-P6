@@ -1,0 +1,252 @@
+{# templates/Trick/view.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+  {{ parent() }}
+{% endblock %}
+
+{% block title %}{{ parent() }} Liste des Tricks {% endblock %}
+
+{% block body %}
+
+{{ include("Parts/_main_header.html.twig") }}
+
+<!-- Page Content -->
+<div class="container-fluid" id="trick-container">
+
+  <!-- Start Trick -->
+    <div class="container mt-5">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-10 col-md-offset-1 mt-5 mb-4">
+                <div class="card mt-5">
+                    <div class="row">
+                        <div class="col-lg-4 mx-4 my-2 border border-primary py-1 px-1">
+                            <img class="card-img-top img-fluid" src="/../OCR-P6/assets/img/tricks/{{ trick.fileName }}" alt="{{ trick.name }}-main">
+                        </div>
+                        <div class="col-lg-6 mt-4 ml-6">
+                            <img class="card-img-top img-fluid text-right" src="{{ asset('../assets/img/design/snowtrick-banner.png') }}" alt="snowtricks">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-inline trick-data">
+                            <li class="list-inline-item">
+                                Par : <span>{{ trick.user.username }}</span>
+                            </li> |
+                            <li class="list-inline-item">
+                                Ajouté le {{ trick.dateAdd | date('d/m/Y') }} (<small>Mise à jour le : {% if trick.dateUpdate is defined %}{{ trick.dateUpdate | date('d/m/Y') }}{% endif %}</small>)
+                            </li> |
+                            <li class="list-inline-item">
+                                Catégorie : {{ trick.category.name }}
+                            </li> |
+                            <li class="list-inline-item">
+                                <a href="#comments-block">{{ trick.comments | length }} commentaires</a>
+                            </li>
+                        </ul>
+                        <hr>
+                        <h4 class="card-title"><strong>{{ trick.name }}</strong></h4>
+                        <hr>
+                        <!-- Start Carousel -->
+                        {% if (medias) or (videos) %}
+                            <div class="row d-none d-lg-flex load-media">
+                                <div class="col-lg-6 col-md-12">
+                                    <div id="carousel" class="carousel slide mt-3 mb-2" data-ride="carousel">
+                                        <ol class="carousel-indicators">
+                                            {% for media in trick.medias %}
+                                                <li data-target=".carousel" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %} class="active" {% endif %}></li>
+                                            {% endfor %}
+                                        </ol>
+                                        <div class="carousel-inner enlarge">
+                                            {% for media in trick.medias %}
+                                                <div class="trickMedia carousel-item {% if loop.index0 == 0 %} active {% endif %}">
+                                                    <img class="d-block img-fluid" src="/../OCR-P6/assets/img/tricks/{{ media.name }}" alt="{{ trick.name }}-image-{{ media.id }}">
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carousel" data-slide="prev">
+                                            <span class="carousel-control-prev-icon"></span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carousel" data-slide="next">
+                                            <span class="carousel-control-next-icon"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div id="carousel-v" class="carousel slide mt-3 mb-2" data-ride="carousel">
+                                        <ol class="carousel-indicators">
+                                            {% for video in trick.videos %}
+                                                <li data-target="#carousel-v" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %} class="active" {% endif %}></li>
+                                            {% endfor %}
+                                        </ol>
+                                        <div class="carousel-inner enlarge">
+                                            {% for video in trick.videos %}
+                                                <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
+                                                    <iframe id="video-reader" frameborder='0' allowfullscreen="1" src="{{ video.url }}" width="auto" height="250" value=""></iframe>
+                                                    <script>
+                                                        let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                                                        let dailyMotionRegex = "^.+dailymotion.com\\/(video|embed)\\/([^_]+)[^#]*(#video=([^_&]+))?";
+                                                        let url = "{{ video.url }}";
+                                                        let match = url.match(regExp);
+                                                        let matchTwo = url.match(dailyMotionRegex);
+                                                        if (match && match[2].length == 11) 
+                                                        {
+                                                            let id = match[2];
+                                                            let embedlink = "http://www.youtube.com/embed/" + id;
+                                                            let iframe = document.getElementById("video-reader");
+                                                            iframe.src = embedlink;
+                                                        }
+                                                        else if (matchTwo && match[2].length >= 7) 
+                                                        {
+                                                            let dailyMotionId = match[2];
+                                                            let dEmbedlink = "https://www.dailymotion.com/embed/" + dailyMotionId;
+                                                            let iframe = document.getElementById("video-reader");
+                                                            iframe.src = dEmbedlink;
+                                                        }                                                    
+                                                    </script>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carousel-v" data-slide="prev">
+                                            <span class="carousel-control-prev-icon"></span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carousel-v" data-slide="next">
+                                            <span class="carousel-control-next-icon"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <a href="#" id="loadMedia" class="d-md-block d-lg-none">
+                                    <button class="btn btn-primary text-uppercase">Afficher plus de médias</button>
+                                </a>
+                                <a href="#" id="hideMedia" class="d-none d-md-none d-lg-none">
+                                    <button class="btn btn-primary text-uppercase mt-3">Masquer les médias</button>
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="row justify-content-center">
+                                <div class="d-inline-block text-center no-medias">
+                                    <p class="mt-3 ml-3 mr-3">Pas de médias pour ce trick</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <!-- End Carousel -->
+                        <hr>
+                        <h5 class="card-title">Description</h5>
+                        <p class="card-text text-justify">{{ trick.description }}</p>
+                    </div>
+                </div>
+                <!--  End Trick -->
+
+                <!-- Start Comment Add Form -->
+                    {% if app.user %}
+                      <div class="col-lg-12 px-0 mb-30">
+                        <div class="cmt padDiv">
+                            {{ form_start(form) }}
+                            <div class="form-group">
+                                {{ form_row(form.content) }}
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-primary mt-3">Commenter</button>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-md-12 px-0 mb-30">
+                        <div class="comments text-center p-3">
+                            <p><a href="{{ path('app_user_register') }}"><strong>Inscrivez-vous</strong></a> ou <a href="{{ path('app_user_login') }}"><strong>connectez vous</strong></a> pour laisser un commentaire</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                <!-- Start Comment Add Form -->
+
+                <!-- Start Comments -->
+                <span class="comments-anchor" id="comments-block"></span>
+                <div class="col-md-12 pl-0 pr-0">
+                    <div class="comments text-left padDiv mb-30">
+                        <div class="entry-comments">
+                        {% for message in app.flashes('success') %}
+                            <div class="col-12 alert alert-success alert-dismissible fade show mb-0 mt-1 text-center" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <i class="fa fa-check mx-2"></i>
+                            <strong>{{ message }}</strong>
+                            </div>
+                        {% endfor %}
+                        <h6 class="mb-30">{{ trick.comments | length }} commentaires</h6>
+                            <ul class="entry-comments-list list-unstyled" id="commentSection">
+                                {% for comment in comments %}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <span class="comment-anchor" id="{{ comment.id }}"></span>
+                                        <li>
+                                        <div class="entry-comments-item">
+                                            <div class="entry-comments-body">
+                                                <p>
+                                                <img class="rounded" src="/../OCR-P6/assets/img/users/{{ comment.user.avatar }}" height="40" width="40" alt="{{ comment.user.username }}" /><br/>
+                                                <span class="entry-comments-author"><strong>Posté par {{ comment.user.username }}</strong>, </span>
+                                                <span class="comment-date text-dark">le {{ comment.dateAdd | date('d/m/Y') }} à {{ comment.dateAdd | date('H:i') }}</span>
+                                                </p> 
+                                                <p class="comment-content text-justify">{{ comment.content }}</p>
+                                            </div>
+                                        </div>
+                                        </li>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Comments -->
+                <!-- Call to Action Section -->
+                <div class="row mb-4">
+                    <div class="col-12 text-center">
+                        <button id="loadComments" class="btn-primary btn-lg center-block text-uppercase" href="#">Voir plus de commentaires</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('media') }}
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+/**----------------------------------------------------
+---------------------Show more Comments------------------
+----------------------------------------------------**/
+  click = 0;
+  function loadMoreComments (event) {
+    event.preventDefault ();
+    click++;
+    let start = 3 * click;
+    const url = "{{ path('loadComments', {'id': trick.id, 'start': 5 } ) }}"
+    axios
+      .get (url)
+      .then (function (response) {
+        console.log (response);
+        $ ('#commentSection').append (response.data);
+      })
+      .catch (function (error) {
+        if (response.status === 403) {
+          window.alert ("Vous n'êtes pas autorisé à effectuer cette action !");
+        } else if (response.status === 404) {
+          window.alert ("La page appelé n'existe pas");
+        } else {
+          window.alert ('Une erreur est survenue !');
+        }
+      });
+  }
+  document
+    .getElementById ('loadComments')
+    .addEventListener ('click', loadMoreComments);
+</script>
+{% endblock %} 

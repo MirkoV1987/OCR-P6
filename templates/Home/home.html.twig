@@ -1,0 +1,117 @@
+{# templates/Home/home.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Accueil {% endblock %}
+
+{% block body %}
+
+{{ include("Parts/_main_header.html.twig") }}
+
+<!-- Page Content -->
+<div class="container-fluid" id="trick-container">
+
+  <div class="row">
+      <img src="{{ asset('../assets/img/design/snowtrick-background.jpg') }}" class="img-fluid" alt="SnowTricks"> 
+  </div>
+
+  <div class="row justify-content-center">
+  {% for message in app.flashes('success') %}
+    <div class="col-4 alert alert-success alert-dismissible fade show mb-0 mt-1 text-center" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <i class="fa fa-check mx-2"></i>
+      <strong>{{ message }}</strong>
+    </div>
+  {% endfor %}
+  </div>
+
+  <!-- Scroll To Bottom Arrow-->
+  <p class="float-right">
+      <a href="javascript:;" id="scrollToBottom"><i class="fa fa-arrow-circle-down fa-3x"></i></a>
+  </p>
+  <!-- Tricks Section -->
+    <div class="row text-center" id="trickSection">
+      {% for trick in tricks %}
+        <div class="col-lg-2 col-md-5 col-xs-12 my-4 mx-4">
+          <div class="card h-100">
+            <h4 class="card-header">{{ trick.name }}</h4>
+              {% if app.user %}
+              <div class="float-right">
+                <a href="{{ path('app_trick_edit', {'id': trick.id }) }}">
+                  <i class="fas fa-pencil-alt"></i>
+                </a>
+                <a href="{{ path('app_trick_delete', {'id': trick.id }) }}" onclick="return confirm(`Êtes-vous sûr de vouloir supprimer le trick : {{trick.name}} ?`)">
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+              </div>
+              {% endif %}
+              <div class="card-body">
+                <a href="{{ path('app_trick_view', {'id': trick.id}) }}"><img class="card-img-top home border border-primary py-1 px-1" src="../assets/img/tricks/{{trick.fileName}}" alt="Trick"></a>
+                <p class="card-text my-2 text-left"><strong>Ajouté le {{ trick.dateAdd | date('d/m/Y') }} à {{ trick.dateAdd | date('H:i') }}<br/>Par : <span>{{ trick.user.username }}</span></strong></p>
+              </div>
+            <div class="card-footer">
+              <a href="{{ path('app_trick_view', {'id': trick.id }) }}" class="btn btn-primary text-uppercase">Voir plus</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %} 
+    </div>
+
+  <!-- Call to Action Section -->
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <button id="loadTrick" class="btn-primary btn-lg center-block text-uppercase" href="#">Voir plus de tricks</button>
+      </div>
+    </div>
+
+  <!-- Scroll To Top Arrow-->
+    <div class="float-right">
+      <a href="javascript:;" id="scrollToTop"><i class="fa fa-arrow-circle-up fa-3x"></i></a>
+    </div>
+
+  <!--footer-->
+    {{ include("Parts/_footer.html.twig") }}
+  <!--end-footer-->
+
+<!-- /.container -->
+
+{% endblock %}
+
+{% block javascripts %}
+      {{ parent() }}
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+/**----------------------------------------------------
+---------------------Show more Tricks------------------
+----------------------------------------------------**/
+  click = 0;
+  function loadMoreTricks (event) {
+    event.preventDefault ();
+    click++;
+    let start = 15 * click;
+    const url = "{{ path('loadTrick') }}" + start;
+    axios
+      .get (url)
+      .then (function (response) {
+        //console.log (response);
+        $ ('#trickSection').append (response.data);
+      })
+      .catch (function (error) {
+        if (response.status === 403) {
+          window.alert ("Vous n'êtes pas autorisé à effectuer cette action !");
+        } else if (response.status === 404) {
+          window.alert ("La page appelé n'existe pas");
+        } else {
+          window.alert ('Une erreur est survenue !');
+        }
+      });
+  }
+  document
+    .getElementById ('loadTrick')
+    .addEventListener ('click', loadMoreTricks);
+  </script>
+{% endblock %}

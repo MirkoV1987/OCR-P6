@@ -1,0 +1,39 @@
+{# templates/Trick/add.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %} 
+
+{% block body %}
+
+    <!--Header start-->
+        {{ include("Parts/_account_header.html.twig") }}
+    <!--Header end-->
+
+    <!--Main section-->
+
+    <div class="content-body my-4">
+        <div class="container-fluid">
+            <h4 class="card-title text-uppercase mx-3">Ajouter un Trick</h4>
+            {{ include("Trick/_form.html.twig") }}
+        </div>
+    </div>
+
+    <!--footer-->
+        {{ include("Parts/_footer.html.twig") }}
+    <!--end-footer-->
+
+    <!--Main-Section-End-->
+
+    <!--Sidebar start-->
+        {{ include("Parts/_sidebar.html.twig") }}
+    <!--end-sidebar-->
+
+{% endblock %}
+
+{% block javascripts %} 
+    {{ parent() }}
+    {{ encore_entry_script_tags('trick-add') }}
+{% endblock %} 
