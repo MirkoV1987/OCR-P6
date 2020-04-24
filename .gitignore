@@ -1,4 +1,5 @@
 ###> symfony/webpack-encore-bundle ###
+/assets/
 /node_modules/
 /vendor/
 /public/
