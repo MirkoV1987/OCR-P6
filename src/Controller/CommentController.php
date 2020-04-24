@@ -30,11 +30,9 @@ class CommentController extends AbstractController
         ->find($id);
 
         $comments = $user->getComments();
-        $tricks = $user->getTricks();
 
         return $this->render('User/user_comments.html.twig', [
             'comments' => $comments,
-            'tricks' => $tricks,
             'user' => $user
         ]);
     }
@@ -43,8 +41,12 @@ class CommentController extends AbstractController
      * Comment delete
      * @Route("comment/delete/{id}", name="app_comment_delete", requirements={"id" = "\d+"})
      */
-    public function commentDelete(Comment $comment, EntityManagerInterface $em)
+    public function commentDelete($id, Comment $comment, EntityManagerInterface $em)
     {
+        $em = $this->getDoctrine()->getManager();
+        $comment = $em->getRepository(Comment::class)->find($id);
+
+
         $em->remove($comment);
         $em->flush();
 
