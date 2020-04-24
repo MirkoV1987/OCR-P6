@@ -102,14 +102,8 @@ class User implements UserInterface
      */
     private $validationToken;
 
-    // /**
-    //  * @ORM\Column(type="string", length=255)
-    //  * @ORM\JoinColumn(nullable=true)
-    //  */
-    // private $resetPasswordToken;
-
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", cascade={"persist"})
      */
     private $tricks;
 
@@ -245,18 +239,6 @@ class User implements UserInterface
 
         return $this;
     }
-
-    // public function getResetPasswordToken(): ?string
-    // {
-    //     return $this->resetPasswordToken;
-    // }
-
-    // public function setResetPasswordToken(?string $resetPasswordToken): self
-    // {
-    //     $this->resetPasswordToken = $resetPasswordToken;
-
-    //     return $this;
-    // }
 
     public function __construct()
     {
