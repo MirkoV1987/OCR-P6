@@ -24,24 +24,8 @@
                                 <hr>
 
                             {% for trick in app.user.tricks %}
-                                <div class="row">
-                                    <div class="col-lg-6"> 
-                                        <div class="mb-3 mx-auto">
-                                            <img class="rounded border border-primary py-1 px-1" src="/../OCR-P6/assets/img/tricks/{{ trick.fileName }}" alt="Trick" width="300"></br>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6"> 
-                                        <p class="mb-0" style="visibility:hidden">{{ app.user.id }}<p>
-                                        <h4 class="mb-1 text-uppercase">Titre</h4>
-                                        <h5 class="mb-1">{{ trick.name }}</h5>
-                                        <hr>
-                                        <h4 class="mb-1 text-uppercase">Date</h4>
-                                        <h5 class="mb-1">Ajouté le {{ trick.dateAdd | date('d/m/Y') }} à {{ trick.dateAdd | date('H:i') }}</h5>
-                                        <hr>
-                                    </div>
-                                </div>
                             <ul class="entry-comments-list list-unstyled" id="commentSection">
-                                {% for comment in app.user.comments %}
+                                {% for comment in trick.comments %}
                                 <div class="card">
                                     <div class="card-body">
                                         <span class="comment-anchor" id="{{ comment.id }}"></span>
@@ -56,8 +40,9 @@
                                                 <p class="comment-content text-justify">{{ comment.content }}</p>
                                                 <div class="float-right">
                                                 <div>
+                                                    <a href="{{ path('app_trick_view', {'id': trick.id }) }}" class="btn btn-primary text-uppercase my-1 float-right mx-4">Voir le trick</a>
                                                     <a href="{{ path('app_comment_delete', {'id': comment.id }) }}" onclick="return confirm(`Êtes-vous sûr de vouloir supprimer ce commnetaire ?`)">
-                                                    <i class="fas fa-trash-alt"></i>
+                                                    <i class="fas fa-trash-alt mt-3"></i>
                                                     </a>
                                                 </div>
                                             </div>
