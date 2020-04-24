@@ -8,9 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
-//use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-//use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -50,6 +48,18 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 254,
+     *      minMessage = "Votre mot de passe doit contenir au moins 8 caractères.",
+     *      maxMessage = "Votre mot de passe ne peut pas contenir plus que {{ limit }} caractères !"
+     * )
+     * @Assert\Regex(
+     *     pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)^",
+     *     match = true,
+     *     message = "Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial !"
+     * )
      */
     private $password;
 
@@ -60,6 +70,10 @@ class User implements UserInterface
 
     /**
      * @var $confirmPassowrd
+     * @Assert\EqualTo(
+     *      propertyPath = "password",
+     *      message = "Les mots de passe ne correspondent pas !"
+     * )
      */
     private $confirmPassword;
 
@@ -89,12 +103,7 @@ class User implements UserInterface
     private $validationToken;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $resetPasswordToken;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", cascade={"persist"})
      */
     private $tricks;
 
@@ -207,11 +216,6 @@ class User implements UserInterface
         return $this;
     }
 
-    // public function serialize(UploadedFile $file): self
-    // {
-    //     return serialize($this->file);
-    // }
-
     public function getIsActive(): ?bool
     {
         return $this->isActive;
@@ -232,18 +236,6 @@ class User implements UserInterface
     public function setValidationToken(?string $validationToken): self
     {
         $this->validationToken = $validationToken;
-
-        return $this;
-    }
-
-    public function getResetPasswordToken(): ?string
-    {
-        return $this->resetPasswordToken;
-    }
-
-    public function setResetPasswordToken(?string $resetPasswordToken): self
-    {
-        $this->resetPasswordToken = $resetPasswordToken;
 
         return $this;
     }

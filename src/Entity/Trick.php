@@ -86,14 +86,13 @@ class Trick
     protected $videos;
 
     /**
-     * @ORM\JoinColumn(nullable=false, onDelete="set null")
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true)
      */
     private $comments;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
      */
     private $user;
 
@@ -269,21 +268,34 @@ class Trick
         return $this;
     }
 
-    public function addComment(Comment $comment)
-    {
-       $this->comments[] = $comment;
-    }
-
-    public function removeComment(Comment $comment)
-    {
-       $this->comments->removeComment($comment);
-    }
-
     /**
      * @return Collection|Comment[]
      */
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getTrick() === $this) {
+                $comment->setTrick(null);
+            }
+        }
+
+        return $this;
     }
 }

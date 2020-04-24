@@ -37,7 +37,6 @@ class Comment
     private $user;
 
     /**
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="comments", cascade={"persist"})
      */
     private $trick;
