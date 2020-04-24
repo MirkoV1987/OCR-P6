@@ -1,0 +1,34 @@
+{
+  "entrypoints": {
+    "app": {
+      "js": [
+        "/build/runtime.js",
+        "/build/app.js"
+      ],
+      "css": [
+        "/build/app.css"
+      ]
+    },
+    "main": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~main~trick-add.js",
+        "/build/main.js"
+      ]
+    },
+    "media": {
+      "js": [
+        "/build/runtime.js",
+        "/build/media.js"
+      ]
+    },
+    "trick-add": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~main~trick-add.js",
+        "/build/vendors~trick-add.js",
+        "/build/trick-add.js"
+      ]
+    }
+  }
+}
