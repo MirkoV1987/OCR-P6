@@ -1,4 +1,7 @@
 # OCR-P6 - SnowTricks
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6e7b60f20df54dc58410ac2439b24802)](https://app.codacy.com/manual/MirkoV1987/OCR-P6?utm_source=github.com&utm_medium=referral&utm_content=MirkoV1987/OCR-P6&utm_campaign=Badge_Grade_Settings)
+
 Projet 6 de mon parcours de Développeur d'applications - PHP/SYMFONY chez OpenClassrooms. Création d'un site communautaire de partage de figures de snowboard. Utilisation du framework Symfony et développement des views à partir des wireframes fournis.
 
 <b>Environnement utilisé durant le développement</b>
