@@ -23,7 +23,7 @@ class CommentController extends AbstractController
      * Get all comments posted by the User
      * @Route("comment/user/{id}", name="app_user_comments", requirements={"id" = "\d+"})
      */
-    public function showCommentsByUser(Request $request, $id)
+    public function showCommentsByUser($id)
     {
         $user = $this->getDoctrine()
         ->getRepository(User::class)
