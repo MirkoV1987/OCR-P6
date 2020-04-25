@@ -9,27 +9,27 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ChangePasswordType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options = [])
     {
         $builder
-            ->add('oldPassword', PasswordType::class, array(
+            ->add('oldPassword', PasswordType::class, [
                 'label' => 'Mot de passe actuel',
                 'attr' => [
                     'placeholder' => 'Inserez votre mot de passe actuel',
                 ],
-            ))
-            ->add('newPassword', PasswordType::class, array(
+            ])
+            ->add('newPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
                 'attr' => [
                     'placeholder' => 'Inserez votre nouveau mot de passe',
                 ],
-            ))
-            ->add('confirmPassword', PasswordType::class, array(
+            ])
+            ->add('confirmPassword', PasswordType::class, [
                 'label' => 'Confirmation de mot de passe',
                 'attr' => [
                     'placeholder' => 'Veuillez confirmer votre mot de passe',
                 ],
-            ))
+            ])
         ;
     }
 
