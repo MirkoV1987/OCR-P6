@@ -17,7 +17,7 @@ class MediaUploader
 
         $fileName = md5(uniqid()) . '.' . $file->guessExtension();
        
-        $path = 'uploads/images/tricks';
+        $path = '../assets/img/tricks';
         $file->move($path, $fileName);
 
         $media->setName($fileName);
@@ -30,7 +30,7 @@ class MediaUploader
         /** @var UploadedFile $file */
         $file = $trick->getFile();
         $fileName = md5(uniqid()) . '.' . $file->guessExtension();
-        $path = 'img/tricks/covers';
+        $path = '../assets/img/tricks';
         $file->move($path, $fileName);
 
         $trick->setFileName($fileName);
