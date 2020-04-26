@@ -1,4 +1,5 @@
-# OCR-P6 - SnowTricks
+# OCR-P6 - SnowTricks<br/>
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c245deefc6a345ab9b82fc806828f2dc)](https://www.codacy.com/manual/MirkoV1987/OCR-P6?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MirkoV1987/OCR-P6&amp;utm_campaign=Badge_Grade)
 Projet 6 de mon parcours de Développeur d'applications - PHP/SYMFONY chez OpenClassrooms. Création d'un site communautaire de partage de figures de snowboard. Utilisation du framework Symfony et développement des views à partir des wireframes fournis.
 
 <b>Environnement utilisé durant le développement</b>
@@ -12,31 +13,52 @@ Projet 6 de mon parcours de Développeur d'applications - PHP/SYMFONY chez OpenC
 <li>PhpMyAdmin 4.8.5</li> 
 <li>MySQL 5.7.26</li>
 <br/>
-<b>Installation</b>
+<b>INSTALLATION</b>
 </br>
 <li>Clonez ou téléchargez le repository GitHub dans le dossier voulu :</li></br>
-    <li>git clone https://github.com/MirkoV1987/OCR-P6.git</li></br>
-<li>Configurez vos variables d'environnement tel que la connexion à la base de données ou votre serveur SMTP ou adresse mail dans le fichier .env.local qui devra être crée à la racine du projet en réalisant une copie du fichier .env.</li>
-</br>
-<li>Téléchargez et installez les dépendances back-end du projet avec Composer :</li>
 </br>
 
-    composer install
-<li>Téléchargez et installez les dépendances front-end du projet avec Npm :</li>
+    git clone https://github.com/MirkoV1987/OCR-P6.git
 </br>
-    <em>npm install</em>
+<li>Ouvrez le fichier webpack.config.js à la racine du projet et configurez l'URL de votre projet dans la fonction .setPublicPath() </li>
 </br>
-<li>Créer un build d'assets (grâce à Webpack Encore) avec Npm :</li>
+
+    .setPublicPath('http://votredomaine/OCR-P6/public/build')
 </br>
-    <em>npm run build</em>
+<li>Positionnez-vous dans la directory de votre projet et installez yarn pour télécharger le dossier node_modules. Utilisez la commande :</li>
 </br>
-<li>Créez la base de données et lancez la commande ci-dessous en vous plaçant dans le répertoire du projet :</li>
+
+    yarn install
 </br>
-    <em>php bin/console doctrine:database:create</em>
+<li>Créez les assets et le dossier build du projet en lançant la commande :</li>
 </br>
-<li>Créez les différentes tables de la base de données en appliquant les migrations :</li>
-    <li>php bin/console doctrine:migrations:migrate</li></br>
+
+    yarn encore dev
+</br>
+<li>Chargez toutes les dépendances du projet avec Composer, en lançant la commande :</li>
+</br>
+
+    composer update
+</br>
+<b>INSTALLATION DE LA BASE DE DONNÉES</b>
+<li>Configurez vos variables d'environnement tel que la connexion à la base de données ou votre serveur SMTP ou adresse mail dans le fichier .env.</li>
+</br>
+
+    DATABASE_URL=mysql://DB_USER:DB_PASSWORD@127.0.0.1:3306/DB_NAME?serverVersion=SERVER_VERSION
+</br>
+<li>Créez la base de données avec la commande Doctrine :</li>
+</br>
+
+    bin/console doctrine:database:create
+</br>
+<li>La base de données a été créée. Générez les tables du database en lançant la commande :</li>
+</br>
+
+    bin/console doctrine:schema:update --force
+</br>
 <li>(Optionnel) Installer les fixtures pour avoir une démo de données fictives :</li></br>
-    <li>php bin/console doctrine:fixtures:load</li>
-    </br>
+</br>
+
+    bin/console doctrine:fixtures:load
+</br>
 Félicitations ! Le projet est installé correctement !
