@@ -16,3 +16,20 @@ $(function () {
         $("#hideMedia").addClass('d-none');
     });
 });
+
+/**----------------------------------------------------
+--------------Show Button if comments------------------
+----------------------------------------------------**/
+
+$(function () {
+    $("div.comments").slice(0, 6).show();
+    $("#loadComments").on('click', function (e) {
+        e.preventDefault();
+        if ($("div.comments:hidden").length < 6) {
+            $("#loadComments").hide('slow');
+        }
+        else {
+            $("#loadComments").show('slow');
+        }
+    });
+});
