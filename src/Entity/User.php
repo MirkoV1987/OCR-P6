@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -244,6 +245,9 @@ class User implements UserInterface
     {
         $this->tricks = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->date_add = new \Datetime('+ 2 hour');
+        $this->date_update = new \Datetime('+ 2 hour');
+        $this->isActive = new ArrayCollection();
     }
 
     /**
@@ -252,6 +256,15 @@ class User implements UserInterface
     public function getTricks(): Collection
     {
         return $this->tricks;
+    }
+
+    public function getNonDeletedTricks(): Collection
+    {
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->eq('isDeleted', false))
+            ->orderBy(['date_add' => 'DESC'])
+        ;
+        return $this->tricks->matching($criteria);
     }
 
     public function addTrick(Trick $trick): self
