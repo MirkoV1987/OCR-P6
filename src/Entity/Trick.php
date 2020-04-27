@@ -75,6 +75,11 @@ class Trick
     protected $category;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted = false;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid()
      */
@@ -91,8 +96,8 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
+     * @ORM\JoinColumn(nullable=false, onDelete="NO ACTION")
      */
     private $user;
 
@@ -185,6 +190,18 @@ class Trick
         return $this;
     }
 
+    public function getIsDeleted(): ?bool
+    {
+        return $this->isDeleted;
+    }
+
+    public function setIsDeleted(bool $isDeleted): self
+    {
+        $this->isDeleted = $isDeleted;
+
+        return $this;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -204,6 +221,7 @@ class Trick
         $this->comments = new ArrayCollection();
         $this->date_add = new \Datetime('+ 2 hour');
         $this->date_update = new \Datetime('+ 2 hour');
+        $this->isActive = new ArrayCollection();
     }
 
     /**
