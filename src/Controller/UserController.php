@@ -174,11 +174,32 @@ class UserController extends AbstractController
      * Delete User 
      * @Route("user/delete/{id}", name="app_user_delete", requirements={"id" = "\d+"})
      */
-    public function delete($id, Request $request, EntityManagerInterface $em) : Response
+    public function delete($id, Request $request, TrickRepository $trickRepo, EntityManagerInterface $em) : Response
     {
+        //Je récupère l'utilisateur à effacer par son $id
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository(User::class)->find($id);
+        $findTrick = $em->getRepository(Trick::class)->find($id);
 
+        //Je récupère la Collection de Tricks de l'utilisateur et la stocke dans la variable $userTricks
+        $userTricks = $user->getTricks();
+
+        //Je paramètre le setter setIsDeleted (flag $isDeleted dans l'Entité Trick) sur true
+        //$findTrick->setIsDeleted(true);
+       
+        //Je crée le nouvel utilisateur $staff et j'attribue les tricks ($userTricks) de l'$user à effacer 
+        $staff = new User();
+        $staff->setUsername('staff')
+                 ->setPassword(md5(random_bytes(80)))
+                 ->setAvatar('user-1.jpeg')
+                 ->setEmail('noreply@snowtricks.com')
+                 ->getTricks($userTricks);
+
+        //Je persiste l'utilisateur $staff dans la BDD
+        $em->persist($staff);
+        //Je persiste les tricks
+        //$em->persist($userTricks);
+        //J'efface l'utilisateur
         $em->remove($user);
         $em->flush();
 
