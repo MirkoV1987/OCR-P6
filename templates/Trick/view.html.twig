@@ -81,29 +81,28 @@
                                         <div class="carousel-inner enlarge">
                                             {% for video in trick.videos %}
                                                 <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}">
-                                                    <iframe id="video-reader" frameborder='0' allowfullscreen="1" src="{{ video.url }}" width="auto" height="250" value=""></iframe>
-                                                    <script>
-                                                        let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-                                                        let dailyMotionRegex = "^.+dailymotion.com\\/(video|embed)\\/([^_]+)[^#]*(#video=([^_&]+))?";
-                                                        let url = "{{ video.url }}";
-                                                        let match = url.match(regExp);
-                                                        let matchTwo = url.match(dailyMotionRegex);
-                                                        if (match && match[2].length == 11) 
-                                                        {
-                                                            let id = match[2];
-                                                            let embedlink = "http://www.youtube.com/embed/" + id;
-                                                            let iframe = document.getElementById("video-reader");
-                                                            iframe.src = embedlink;
-                                                        }
-                                                        else if (matchTwo && match[2].length >= 7) 
-                                                        {
-                                                            let dailyMotionId = match[2];
-                                                            let dEmbedlink = "https://www.dailymotion.com/embed/" + dailyMotionId;
-                                                            let iframe = document.getElementById("video-reader");
-                                                            iframe.src = dEmbedlink;
-                                                        }                                                    
-                                                    </script>
+                                                    <iframe id="video-reader" frameborder='0' allowfullscreen="1" src="{{ video.url }}" width="auto" height="250" value="0"></iframe>
                                                 </div>
+                                                <script>
+                                                        var url = "{{ video.url }}";
+                                                        var iframe = document.getElementById("video-reader");
+                                                            if (url.includes('youtube') || url.includes('youtu.be')) 
+                                                            {
+                                                                var youtubeId = url.substring(url.length -11)
+                                                                var youtubeLink = "https://www.youtube.com/embed/" + youtubeId;
+                                                                iframe.src = youtubeLink;
+                                                                //console.log(youtubeLink);
+                                                            }
+                                                            else if (url.includes('dailymotion')) {
+                                                                var dailyId = url.substring(url.length -7)
+                                                                var dailyLink = "https://www.dailymotion.com/embed/video/" + dailyId; 
+                                                                iframe.src = dailyLink;
+                                                                //console.log(dailyLink);
+                                                            }
+                                                            else {
+                                                                alert('Le format de l\'URL n\'est pas valide');
+                                                            }
+                                                </script>
                                             {% endfor %}
                                         </div>
                                         <a class="carousel-control-prev" href="#carousel-v" data-slide="prev">
@@ -249,4 +248,5 @@
     .getElementById ('loadComments')
     .addEventListener ('click', loadMoreComments);
 </script>
+
 {% endblock %} 
