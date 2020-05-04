@@ -31,7 +31,9 @@
         "fzaninotto/faker": "^1.9",
         "symfony/debug-pack": "^1.0",
         "symfony/maker-bundle": "^1.14",
-        "symfony/profiler-pack": "^1.0"
+        "symfony/phpunit-bridge": "^5.0",
+        "symfony/profiler-pack": "^1.0",
+        "symfony/test-pack": "^1.0"
     },
     "config": {
         "preferred-install": {
