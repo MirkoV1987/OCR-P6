@@ -1,10 +1,10 @@
 doctrine:
     dbal:
         # DATABASE configuration
-        dbname: 'DB_NAME'
-        host: 'HOST'
-        port: 'PORT'
-        user: 'USER'
+        dbname: ''
+        host: ''
+        port: ''
+        user: ''
         password: ''
         driver: 'pdo_mysql'
         url: '%env(resolve:DATABASE_URL)%'
