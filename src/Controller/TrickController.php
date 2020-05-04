@@ -108,7 +108,6 @@ class TrickController extends AbstractController
 
         $findTrick = $trickRepo->findById($trick->getId());
         $comments = $commentRepo->findBy(['trick' => $findTrick], ['date_add' => 'DESC'], 5);
-        dump($comments);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setDateAdd(new \DateTime('+ 2 hour'));
