@@ -103,7 +103,7 @@ class User implements UserInterface
     private $validationToken;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user", orphanRemoval=true)
      */
     private $tricks;
 
