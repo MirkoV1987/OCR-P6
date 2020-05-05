@@ -73,7 +73,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Email could not be found.');
+            throw new CustomUserMessageAuthenticationException('L\'utilisateur n\'a pas pu être trouvé');
         }
 
         return $user;
@@ -81,7 +81,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        // user account have to be set on activated (true) to authorize login
+        if ($user->getIsActive(true)) {
+            return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        }
+        else {
+            throw new CustomUserMessageAuthenticationException('Pour vous connecter, merci d\'activer votre compte via le mail qui vous a été envoyé');
+        }
     }
 
     /**
