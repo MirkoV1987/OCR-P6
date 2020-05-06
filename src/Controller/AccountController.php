@@ -7,7 +7,7 @@ use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\ForgotPasswordType;
 use App\Form\ChangePasswordType;
-use App\Form\Modal\ResetPassword;
+use App\Form\Model\ResetPassword;
 use App\Form\ResetPasswordType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
