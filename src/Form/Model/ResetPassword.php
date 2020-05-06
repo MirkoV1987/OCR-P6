@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Modal;
+namespace App\Form\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -31,7 +31,7 @@ class ResetPassword
      * )
      */
     private $confirmPassword;
-    
+
 
     public function getNewPassword(): ?string
     {
