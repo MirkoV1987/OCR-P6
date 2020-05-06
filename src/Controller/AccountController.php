@@ -6,8 +6,8 @@ use App\Form\Model\ChangePassword;
 use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\ForgotPasswordType;
-use App\Form\PasswordResetType;
 use App\Form\ChangePasswordType;
+use App\Form\Modal\ResetPassword;
 use App\Form\ResetPasswordType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -109,23 +109,26 @@ class AccountController extends AbstractController
      */
     public function resetPassword(Request $request, UserRepository $userRepo, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $username, $validationToken)
     {
+        $resetPassword = new ResetPassword();
         $user = $userRepo->findOneByUsername($username);
-        $form = $this->createForm(ResetPasswordType::class);
-    
+        
+        $form = $this->createForm(ResetPasswordType::class, $resetPassword);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($user->getValidationToken() === $validationToken) {
-                $password = $encoder->encodePassword($user, $user->getPassword());
-                $user->setPassword($password);
-
-                $em->persist($user);
-                $em->flush();
+            
+            $newPassword = $resetPassword->getNewPassword();
+            $password = $encoder->encodePassword($user, $newPassword);
+            
+            $user->setPassword($password);
+            $em->persist($user);
+            $em->flush();
                         
-                $this->addFlash(
-                    'success',
-                    'Votre mot de passe a été mis à jour ! Connectez-vous !'
-                );
+            $this->addFlash(
+                'success',
+                'Votre mot de passe a été mis à jour ! Connectez-vous !'
+            );
 
                 return $this->redirectToRoute('app_user_login');
             } else {
